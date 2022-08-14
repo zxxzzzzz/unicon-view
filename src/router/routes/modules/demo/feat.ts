@@ -11,6 +11,7 @@ const feat: AppRouteModule = {
   meta: {
     orderNo: 19,
     icon: 'ion:git-compare-outline',
+    hideMenu: true,
     title: t('routes.demo.feat.feat'),
   },
 

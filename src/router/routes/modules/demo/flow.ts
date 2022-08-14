@@ -11,6 +11,7 @@ const charts: AppRouteModule = {
   meta: {
     orderNo: 5000,
     icon: 'tabler:chart-dots',
+    hideMenu: true,
     title: t('routes.demo.flow.name'),
   },
   children: [

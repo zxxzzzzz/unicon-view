@@ -44,7 +44,7 @@ export function useFormRules(formData?: Recordable) {
   const getAccountFormRule = computed(() => createRule(t('sys.login.accountPlaceholder')));
   const getPasswordFormRule = computed(() => createRule(t('sys.login.passwordPlaceholder')));
   const getSmsFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
-  const getMobileFormRule = computed(() => createRule(t('sys.login.mobilePlaceholder')));
+  const getAddressFormRule = computed(() => createRule(t('请输入地址')));
 
   const validatePolicy = async (_: RuleObject, value: boolean) => {
     return !value ? Promise.reject(t('sys.login.policyPlaceholder')) : Promise.resolve();
@@ -66,11 +66,11 @@ export function useFormRules(formData?: Recordable) {
     const accountFormRule = unref(getAccountFormRule);
     const passwordFormRule = unref(getPasswordFormRule);
     const smsFormRule = unref(getSmsFormRule);
-    const mobileFormRule = unref(getMobileFormRule);
+    const addressFormRule = unref(getAddressFormRule);
 
     const mobileRule = {
       sms: smsFormRule,
-      mobile: mobileFormRule,
+      mobile: addressFormRule,
     };
     switch (unref(currentState)) {
       // register form rules

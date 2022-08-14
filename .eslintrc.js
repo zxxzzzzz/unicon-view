@@ -42,7 +42,7 @@ module.exports = {
       },
     ],
     'no-unused-vars': [
-      'error',
+      'warn',
       {
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',

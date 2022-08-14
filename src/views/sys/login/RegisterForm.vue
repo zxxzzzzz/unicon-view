@@ -10,20 +10,12 @@
           :placeholder="t('sys.login.userName')"
         />
       </FormItem>
-      <FormItem name="mobile" class="enter-x">
+      <FormItem name="address" class="enter-x">
         <Input
           size="large"
-          v-model:value="formData.mobile"
-          :placeholder="t('sys.login.mobile')"
+          v-model:value="formData.address"
+          placeholder="地址"
           class="fix-auto-fill"
-        />
-      </FormItem>
-      <FormItem name="sms" class="enter-x">
-        <CountdownInput
-          size="large"
-          class="fix-auto-fill"
-          v-model:value="formData.sms"
-          :placeholder="t('sys.login.smsCode')"
         />
       </FormItem>
       <FormItem name="password" class="enter-x">
@@ -40,13 +32,6 @@
           v-model:value="formData.confirmPassword"
           :placeholder="t('sys.login.confirmPassword')"
         />
-      </FormItem>
-
-      <FormItem class="enter-x" name="policy">
-        <!-- No logic, you need to deal with it yourself -->
-        <Checkbox v-model:checked="formData.policy" size="small">
-          {{ t('sys.login.policy') }}
-        </Checkbox>
       </FormItem>
 
       <Button
@@ -68,9 +53,8 @@
 <script lang="ts" setup>
   import { reactive, ref, unref, computed } from 'vue';
   import LoginFormTitle from './LoginFormTitle.vue';
-  import { Form, Input, Button, Checkbox } from 'ant-design-vue';
+  import { Form, Input, Button } from 'ant-design-vue';
   import { StrengthMeter } from '/@/components/StrengthMeter';
-  import { CountdownInput } from '/@/components/CountDown';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
 
@@ -86,7 +70,7 @@
     account: '',
     password: '',
     confirmPassword: '',
-    mobile: '',
+    address: '',
     sms: '',
     policy: false,
   });

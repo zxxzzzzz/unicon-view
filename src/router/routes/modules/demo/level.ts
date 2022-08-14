@@ -11,6 +11,7 @@ const permission: AppRouteModule = {
   meta: {
     orderNo: 2000,
     icon: 'ion:menu-outline',
+    hideMenu: true,
     title: t('routes.demo.level.level'),
   },
 

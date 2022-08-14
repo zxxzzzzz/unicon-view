@@ -14,6 +14,7 @@ const page: AppRouteModule = {
   meta: {
     orderNo: 20,
     icon: 'ion:aperture-outline',
+    hideMenu: true,
     title: t('routes.demo.page.page'),
   },
   children: [

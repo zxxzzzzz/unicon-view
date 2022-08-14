@@ -12,6 +12,7 @@ const permission: AppRouteModule = {
   meta: {
     orderNo: 15,
     icon: 'ion:key-outline',
+    hideMenu: true,
     title: t('routes.demo.permission.permission'),
   },
 
