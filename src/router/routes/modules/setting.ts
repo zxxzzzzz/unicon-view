@@ -8,7 +8,7 @@ const dashboard: AppRouteModule = {
   component: LAYOUT,
   redirect: '/setting/index',
   meta: {
-    orderNo: 12,
+    orderNo: 13,
     icon: 'ant-design:setting-outlined',
     title: '设置',
     hideChildrenInMenu: true,

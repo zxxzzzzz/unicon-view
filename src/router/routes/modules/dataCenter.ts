@@ -8,7 +8,7 @@ const dashboard: AppRouteModule = {
   component: LAYOUT,
   redirect: '/dataCenter/index',
   meta: {
-    orderNo: 11,
+    orderNo: 12,
     icon: 'bx:data',
     title: '数据中心',
     hideChildrenInMenu: true,

@@ -3,24 +3,24 @@ import { LAYOUT } from '/@/router/constant';
 import { PageNameEnum } from '/@/enums/pageEnum';
 
 const dashboard: AppRouteModule = {
-  path: '/home',
-  name: PageNameEnum.HOME,
+  path: '/union',
+  name: PageNameEnum.UNION,
   component: LAYOUT,
-  redirect: '/home/index',
+  redirect: '/union/index',
   meta: {
-    orderNo: 10,
-    icon: 'ant-design:home-filled',
-    title: '首页',
+    orderNo: 11,
+    icon: 'lucide:file-digit',
+    title: '数字孪生',
     hideChildrenInMenu: true,
   },
   children: [
     {
       path: 'index',
-      name: PageNameEnum.HOME,
-      component: () => import('/@/views/home/index.vue'),
+      name: PageNameEnum.UNION,
+      component: () => import('/@/views/union/index.vue'),
       meta: {
         // affix: true,
-        title: '拓扑图',
+        title: '数字孪生',
       },
     },
   ],
