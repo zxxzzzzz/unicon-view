@@ -1,13 +1,13 @@
 import { watch } from 'fs';
 <template>
-  <div ref="canvas" class="h-full"></div>
+  <div ref="canvas" class="h-full border border-dark-50"></div>
 </template>
 <script lang="ts" setup>
   import cytoscape from 'cytoscape';
   import { Topology } from '/@/api/union/model/topology';
   import { ref, computed, watch, nextTick } from 'vue';
 
-  const props = defineProps<{ topology: Topology }>();
+  const props = defineProps<{ topology: Topology | undefined }>();
   const canvas = ref<HTMLDivElement>();
 
   const elements = computed(() => {
