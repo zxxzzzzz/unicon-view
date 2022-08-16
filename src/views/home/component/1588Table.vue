@@ -5,7 +5,7 @@
   import { Table } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
   import { useRequest } from 'vue-request';
-  import { getPort1588Param } from '/@/api/union/topology';
+  import { getPort1588Param } from '/@/api/union';
   // defineProps<{}>();
   const { data: dataSource, run: _getPort1588Param } = useRequest(getPort1588Param, {
     formatResult: (d) => d.ptp,

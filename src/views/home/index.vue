@@ -34,8 +34,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import Topology from './component/topology.vue';
-  import { getTopology } from '/@/api/union/topology';
+  import Topology from '/@/component/topology/index.vue';
+  import { getTopology } from '/@/api/union';
   import { useRequest } from 'vue-request';
   import { Table, TabPane, Tabs, Card, Input } from 'ant-design-vue';
   import T1588Table from './component/1588Table.vue';

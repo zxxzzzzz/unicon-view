@@ -1,4 +1,3 @@
-import { watch } from 'fs';
 <template>
   <div ref="canvas" class="h-full border border-dark-50"></div>
 </template>
@@ -9,7 +8,7 @@ import { watch } from 'fs';
 
   const props = defineProps<{ topology: Topology | undefined }>();
   const canvas = ref<HTMLDivElement>();
-
+  const emits = defineEmits(['cxttap']);
   const elements = computed(() => {
     const topology = props.topology;
     if (!topology) {
@@ -61,14 +60,13 @@ import { watch } from 'fs';
           });
           cy.on('cxttap', 'node', function (evt) {
             var node = evt.target;
-            console.log('tapped ' + node.id());
+            evt.originalEvent.preventDefault();
+            evt.preventDefault();
+            emits('cxttap', node);
           });
         }
       });
     },
     { immediate: true },
   );
-
-  // fabric.canvas()
-  // defineProps<{  }>();
 </script>

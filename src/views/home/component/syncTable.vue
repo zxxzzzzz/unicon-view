@@ -5,7 +5,7 @@
   import { Table } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
   import { useRequest } from 'vue-request';
-  import { getSyncParam } from '/@/api/union/topology';
+  import { getSyncParam } from '/@/api/union';
   // defineProps<{}>();
   const { data: dataSource, run: _getSyncParam } = useRequest(getSyncParam, {
     formatResult: (d) => d.freq,
