@@ -1,6 +1,6 @@
 <template>
   <div class="h-full">
-    <Topology :topology="topology" @cxttap="handleCtxtap" />
+    <Topology :topology="topology" @tap="handleTap" />
     <Modal />
   </div>
 </template>
@@ -12,12 +12,13 @@
   import { ref } from 'vue';
   import { useModal } from '/@/hooks/component/useModal';
   import SetPortParamModal from './component/setPortParamModal.vue';
+  import cytoscape from 'cytoscape';
 
   const { Modal, open } = useModal(SetPortParamModal);
   // const activeKey = ref('1');
   const { data: topology, run: _getTopology } = useRequest(getTopology);
 
-  const handleCtxtap = (node) => {
+  const handleTap = (node: cytoscape.CollectionReturnValue) => {
     console.log('click');
     setTimeout(() => {
       open();

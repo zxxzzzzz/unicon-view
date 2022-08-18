@@ -36,5 +36,11 @@ const t = {
     },
   ],
 };
+const devPortItem = {
+  DeviceName: '设备1',
+  PortList: ['GigabitEthernet0/1/0', 'GigabitEthernet2/0/6'],
+};
+type DevPortItem = typeof devPortItem;
 
 export type Topology = typeof t;
+export type DevPort = DevPortItem[];

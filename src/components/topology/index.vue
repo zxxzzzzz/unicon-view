@@ -8,7 +8,10 @@
 
   const props = defineProps<{ topology: Topology | undefined }>();
   const canvas = ref<HTMLDivElement>();
-  const emits = defineEmits(['cxttap']);
+  const emits = defineEmits<{
+    (event: 'cxttap', node: cytoscape.CollectionReturnValue): void;
+    (event: 'tap', node: cytoscape.CollectionReturnValue): void;
+  }>();
   const elements = computed(() => {
     const topology = props.topology;
     if (!topology) {
@@ -19,7 +22,7 @@
     }
     const nodes = topology.DeviceList.map((d) => {
       return {
-        data: { id: d.object },
+        data: { id: d.object, ip: d.ip, type: d.type },
         position: { x: d.posX, y: d.posY },
       };
     });
@@ -37,13 +40,13 @@
       edges,
     };
   });
-
+  let cy: cytoscape.Core | undefined = undefined;
   watch(
     elements,
     () => {
       nextTick(() => {
         if (canvas.value) {
-          const cy = cytoscape({
+          cy = cytoscape({
             container: canvas.value, // container to render in
             elements: elements.value,
             layout: {
@@ -57,6 +60,13 @@
                 },
               },
             ],
+            wheelSensitivity: 0.1,
+          });
+          cy.on('tap', 'node', function (evt) {
+            var node = evt.target;
+            evt.originalEvent.preventDefault();
+            evt.preventDefault();
+            emits('tap', node);
           });
           cy.on('cxttap', 'node', function (evt) {
             var node = evt.target;
@@ -69,4 +79,9 @@
     },
     { immediate: true },
   );
+  defineExpose({
+    getCy() {
+      return cy;
+    },
+  });
 </script>

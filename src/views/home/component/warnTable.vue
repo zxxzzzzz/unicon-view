@@ -51,6 +51,6 @@
     { dataIndex: 'alarmDesc', title: '告警描述' },
   ];
   const pagination: TableProps['pagination'] = {
-    pageSize: 5,
+    pageSize: 4,
   };
 </script>

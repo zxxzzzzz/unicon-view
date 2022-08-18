@@ -1,14 +1,26 @@
 <template>
-  <Table :columns="columns" :dataSource="dataSource" :pagination="pagination" />
+  <Table :columns="columns" :dataSource="filterDataSource" :pagination="pagination" />
 </template>
 <script lang="ts" setup>
   import { Table } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
   import { useRequest } from 'vue-request';
   import { getPort1588Param } from '/@/api/union';
-  // defineProps<{}>();
+  import { computed } from 'vue';
+  const props = defineProps<{ selectedPortList: string[] }>();
   const { data: dataSource, run: _getPort1588Param } = useRequest(getPort1588Param, {
-    formatResult: (d) => d.ptp,
+    formatResult: (d) => {
+      return d.ptp;
+    },
+  });
+  const filterDataSource = computed(() => {
+    if (!props.selectedPortList?.length) {
+      return [];
+    }
+    if (!dataSource.value) {
+      return [];
+    }
+    return dataSource.value.filter((d) => props.selectedPortList.includes(d.name));
   });
 
   // name: '端口名称',

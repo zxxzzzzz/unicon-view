@@ -3,24 +3,30 @@
     <div class="flex h-full">
       <div class="flex flex-col w-3/4">
         <div class="h-1/2">
-          <Topology :topology="typology" />
+          <Topology :topology="typology" @tap="handleTopologyTap" ref="topologyIns" />
         </div>
         <div class="flex">
           <div class="flex-1">
             <Card title="端口">
               <Tabs v-model:activeKey="activeKey" type="card">
                 <TabPane key="1" tab="1588">
-                  <T1588Table />
+                  <T1588Table :selectedPortList="selectedNodePort" />
                 </TabPane>
                 <TabPane key="2" tab="同步">
-                  <SyncTable />
+                  <SyncTable :selectedPortList="selectedNodePort" />
                 </TabPane>
               </Tabs>
             </Card>
           </div>
           <div class="flex-1">
             <Card title="搜索">
-              <Input />
+              <div class="flex items-center">
+                <div class="whitespace-nowrap mr-4">ip地址</div>
+                <Input v-model:value="ip" placeholder="请输入ip地址" />
+              </div>
+              <div class="flex justify-end mt-4">
+                <Button @click="handleSearch"> 搜索</Button>
+              </div>
             </Card>
           </div>
         </div>
@@ -34,17 +40,55 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import Topology from '/@/component/topology/index.vue';
+  import Topology from '/@/components/topology/index.vue';
   import { getTopology } from '/@/api/union';
   import { useRequest } from 'vue-request';
-  import { Table, TabPane, Tabs, Card, Input } from 'ant-design-vue';
+  import { Table, TabPane, Tabs, Card, Input, Button } from 'ant-design-vue';
   import T1588Table from './component/1588Table.vue';
   import SyncTable from './component/syncTable.vue';
   import WarnTable from './component/warnTable.vue';
-  import { ref } from 'vue';
+  import { getDevPort } from '/@/api/union/index';
+  import { computed, ref } from 'vue';
+  import cytoscape from 'cytoscape';
 
   const activeKey = ref('1');
   const { data: typology, run: _getTopology } = useRequest(getTopology);
+  const { data: devPortdata } = useRequest(getDevPort);
+  const selectedNode = ref<cytoscape.CollectionReturnValue>();
+  const ip = ref('');
+  const topologyIns = ref<InstanceType<typeof Topology>>();
+  const selectedNodePort = computed(() => {
+    if (!selectedNode.value) {
+      return [];
+    }
+    const id = selectedNode.value.data('id');
+    return (devPortdata.value || [])
+      .filter((d) => {
+        return d.DeviceName === id;
+      })
+      .map((d) => d.PortList)
+      .flat();
+  });
+
+  const handleTopologyTap = (node) => {
+    selectedNode.value = node;
+    console.log(node);
+  };
+  const handleSearch = () => {
+    if (!topologyIns.value) {
+      return;
+    }
+    const cy = topologyIns.value.getCy();
+    if (!cy) {
+      return;
+    }
+    cy.$('node').unselect();
+    const node = cy.$(`node[ip="${ip.value}"]`);
+    if (node.length) {
+      node.select();
+      selectedNode.value = node;
+    }
+  };
   // fabric.canvas()
   // defineProps<{  }>();
 </script>

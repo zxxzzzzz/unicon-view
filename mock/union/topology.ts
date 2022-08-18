@@ -50,21 +50,21 @@ export default [
           {
             object: '设备1',
             type: '设备类型',
-            ip: '设备ip',
+            ip: '10.0.0.1',
             posX: 0,
             posY: 0,
           },
           {
             object: '设备2',
             type: '设备类型',
-            ip: '设备ip',
+            ip: '10.0.0.2',
             posX: 150,
             posY: 150,
           },
           {
             object: '设备3',
             type: '设备类型',
-            ip: '设备ip',
+            ip: '10.0.0.3',
             posX: 200,
             posY: 200,
           },
@@ -83,6 +83,19 @@ export default [
           },
         ],
       });
+    },
+  },
+  {
+    url: '/basic-api/GetDevPort',
+    timeout: 200,
+    method: 'post',
+    response: ({ body }) => {
+      return resultSuccess([
+        {
+          DeviceName: '设备1',
+          PortList: ['GigabitEthernet0/1/0', 'GigabitEthernet2/0/6'],
+        },
+      ]);
     },
   },
 ] as MockMethod[];

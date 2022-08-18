@@ -1,7 +1,7 @@
 import { defHttp } from '/@/utils/http/axios';
 // import { getMenuListResultModel } from './model/menuModel';
 import type { I1588Params } from './model/1588param';
-import type { Topology } from './model/topology';
+import type { Topology, DevPort } from './model/topology';
 import type { SyncParam } from './model/syncParam';
 import type { Alarm } from './model/alarm';
 import type { AllUserInfo, UserItem } from './model/user';
@@ -17,6 +17,9 @@ export { AllUserInfo };
 
 export const getTopology = async (userName: string) => {
   return defHttp.post<Topology>({ url: '/getTopography', params: { userName } });
+};
+export const getDevPort = async (userName: string) => {
+  return defHttp.post<DevPort>({ url: '/GetDevPort', params: { userName } });
 };
 export const setPortParam = async (params: SetPortParam) => {
   return defHttp.post<Topology>({ url: '/SetPortParam', params });

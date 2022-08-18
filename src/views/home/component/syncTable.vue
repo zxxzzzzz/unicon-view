@@ -1,14 +1,24 @@
 <template>
-  <Table :columns="columns" :dataSource="dataSource" :pagination="pagination" />
+  <Table :columns="columns" :dataSource="filterDataSource" :pagination="pagination" />
 </template>
 <script lang="ts" setup>
   import { Table } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
   import { useRequest } from 'vue-request';
   import { getSyncParam } from '/@/api/union';
-  // defineProps<{}>();
+  import { computed } from 'vue';
+  const props = defineProps<{ selectedPortList: string[] }>();
   const { data: dataSource, run: _getSyncParam } = useRequest(getSyncParam, {
     formatResult: (d) => d.freq,
+  });
+  const filterDataSource = computed(() => {
+    if (!props.selectedPortList?.length) {
+      return [];
+    }
+    if (!dataSource.value) {
+      return [];
+    }
+    return dataSource.value.filter((d) => props.selectedPortList.includes(d.name));
   });
 
   //  name: '端口名称',
