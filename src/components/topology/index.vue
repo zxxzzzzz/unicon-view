@@ -11,6 +11,7 @@
   const emits = defineEmits<{
     (event: 'cxttap', node: cytoscape.CollectionReturnValue): void;
     (event: 'tap', node: cytoscape.CollectionReturnValue): void;
+    (event: 'drag', node: cytoscape.CollectionReturnValue): void;
   }>();
   const elements = computed(() => {
     const topology = props.topology;
@@ -73,6 +74,10 @@
             evt.originalEvent.preventDefault();
             evt.preventDefault();
             emits('cxttap', node);
+          });
+          cy.on('drag', 'node', function (evt) {
+            var node = evt.target;
+            emits('drag', node);
           });
         }
       });

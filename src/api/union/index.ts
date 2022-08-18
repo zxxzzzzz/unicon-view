@@ -16,7 +16,24 @@ import type {
 export { AllUserInfo };
 
 export const getTopology = async (userName: string) => {
-  return defHttp.post<Topology>({ url: '/getTopography', params: { userName } });
+  const topologyData = await defHttp.post<Topology>({
+    url: '/getTopography',
+    params: { userName },
+  });
+  const portList = await defHttp.post<DevPort>({ url: '/GetDevPort', params: { userName } });
+  const deviceList = topologyData.DeviceList.map((d) => {
+    return {
+      ...d,
+      portList: portList
+        .filter((p) => p.DeviceName === d.object)
+        .map((p) => p.PortList)
+        .flat(),
+    };
+  });
+  return {
+    DeviceList: deviceList,
+    LinkList: topologyData.LinkList,
+  };
 };
 export const getDevPort = async (userName: string) => {
   return defHttp.post<DevPort>({ url: '/GetDevPort', params: { userName } });

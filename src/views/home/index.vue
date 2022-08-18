@@ -3,7 +3,12 @@
     <div class="flex h-full">
       <div class="flex flex-col w-3/4">
         <div class="h-1/2">
-          <Topology :topology="typology" @tap="handleTopologyTap" ref="topologyIns" />
+          <Topology
+            :topology="typology"
+            @tap="handleTopologyTap"
+            ref="topologyIns"
+            @drag="handleDrag"
+          />
         </div>
         <div class="flex">
           <div class="flex-1">
@@ -37,6 +42,7 @@
         </Card>
       </div>
     </div>
+    <Popup :position="popupPosition" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -50,11 +56,13 @@
   import { getDevPort } from '/@/api/union/index';
   import { computed, ref } from 'vue';
   import cytoscape from 'cytoscape';
+  import Popup from './component/popup.vue';
 
   const activeKey = ref('1');
   const { data: typology, run: _getTopology } = useRequest(getTopology);
   const { data: devPortdata } = useRequest(getDevPort);
   const selectedNode = ref<cytoscape.CollectionReturnValue>();
+  const popupPosition = ref({ x: 0, y: 0 });
   const ip = ref('');
   const topologyIns = ref<InstanceType<typeof Topology>>();
   const selectedNodePort = computed(() => {
@@ -73,6 +81,10 @@
   const handleTopologyTap = (node) => {
     selectedNode.value = node;
     console.log(node);
+  };
+  const handleDrag = (node: cytoscape.CollectionReturnValue) => {
+    popupPosition.value = { ...node.renderedPosition() };
+    // console.log(node.position());
   };
   const handleSearch = () => {
     if (!topologyIns.value) {

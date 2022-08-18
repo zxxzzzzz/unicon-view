@@ -6,6 +6,7 @@ const t = {
       ip: '设备ip',
       posX: 0,
       posY: 0,
+      portList: ['123', '123'],
     },
     {
       object: '设备2',
@@ -13,6 +14,7 @@ const t = {
       ip: '设备ip',
       posX: 150,
       posY: 150,
+      portList: ['123', '123'],
     },
     {
       object: '设备3',
@@ -20,6 +22,7 @@ const t = {
       ip: '设备ip',
       posX: 200,
       posY: 200,
+      portList: ['123', '123'],
     },
   ],
   LinkList: [
