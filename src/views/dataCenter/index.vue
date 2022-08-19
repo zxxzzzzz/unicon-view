@@ -17,6 +17,12 @@
         <TabPane tab="网元" key="5">
           <DevParamTable />
         </TabPane>
+        <TabPane tab="登录历史" key="6">
+          <LoginTable />
+        </TabPane>
+        <TabPane tab="用户操作历史" key="7">
+          <UserOperationTable />
+        </TabPane>
       </Tabs>
     </Card>
   </div>
@@ -27,6 +33,8 @@
   import DevSyncParamTable from './component/devSyncParamTable.vue';
   import PortParamTable from './component/portParamTable.vue';
   import AlarmParamTable from './component/alarmParamTable.vue';
+  import LoginTable from './component/loginTable.vue';
+  import UserOperationTable from './component/userOperationTable.vue';
   import { Tabs, TabPane, Card } from 'ant-design-vue';
   import { ref } from 'vue';
   // defineProps<{  }>();

@@ -4,7 +4,7 @@ import type { I1588Params } from './model/1588param';
 import type { Topology, DevPort } from './model/topology';
 import type { SyncParam } from './model/syncParam';
 import type { Alarm } from './model/alarm';
-import type { AllUserInfo, UserItem } from './model/user';
+import type { AllUserInfo, LoginHistory, OperationHistory, UserItem } from './model/user';
 import type { SetPortParam } from './model/params';
 import type {
   OperationSystem,
@@ -67,6 +67,12 @@ export const getAlarmParam = async (userName: string) => {
 };
 export const getUserInformation = async (userName: string) => {
   return defHttp.post<AllUserInfo>({ url: '/GetUserInformation', params: { userName } });
+};
+export const getUserLogin = async (userName: string) => {
+  return defHttp.post<LoginHistory>({ url: '/GetUserLogin', params: { userName } });
+};
+export const getUserOperation = async (userName: string) => {
+  return defHttp.post<OperationHistory>({ url: '/GetUserOperation', params: { userName } });
 };
 export const setUserInformation = async (params: { userList: UserItem[] }) => {
   return defHttp.post<AllUserInfo>({ url: '/SetUserAuthority', params });

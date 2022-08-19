@@ -38,4 +38,43 @@ export default [
       return resultSuccess({});
     },
   },
+  {
+    url: '/basic-api/GetUserLogin',
+    timeout: 200,
+    method: 'post',
+    response: ({ body }) => {
+      const result = Array(30)
+        .fill(0)
+        .map((d) => ({
+          username: 'zcv',
+          state: '成功',
+          position: '南京',
+          'start-time': '2021-07-08',
+          'end-time': '2021-07-08',
+        }));
+      return resultSuccess({
+        Userlist: result,
+      });
+    },
+  },
+  {
+    url: '/basic-api/GetUserOperation',
+    timeout: 200,
+    method: 'post',
+    response: ({ body }) => {
+      const result = Array(30)
+        .fill(0)
+        .map((d) => ({
+          username: 'cbj',
+          position: '上海',
+          Module: '登录',
+          msg: '用户登录',
+          'start-time': '2021-08-07',
+          'end-time': '2022-09-09',
+        }));
+      return resultSuccess({
+        Userlist: result,
+      });
+    },
+  },
 ] as MockMethod[];
