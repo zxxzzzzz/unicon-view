@@ -8,6 +8,7 @@
             @tap="handleTopologyTap"
             ref="topologyIns"
             @drag="handleDrag"
+            @dragfree="handleDragFree"
           />
         </div>
         <div class="flex">
@@ -42,7 +43,7 @@
         </Card>
       </div>
     </div>
-    <Popup :position="popupPosition" />
+    <Popup v-bind="popupProps" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -54,7 +55,7 @@
   import SyncTable from './component/syncTable.vue';
   import WarnTable from './component/warnTable.vue';
   import { getDevPort } from '/@/api/union/index';
-  import { computed, ref } from 'vue';
+  import { computed, ref, reactive } from 'vue';
   import cytoscape from 'cytoscape';
   import Popup from './component/popup.vue';
 
@@ -62,7 +63,13 @@
   const { data: typology, run: _getTopology } = useRequest(getTopology);
   const { data: devPortdata } = useRequest(getDevPort);
   const selectedNode = ref<cytoscape.CollectionReturnValue>();
-  const popupPosition = ref({ x: 0, y: 0 });
+  const popupProps = reactive({
+    position: { x: 0, y: 0 },
+    name: '',
+    ip: '',
+    portList: [],
+    visible: false,
+  });
   const ip = ref('');
   const topologyIns = ref<InstanceType<typeof Topology>>();
   const selectedNodePort = computed(() => {
@@ -83,8 +90,17 @@
     console.log(node);
   };
   const handleDrag = (node: cytoscape.CollectionReturnValue) => {
-    popupPosition.value = { ...node.renderedPosition() };
+    const box = node.renderedBoundingBox();
+    const position = { ...node.renderedPosition() };
+    popupProps.position = { x: position.x + box.w / 2, y: position.y - box.h / 2 };
+    popupProps.ip = node.data('ip');
+    popupProps.name = node.data('id');
+    popupProps.portList = node.data('portList');
+    popupProps.visible = true;
     // console.log(node.position());
+  };
+  const handleDragFree = () => {
+    popupProps.visible = false;
   };
   const handleSearch = () => {
     if (!topologyIns.value) {

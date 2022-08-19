@@ -12,6 +12,7 @@
     (event: 'cxttap', node: cytoscape.CollectionReturnValue): void;
     (event: 'tap', node: cytoscape.CollectionReturnValue): void;
     (event: 'drag', node: cytoscape.CollectionReturnValue): void;
+    (event: 'dragfree', node: cytoscape.CollectionReturnValue): void;
   }>();
   const elements = computed(() => {
     const topology = props.topology;
@@ -23,7 +24,7 @@
     }
     const nodes = topology.DeviceList.map((d) => {
       return {
-        data: { id: d.object, ip: d.ip, type: d.type },
+        data: { id: d.object, ip: d.ip, type: d.type, portList: d.portList },
         position: { x: d.posX, y: d.posY },
       };
     });
@@ -78,6 +79,10 @@
           cy.on('drag', 'node', function (evt) {
             var node = evt.target;
             emits('drag', node);
+          });
+          cy.on('dragfree', 'node', function (evt) {
+            var node = evt.target;
+            emits('dragfree', node);
           });
         }
       });
