@@ -2,6 +2,12 @@
   <div>
     <Card>
       <Tabs v-model:activeKey="activeKey" type="card">
+        <template #rightExtra>
+          <div>
+            <RangePicker v-model:value="dateRange" class="mb-2" />
+            <Button>下载数据</Button>
+          </div>
+        </template>
         <TabPane tab="操作" key="1">
           <OpTable />
         </TabPane>
@@ -35,8 +41,11 @@
   import AlarmParamTable from './component/alarmParamTable.vue';
   import LoginTable from './component/loginTable.vue';
   import UserOperationTable from './component/userOperationTable.vue';
-  import { Tabs, TabPane, Card } from 'ant-design-vue';
+  import { Tabs, TabPane, Card, RangePicker, Button } from 'ant-design-vue';
   import { ref } from 'vue';
+  import { Dayjs } from 'dayjs';
   // defineProps<{  }>();
+  type RangeValue = [Dayjs, Dayjs];
   const activeKey = ref('1');
+  const dateRange = ref<RangeValue>();
 </script>

@@ -13,7 +13,7 @@ import type {
   PortParam,
   AlarmParam,
 } from './model/operationSystem';
-export { AllUserInfo };
+export { AllUserInfo, SetPortParam, I1588Params };
 
 export const getTopology = async (userName: string) => {
   const topologyData = await defHttp.post<Topology>({
@@ -76,4 +76,10 @@ export const getUserOperation = async (userName: string) => {
 };
 export const setUserInformation = async (params: { userList: UserItem[] }) => {
   return defHttp.post<AllUserInfo>({ url: '/SetUserAuthority', params });
+};
+export const getUserData = async (params: { username: string; msg: string }) => {
+  return defHttp.post<PortParam & { username: string; devname: string }>({
+    url: '/UserData',
+    params,
+  });
 };

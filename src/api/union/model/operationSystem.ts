@@ -74,7 +74,7 @@ const alarmParamItem = {
 
 type DevParamItem = typeof devParamItem;
 type DevSyncParamItem = typeof devSyncParamItem;
-type PortParamItem = typeof portParamItem;
+export type PortParamItem = typeof portParamItem;
 type AlarmParamItem = typeof alarmParamItem;
 export type OperationSystem = { Systemlist: Item[] };
 export type DevParam = { devlist: DevParamItem[] };

@@ -19,6 +19,9 @@ export default defineConfig({
         xl: '1200px',
         '2xl': '1600px',
       },
+      flex: {
+        2: '2 2 0',
+      },
     },
   },
 });
