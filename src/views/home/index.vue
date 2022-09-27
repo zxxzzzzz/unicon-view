@@ -1,17 +1,11 @@
 <template>
-  <div class="h-full">
+  <div class="h-[calc(100vh-48px)]">
     <div class="flex h-full">
-      <div class="flex flex-col w-3/4">
-        <div class="h-1/2">
-          <Topology
-            :topology="typology"
-            @tap="handleTopologyTap"
-            ref="topologyIns"
-            @drag="handleDrag"
-            @dragfree="handleDragFree"
-          />
+      <div class="flex flex-col w-3/5">
+        <div class="h-[50vh]">
+          <Topology :topology="typology" @tap="handleTopologyTap" ref="topologyIns" />
         </div>
-        <div class="flex">
+        <div class="flex overflow-auto">
           <div class="flex-1">
             <Card title="端口">
               <Tabs v-model:activeKey="activeKey" type="card">
@@ -37,7 +31,7 @@
           </div>
         </div>
       </div>
-      <div class="flex-1">
+      <div class="flex-1 overflow-auto">
         <Card title="告警">
           <WarnTable />
         </Card>
@@ -85,22 +79,20 @@
       .flat();
   });
 
-  const handleTopologyTap = (node) => {
+  const handleTopologyTap = (node: cytoscape.CollectionReturnValue) => {
+    if (selectedNode.value?.data?.('id') === node.data('id') && popupProps.visible === true) {
+      popupProps.visible = false;
+    } else {
+      const box = node.renderedBoundingBox();
+      const position = { ...node.renderedPosition() };
+      popupProps.position = { x: position.x + box.w / 2, y: position.y - box.h / 2 };
+      popupProps.ip = node.data('ip');
+      popupProps.name = node.data('id');
+      popupProps.portList = node.data('portList');
+      popupProps.visible = true;
+    }
     selectedNode.value = node;
-    console.log(node);
-  };
-  const handleDrag = (node: cytoscape.CollectionReturnValue) => {
-    const box = node.renderedBoundingBox();
-    const position = { ...node.renderedPosition() };
-    popupProps.position = { x: position.x + box.w / 2, y: position.y - box.h / 2 };
-    popupProps.ip = node.data('ip');
-    popupProps.name = node.data('id');
-    popupProps.portList = node.data('portList');
-    popupProps.visible = true;
-    // console.log(node.position());
-  };
-  const handleDragFree = () => {
-    popupProps.visible = false;
+    console.log(node.data());
   };
   const handleSearch = () => {
     if (!topologyIns.value) {
