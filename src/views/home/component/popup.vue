@@ -1,8 +1,8 @@
 <template>
   <div class="absolute bg-white p-1" :style="positionStyle" v-if="visible">
     <Descriptions bordered :column="1">
-      <DescriptionsItem label="名称">{{ props.name }}</DescriptionsItem>
-      <DescriptionsItem label="ip">{{ props.ip }}</DescriptionsItem>
+      <DescriptionsItem label="名称" v-if="props.name">{{ props.name }}</DescriptionsItem>
+      <DescriptionsItem label="ip" v-if="props.ip">{{ props.ip }}</DescriptionsItem>
       <DescriptionsItem label="端口">
         <template v-for="port in props.portList" :key="port">
           <div>{{ port }}</div>

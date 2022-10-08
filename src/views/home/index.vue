@@ -3,7 +3,12 @@
     <div class="flex h-full">
       <div class="flex flex-col w-3/5">
         <div class="h-[50vh]">
-          <Topology :topology="typology" @tap="handleTopologyTap" ref="topologyIns" />
+          <Topology
+            :topology="typology"
+            @select="handleTopologySelect"
+            @unselect="handleTopologyUnselect"
+            ref="topologyIns"
+          />
         </div>
         <div class="flex overflow-auto">
           <div class="flex-1">
@@ -37,7 +42,9 @@
         </Card>
       </div>
     </div>
-    <Popup v-bind="popupProps" />
+    <template v-for="popupProp in popupPropList" :key="popupProp.name">
+      <Popup v-bind="popupProp" />
+    </template>
   </div>
 </template>
 <script lang="ts" setup>
@@ -57,13 +64,15 @@
   const { data: typology, run: _getTopology } = useRequest(getTopology);
   const { data: devPortdata } = useRequest(getDevPort);
   const selectedNode = ref<cytoscape.CollectionReturnValue>();
-  const popupProps = reactive({
-    position: { x: 0, y: 0 },
-    name: '',
-    ip: '',
-    portList: [],
-    visible: false,
-  });
+  const popupPropList = ref([
+    {
+      position: { x: 0, y: 0 },
+      name: '',
+      ip: '',
+      portList: [] as string[],
+      visible: false,
+    },
+  ]);
   const ip = ref('');
   const topologyIns = ref<InstanceType<typeof Topology>>();
   const selectedNodePort = computed(() => {
@@ -79,20 +88,46 @@
       .flat();
   });
 
-  const handleTopologyTap = (node: cytoscape.CollectionReturnValue) => {
-    if (selectedNode.value?.data?.('id') === node.data('id') && popupProps.visible === true) {
-      popupProps.visible = false;
-    } else {
-      const box = node.renderedBoundingBox();
-      const position = { ...node.renderedPosition() };
-      popupProps.position = { x: position.x + box.w / 2, y: position.y - box.h / 2 };
-      popupProps.ip = node.data('ip');
-      popupProps.name = node.data('id');
-      popupProps.portList = node.data('portList');
-      popupProps.visible = true;
+  const showPopup = (
+    node: cytoscape.CollectionReturnValue,
+    options?: { clear?: boolean; onlyPort?: boolean },
+  ) => {
+    if (options?.clear) {
+      popupPropList.value = [];
     }
-    selectedNode.value = node;
-    console.log(node.data());
+    const box = node.renderedBoundingBox();
+    const position = { ...node.renderedPosition() };
+    const props = {
+      position: { x: 0, y: 0 },
+      name: '',
+      ip: '',
+      portList: [] as string[],
+      visible: false,
+    };
+    props.position = { x: position.x + box.w / 2, y: position.y - box.h / 2 };
+    if (!options?.onlyPort) {
+      props.ip = node.data('ip');
+      props.name = node.data('id');
+    }
+    props.portList = node.data('portList');
+    props.visible = true;
+    popupPropList.value = [...popupPropList.value, props];
+  };
+
+  const handleTopologySelect = (node: cytoscape.CollectionReturnValue) => {
+    if (node.isEdge()) {
+      const { source, target } = node.data();
+      showPopup(node.cy().$(`[id="${source}"]`), { onlyPort: true });
+      showPopup(node.cy().$(`[id="${target}"]`), { onlyPort: true });
+      console.log(node.cy().$(`[id="${source}"]`).data(), 123);
+      console.log(node.cy().$(`[id="${target}"]`).data(), 134);
+    }
+    if (node.isNode()) {
+      showPopup(node, { clear: true });
+    }
+  };
+  const handleTopologyUnselect = (node: cytoscape.CollectionReturnValue) => {
+    popupPropList.value = [];
   };
   const handleSearch = () => {
     if (!topologyIns.value) {

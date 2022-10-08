@@ -11,24 +11,14 @@
 
     <template #overlay>
       <Menu @click="handleMenuClick">
-        <MenuItem
-          key="doc"
-          :text="t('layout.header.dropdownItemDoc')"
-          icon="ion:document-text-outline"
-          v-if="getShowDoc"
-        />
-        <MenuDivider v-if="getShowDoc" />
+        <MenuItem key="userCenter" text="用户中心" icon="bxs:user-rectangle" />
         <MenuItem
           v-if="getUseLockPage"
-          key="lock"
-          :text="t('layout.header.tooltipLock')"
-          icon="ion:lock-closed-outline"
+          key="roleSetting"
+          text="权限设置"
+          icon="ant-design:setting-filled"
         />
-        <MenuItem
-          key="logout"
-          :text="t('layout.header.dropdownItemLoginOut')"
-          icon="ion:power-outline"
-        />
+        <MenuItem key="logout" text="退出系统" icon="ion:power-outline" />
       </Menu>
     </template>
   </Dropdown>
@@ -54,8 +44,10 @@
   import { openWindow } from '/@/utils';
 
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
+  import { useRouter } from 'vue-router';
+  import { PageNameEnum } from '/@/enums/pageEnum';
 
-  type MenuEvent = 'logout' | 'doc' | 'lock';
+  type MenuEvent = 'logout' | 'userCenter' | 'roleSetting';
 
   export default defineComponent({
     name: 'UserDropdown',
@@ -63,7 +55,6 @@
       Dropdown,
       Menu,
       MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
-      MenuDivider: Menu.Divider,
       LockAction: createAsyncComponent(() => import('../lock/LockModal.vue')),
     },
     props: {
@@ -79,11 +70,12 @@
         const { realName = '', avatar, desc } = userStore.getUserInfo || {};
         return { realName, avatar: avatar || headerImg, desc };
       });
+      const router = useRouter();
 
       const [register, { openModal }] = useModal();
 
-      function handleLock() {
-        openModal(true);
+      function handleRoleSettingClick() {
+        router.push({ name: PageNameEnum.SETTING });
       }
 
       //  login out
@@ -92,8 +84,8 @@
       }
 
       // open doc
-      function openDoc() {
-        openWindow(DOC_URL);
+      function handleUserCenterClick() {
+        router.push({ name: PageNameEnum.USER_INFO });
       }
 
       function handleMenuClick(e: MenuInfo) {
@@ -101,11 +93,11 @@
           case 'logout':
             handleLoginOut();
             break;
-          case 'doc':
-            openDoc();
+          case 'userCenter':
+            handleUserCenterClick();
             break;
-          case 'lock':
-            handleLock();
+          case 'roleSetting':
+            handleRoleSettingClick();
             break;
         }
       }

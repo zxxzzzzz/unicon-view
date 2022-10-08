@@ -11,6 +11,7 @@ export enum PageEnum {
 export enum PageNameEnum {
   HOME = 'home',
   SETTING = 'setting',
+  USER_INFO = 'userInfo',
   DATA = 'data',
   UNION = 'union',
 }

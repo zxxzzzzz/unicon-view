@@ -11,6 +11,8 @@
   const emits = defineEmits<{
     (event: 'cxttap', node: cytoscape.CollectionReturnValue): void;
     (event: 'tap', node: cytoscape.CollectionReturnValue): void;
+    (event: 'select', node: cytoscape.CollectionReturnValue): void;
+    (event: 'unselect', node: cytoscape.CollectionReturnValue): void;
     (event: 'drag', node: cytoscape.CollectionReturnValue): void;
     (event: 'dragfree', node: cytoscape.CollectionReturnValue): void;
   }>();
@@ -64,16 +66,31 @@
             ],
             wheelSensitivity: 0.1,
           });
+          cy.on('select ', 'node', (evt) => {
+            var node = evt.target;
+            emits('select', node);
+          });
+          cy.on('select ', 'edge', (evt) => {
+            var node = evt.target;
+            emits('select', node);
+            // var node = evt.target;
+            // emits('select', node);
+            // console.log(evt.target.targetEndpoint().data());
+          });
+          cy.on('unselect ', 'node', (evt) => {
+            var node = evt.target;
+            emits('unselect', node);
+          });
+          cy.on('unselect ', 'edge', (evt) => {
+            var node = evt.target;
+            emits('unselect', node);
+          });
           cy.on('tap', 'node', function (evt) {
             var node = evt.target;
-            evt.originalEvent.preventDefault();
-            evt.preventDefault();
             emits('tap', node);
           });
           cy.on('cxttap', 'node', function (evt) {
             var node = evt.target;
-            evt.originalEvent.preventDefault();
-            evt.preventDefault();
             emits('cxttap', node);
           });
           cy.on('drag', 'node', function (evt) {

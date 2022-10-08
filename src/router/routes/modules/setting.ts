@@ -3,24 +3,34 @@ import { LAYOUT } from '/@/router/constant';
 import { PageNameEnum } from '/@/enums/pageEnum';
 
 const dashboard: AppRouteModule = {
-  path: '/setting',
+  path: '/user',
   name: PageNameEnum.SETTING,
   component: LAYOUT,
-  redirect: '/setting/index',
+  redirect: '/user/setting',
   meta: {
     orderNo: 13,
     icon: 'ant-design:setting-outlined',
     title: '设置',
+    hideMenu: true,
     hideChildrenInMenu: true,
   },
   children: [
     {
-      path: 'index',
+      path: 'setting',
       name: PageNameEnum.SETTING,
       component: () => import('/@/views/setting/index.vue'),
       meta: {
         // affix: true,
         title: '设置',
+      },
+    },
+    {
+      path: 'info',
+      name: PageNameEnum.USER_INFO,
+      component: () => import('/@/views/setting/userInfo.vue'),
+      meta: {
+        // affix: true,
+        title: '用户中心',
       },
     },
   ],

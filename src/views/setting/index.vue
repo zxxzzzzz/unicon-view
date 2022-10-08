@@ -1,17 +1,7 @@
 <template>
   <div>
     <Card>
-      <Tabs v-model:activeKey="activeKey" type="card">
-        <TabPane tab="设置" key="5">
-          <Table :columns="columns" :dataSource="userList" />
-        </TabPane>
-        <TabPane tab="登录历史" key="6">
-          <LoginTable />
-        </TabPane>
-        <TabPane tab="用户操作历史" key="7">
-          <UserOperationTable />
-        </TabPane>
-      </Tabs>
+      <Table :columns="columns" :dataSource="userList" />
     </Card>
   </div>
 </template>
