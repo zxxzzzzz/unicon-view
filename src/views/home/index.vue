@@ -124,9 +124,11 @@
     }
     if (node.isNode()) {
       showPopup(node, { clear: true });
+      selectedNode.value = node;
     }
   };
   const handleTopologyUnselect = (node: cytoscape.CollectionReturnValue) => {
+    selectedNode.value = void 0;
     popupPropList.value = [];
   };
   const handleSearch = () => {
