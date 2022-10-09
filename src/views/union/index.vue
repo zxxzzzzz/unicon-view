@@ -15,7 +15,8 @@
             </div>
           </div>
           <div>
-            <template v-for="port in userData?.portlist || []" :key="port.name">
+            <Table :columns="portTableColumnList" :dataSource="userData?.portlist || []" />
+            <!-- <template v-for="port in userData?.portlist || []" :key="port.name">
               <Descriptions title="结果" :column="2" bordered>
                 <DescriptionsItem label="端口名称">{{ port.name }}</DescriptionsItem>
                 <DescriptionsItem label="框-槽位-端口号">{{ port.aliasName }}</DescriptionsItem>
@@ -34,7 +35,7 @@
                 <DescriptionsItem label="报文播发类型">{{ port.broadcastType }}</DescriptionsItem>
                 <DescriptionsItem label="延时机制">{{ port.delayMechanism }}</DescriptionsItem>
               </Descriptions>
-            </template>
+            </template> -->
           </div>
         </Card>
       </div>
@@ -46,7 +47,8 @@
   import Topology from '/@/components/topology/index.vue';
   import { getTopology } from '/@/api/union';
   import { useRequest } from 'vue-request';
-  import { Button, Card, Input, Descriptions, DescriptionsItem } from 'ant-design-vue';
+  import { Button, Card, Input, Descriptions, DescriptionsItem, Table } from 'ant-design-vue';
+  import type { TableProps } from 'ant-design-vue';
   import { ref } from 'vue';
   import { useModal } from '/@/hooks/component/useModal';
   import SetPortParamModal from './component/setPortParamModal.vue';
@@ -62,6 +64,13 @@
   const { data: userData, run: _getUserData } = useRequest(getUserData, { manual: true });
   const Textarea = Input.TextArea;
   const msg = ref('');
+
+  const portTableColumnList: TableProps['columns'] = [
+    { dataIndex: 'name', key: 'name', title: '名称' },
+    { dataIndex: 'aliasName', key: 'name', title: '框-槽位-端口号' },
+    { dataIndex: 'state', key: 'name', title: '端口状态' },
+  ];
+
   const handleTap = async (node: cytoscape.CollectionReturnValue) => {
     try {
       const portParam = await open<SetPortParam['portlist']>({
