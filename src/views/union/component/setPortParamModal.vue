@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model:visible="visible" @ok="handleOk" :closable="false" :footer="null" width="800px">
+  <Modal v-model:visible="visible" @ok="handleOk" :footer="null" width="800px" title="设置">
     <div class="p-1">
       <div class="flex bg-[rgb(240,240,240)]">
         <template v-for="(port, index) in portList" :key="port">
