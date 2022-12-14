@@ -4,7 +4,7 @@ import { resultSuccess } from '../_util';
 export default [
   // mock user login
   {
-    url: '/basic-api/UserLoginJudgment',
+    url: '/UserLoginJudgment',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {

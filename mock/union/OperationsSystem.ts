@@ -77,7 +77,7 @@ export default [
     },
   },
   {
-    url: '/basic-api/PortParam',
+    url: '/PortParam',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {
@@ -107,7 +107,7 @@ export default [
     },
   },
   {
-    url: '/basic-api/AlarmParam',
+    url: '/AlarmParam',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {

@@ -50,10 +50,10 @@ const transform: AxiosTransform = {
       throw new Error(t('sys.api.apiRequestFailed'));
     }
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    const { code, result, message } = data;
+    const { code, result, message } = data?.body || {};
 
     // 这里逻辑可以根据项目进行修改
-    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
+    const hasSuccess = data && code === ResultEnum.SUCCESS;
     if (hasSuccess) {
       return result;
     }
@@ -111,11 +111,7 @@ const transform: AxiosTransform = {
     } else {
       if (!isString(params)) {
         formatDate && formatRequestDate(params);
-        if (
-          Reflect.has(config, 'data') &&
-          config.data &&
-          (Object.keys(config.data).length > 0 || config.data instanceof FormData)
-        ) {
+        if (Reflect.has(config, 'data') && config.data && (Object.keys(config.data).length > 0 || config.data instanceof FormData)) {
           config.data = data;
           config.params = params;
         } else {
@@ -124,10 +120,7 @@ const transform: AxiosTransform = {
           config.params = undefined;
         }
         if (joinParamsToUrl) {
-          config.url = setObjToUrlParams(
-            config.url as string,
-            Object.assign({}, config.params, config.data),
-          );
+          config.url = setObjToUrlParams(config.url as string, Object.assign({}, config.params, config.data));
         }
       } else {
         // 兼容restful风格
@@ -146,9 +139,7 @@ const transform: AxiosTransform = {
     const token = getToken();
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
       // jwt token
-      (config as Recordable).headers.Authorization = options.authenticationScheme
-        ? `${options.authenticationScheme} ${token}`
-        : token;
+      (config as Recordable).headers.Authorization = options.authenticationScheme ? `${options.authenticationScheme} ${token}` : token;
     }
     return config;
   },
@@ -259,7 +250,11 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
     ),
   );
 }
-export const defHttp = createAxios();
+export const defHttp = createAxios({
+  requestOptions: {
+    apiUrl: 'http://115.239.56.85:7000',
+  },
+});
 
 // other api url
 // export const otherHttp = createAxios({

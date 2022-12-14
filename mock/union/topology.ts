@@ -41,7 +41,7 @@ export function createFakeUserList() {
 export default [
   // mock user login
   {
-    url: '/basic-api/getTopography',
+    url: '/getTopography',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {
@@ -80,13 +80,38 @@ export default [
             port2: '连接端口2',
             EndposX: 0,
             EndposY: 0,
+            lineType: 'ptp',
+          },
+          {
+            object: '链路2',
+            Dev1: '设备1',
+            port1: '连接端口1',
+            StartposX: 0,
+            StartposY: 0,
+            ConnectDev2: '设备2',
+            port2: '连接端口2',
+            EndposX: 0,
+            EndposY: 0,
+            lineType: 'syncE',
+          },
+          {
+            object: '链路3',
+            Dev1: '设备1',
+            port1: '连接端口1',
+            StartposX: 0,
+            StartposY: 0,
+            ConnectDev2: '设备2',
+            port2: '连接端口2',
+            EndposX: 0,
+            EndposY: 0,
+            lineType: '',
           },
         ],
       });
     },
   },
   {
-    url: '/basic-api/GetDevPort',
+    url: '/GetDevPort',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {

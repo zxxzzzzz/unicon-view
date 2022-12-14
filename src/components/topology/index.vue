@@ -24,19 +24,20 @@
         edges: [],
       };
     }
-    const nodes = topology.DeviceList.map((d) => {
+    const nodes = topology.deviceList.map((d) => {
       return {
         data: { id: d.object, ip: d.ip, type: d.type, portList: d.portList },
         position: { x: d.posX, y: d.posY },
       };
     });
-    const edges = topology.LinkList.map((l) => {
+    const edges = topology.linkList.map((l) => {
       return {
         data: {
           id: l.object,
           source: l.Dev1,
           target: l.ConnectDev2,
         },
+        classes: [l.lineType].join(' '),
       };
     });
     return {
@@ -52,7 +53,10 @@
         if (canvas.value) {
           cy = cytoscape({
             container: canvas.value, // container to render in
-            elements: elements.value,
+            elements: {
+              nodes: elements.value.nodes,
+              edges: elements.value.edges,
+            },
             layout: {
               name: 'preset',
             },
@@ -61,6 +65,24 @@
                 selector: 'node',
                 style: {
                   label: 'data(id)',
+                },
+              },
+              {
+                selector: 'edge.ptp',
+                style: {
+                  'curve-style': 'bezier',
+                  'line-style': 'dashed',
+                  'line-dash-pattern': [10, 3],
+                  'line-color': 'blue',
+                },
+              },
+              {
+                selector: 'edge.syncE',
+                style: {
+                  'curve-style': 'bezier',
+                  'line-style': 'dashed',
+                  'line-dash-pattern': [10, 3],
+                  'line-color': 'red',
                 },
               },
             ],

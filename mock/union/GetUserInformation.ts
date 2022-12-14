@@ -4,7 +4,7 @@ import { resultSuccess } from '../_util';
 export default [
   // mock user login
   {
-    url: '/basic-api/GetUserInformation',
+    url: '/GetUserInformation',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {
@@ -31,7 +31,7 @@ export default [
     },
   },
   {
-    url: '/basic-api/SetUserAuthority',
+    url: '/SetUserAuthority',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {
@@ -39,7 +39,7 @@ export default [
     },
   },
   {
-    url: '/basic-api/GetUserLogin',
+    url: '/GetUserLogin',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {
@@ -58,7 +58,7 @@ export default [
     },
   },
   {
-    url: '/basic-api/GetUserOperation',
+    url: '/GetUserOperation',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {

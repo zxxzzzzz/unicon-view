@@ -1,5 +1,5 @@
 const t = {
-  DeviceList: [
+  deviceList: [
     {
       object: '设备1',
       type: '设备类型',
@@ -25,10 +25,11 @@ const t = {
       portList: ['123', '123'],
     },
   ],
-  LinkList: [
+  linkList: [
     {
       object: '链路1',
       Dev1: '设备1',
+      lineType: 'ptp',
       port1: '连接端口1',
       StartposX: 0,
       StartposY: 0,

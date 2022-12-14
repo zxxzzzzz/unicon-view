@@ -4,17 +4,11 @@ import { resultError, resultSuccess, getRequestToken, requestParams } from '../_
 export default [
   // mock user login
   {
-    url: '/basic-api/Port1588Param',
+    url: '/Port1588Param',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {
-      const portList = [
-        'GigabitEthernet0/1/0',
-        'GigabitEthernet2/0/6',
-        'GigabitEthernet2/0/7',
-        'GigabitEthernet1/0/6',
-        'GigabitEthernet2/1/6',
-      ];
+      const portList = ['GigabitEthernet0/1/0', 'GigabitEthernet2/0/6', 'GigabitEthernet2/0/7', 'GigabitEthernet1/0/6', 'GigabitEthernet2/1/6'];
       const ar = Array(20)
         .fill(0)
         .map((d, index) => ({
@@ -44,17 +38,11 @@ export default [
     },
   },
   {
-    url: '/basic-api/UserData',
+    url: '/UserData',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {
-      const portList = [
-        'GigabitEthernet0/1/0',
-        'GigabitEthernet2/0/6',
-        'GigabitEthernet2/0/7',
-        'GigabitEthernet1/0/6',
-        'GigabitEthernet2/1/6',
-      ];
+      const portList = ['GigabitEthernet0/1/0', 'GigabitEthernet2/0/6', 'GigabitEthernet2/0/7', 'GigabitEthernet1/0/6', 'GigabitEthernet2/1/6'];
       const ar = Array(20)
         .fill(0)
         .map((d, index) => ({

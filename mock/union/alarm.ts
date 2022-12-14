@@ -4,7 +4,7 @@ import { resultError, resultSuccess, getRequestToken, requestParams } from '../_
 export default [
   // mock user login
   {
-    url: '/basic-api/Alarm',
+    url: '/Alarm',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {

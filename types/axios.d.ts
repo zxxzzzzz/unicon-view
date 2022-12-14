@@ -33,10 +33,12 @@ export interface RetryRequest {
   waitTime: number;
 }
 export interface Result<T = any> {
-  code: number;
-  type: 'success' | 'error' | 'warning';
-  message: string;
-  result: T;
+  body: {
+    code: number;
+    type: 'success' | 'error' | 'warning';
+    message: string;
+    result: T;
+  };
 }
 
 // multipart/form-data: upload file

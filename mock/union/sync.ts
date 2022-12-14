@@ -4,17 +4,11 @@ import { resultSuccess } from '../_util';
 export default [
   // mock user login
   {
-    url: '/basic-api/PortSyncParam',
+    url: '/PortSyncParam',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {
-      const portList = [
-        'GigabitEthernet0/1/0',
-        'GigabitEthernet2/0/6',
-        'GigabitEthernet2/0/7',
-        'GigabitEthernet1/0/6',
-        'GigabitEthernet2/1/6',
-      ];
+      const portList = ['GigabitEthernet0/1/0', 'GigabitEthernet2/0/6', 'GigabitEthernet2/0/7', 'GigabitEthernet1/0/6', 'GigabitEthernet2/1/6'];
       const ar = Array(20)
         .fill(0)
         .map((d, index) => ({

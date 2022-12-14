@@ -6,13 +6,7 @@ import type { SyncParam } from './model/syncParam';
 import type { Alarm } from './model/alarm';
 import type { AllUserInfo, LoginHistory, OperationHistory, UserItem } from './model/user';
 import type { SetPortParam } from './model/params';
-import type {
-  OperationSystem,
-  DevParam,
-  DevSyncParam,
-  PortParam,
-  AlarmParam,
-} from './model/operationSystem';
+import type { OperationSystem, DevParam, DevSyncParam, PortParam, AlarmParam } from './model/operationSystem';
 export { AllUserInfo, SetPortParam, I1588Params };
 
 export const getTopology = async (userName: string) => {
@@ -21,6 +15,7 @@ export const getTopology = async (userName: string) => {
     params: { userName },
   });
   const portList = await defHttp.post<DevPort>({ url: '/GetDevPort', params: { userName } });
+  // @ts-ignore
   const deviceList = topologyData.DeviceList.map((d) => {
     return {
       ...d,
@@ -31,8 +26,9 @@ export const getTopology = async (userName: string) => {
     };
   });
   return {
-    DeviceList: deviceList,
-    LinkList: topologyData.LinkList,
+    deviceList: deviceList,
+    // @ts-ignore
+    linkList: topologyData.LinkList,
   };
 };
 export const getDevPort = async (userName: string) => {
