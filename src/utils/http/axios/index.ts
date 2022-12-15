@@ -252,7 +252,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
 }
 export const defHttp = createAxios({
   requestOptions: {
-    apiUrl: 'http://115.239.56.85:7000',
+    apiUrl: '',
   },
 });
 

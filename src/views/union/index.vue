@@ -8,10 +8,9 @@
       <div class="flex-1 overflow-auto">
         <Card title="仿真结果">
           <div>
-            <div>输入</div>
-            <Textarea :rows="5" v-model:value="msg" />
             <div class="flex justify-end mt-2">
               <Button @click="handleSend">发送</Button>
+              <Button @click="handleResult">查看结果</Button>
             </div>
           </div>
           <div @dblclick="handleTableDblclick" ref="dragTable" :style="isTableDrag ? style + ';position: fixed' : ''">
@@ -47,9 +46,9 @@
   import Topology from '/@/components/topology/index.vue';
   import { getTopology } from '/@/api/union';
   import { useRequest } from 'vue-request';
-  import { Button, Card, Input, Descriptions, DescriptionsItem, Table } from 'ant-design-vue';
+  import { Button, Card, Input, Descriptions, DescriptionsItem, Table, Modal as AntModal } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
-  import { ref, computed } from 'vue';
+  import { ref, computed, h } from 'vue';
   import { useModal } from '/@/hooks/component/useModal';
   import SetPortParamModal from './component/setPortParamModal.vue';
   import cytoscape from 'cytoscape';
@@ -57,6 +56,7 @@
   import { getPort1588Param } from '/@/api/union/index';
   import { getUserData } from '/@/api/union/index';
   import { useDraggable, useElementBounding } from '@vueuse/core';
+  import InputTable from './component/inputTable.vue';
 
   const { Modal, open } = useModal(SetPortParamModal);
   // const activeKey = ref('1');
@@ -96,8 +96,22 @@
     // }, 300);
   };
   const handleSend = async () => {
-    _getUserData({ username: '', msg: msg.value });
+    const data = ref<any>();
+    AntModal.confirm({
+      title: '发送',
+      content: h(InputTable, {
+        onChange(d) {
+          console.log(d, 'd');
+          data.value = d;
+        },
+      }),
+      width: '100%',
+      onOk() {
+        _getUserData(data.value);
+      },
+    });
   };
+  const handleResult = () => {};
   const handleTableDblclick = () => {
     isTableDrag.value = true;
   };
