@@ -39,4 +39,4 @@ export function resetRouter() {
 // 配置路由器
 export function setupRouter(app: App<Element>) {
   app.use(router);
-}
+} 
