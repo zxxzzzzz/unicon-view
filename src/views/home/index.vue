@@ -117,8 +117,6 @@
       const { source, target } = node.data();
       showPopup(node.cy().$(`[id="${source}"]`), { onlyPort: true });
       showPopup(node.cy().$(`[id="${target}"]`), { onlyPort: true });
-      console.log(node.cy().$(`[id="${source}"]`).data(), 123);
-      console.log(node.cy().$(`[id="${target}"]`).data(), 134);
     }
     if (node.isNode()) {
       showPopup(node, { clear: true });

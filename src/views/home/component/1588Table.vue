@@ -14,7 +14,6 @@
     },
   });
   const filterDataSource = computed(() => {
-    console.log(props.selectedPortList, 'props.selectedPortList', dataSource.value);
     if (!props.selectedPortList?.length) {
       return [];
     }

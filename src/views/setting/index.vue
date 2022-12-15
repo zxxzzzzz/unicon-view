@@ -20,7 +20,7 @@
   const activeKey = ref('5');
   const { data } = useRequest(getUserInformation, {
     onSuccess(_data) {
-      _data.UserList.forEach((u, index) => {
+      _data.userList.forEach((u, index) => {
         selectedRoleList[index] = u.authority;
       });
     },
@@ -29,7 +29,7 @@
     return data.value?.AuthList || [];
   });
   const userList = computed(() => {
-    return data.value?.UserList || [];
+    return data.value?.userList || [];
   });
   const roleOptions = computed(() => {
     return roleList.value.map((r) => {
@@ -39,10 +39,9 @@
       };
     });
   });
-  console.log(selectedRoleList, 'selectedRoleList');
-  const columns: TableProps<AllUserInfo['UserList'][0]>['columns'] = [
-    { dataIndex: 'username', title: '用户名称' },
-    { dataIndex: 'password', title: '密码' },
+  const columns: TableProps<AllUserInfo['userList'][0]>['columns'] = [
+    { dataIndex: 'userName', title: '用户名称' },
+    { dataIndex: 'position', title: '地点' },
     {
       dataIndex: 'authority',
       title: '角色',

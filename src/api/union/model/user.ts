@@ -1,26 +1,16 @@
 const a = {
   AuthList: ['操作员', '普通用户', '重庆'],
-  UserList: [
+  userList: [
     {
-      username: 'zxxz',
-      password: 'qweqweqwe',
       authority: '操作员',
-    },
-    {
-      username: 'zxxzzzz',
-      password: 'qweqweqweqweqwe',
-      authority: '操作员',
-    },
-    {
-      username: 'wc',
-      password: 'zxcasdqwe',
-      authority: '操作员',
+      position: '嘉兴',
+      userName: 'zhangsan',
     },
   ],
 };
 const userItem = {
-  username: 'wc',
-  password: 'zxcasdqwe',
+  userName: 'wc',
+  position: 'zxcasdqwe',
   authority: '操作员',
 };
 
