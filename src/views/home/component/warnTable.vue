@@ -15,13 +15,13 @@
     formatResult: (d) => {
       return d.alarm.reduce(
         (re, al) => {
-          if (al.alarmLevel === 'Serious') {
+          if (al.alarmLevel === '重要') {
             re[0].push(al);
           }
-          if (al.alarmLevel === 'Major') {
+          if (al.alarmLevel === '主要') {
             re[1].push(al);
           }
-          if (al.alarmLevel === 'Secondary') {
+          if (al.alarmLevel === '次要') {
             re[2].push(al);
           }
           return re;
@@ -53,4 +53,8 @@
   const pagination: TableProps['pagination'] = {
     pageSize: 4,
   };
+
+  defineExpose({
+    update: () => _getHomeAlarm(),
+  });
 </script>

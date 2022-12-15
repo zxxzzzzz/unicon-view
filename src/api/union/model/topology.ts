@@ -29,7 +29,7 @@ const t = {
     {
       object: '链路1',
       Dev1: '设备1',
-      lineType: 'ptp',
+      linkType: 'ptp',
       port1: '连接端口1',
       StartposX: 0,
       StartposY: 0,
@@ -41,8 +41,8 @@ const t = {
   ],
 };
 const devPortItem = {
-  DeviceName: '设备1',
-  PortList: ['GigabitEthernet0/1/0', 'GigabitEthernet2/0/6'],
+  deviceName: '设备1',
+  portList: ['GigabitEthernet0/1/0', 'GigabitEthernet2/0/6'],
 };
 type DevPortItem = typeof devPortItem;
 

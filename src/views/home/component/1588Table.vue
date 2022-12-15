@@ -14,13 +14,14 @@
     },
   });
   const filterDataSource = computed(() => {
+    console.log(props.selectedPortList, 'props.selectedPortList', dataSource.value);
     if (!props.selectedPortList?.length) {
       return [];
     }
     if (!dataSource.value) {
       return [];
     }
-    return dataSource.value.filter((d) => props.selectedPortList.includes(d.name));
+    return dataSource.value.filter((d) => props.selectedPortList.includes(d.portName));
   });
 
   // name: '端口名称',
@@ -44,8 +45,8 @@
   //     timestampSend: '', //时间戳发送模式
 
   const columns: TableProps['columns'] = [
-    { dataIndex: 'name', title: '端口名称' },
-    { dataIndex: 'state', title: '端口状态' },
+    { dataIndex: 'portName', title: '端口名称' },
+    { dataIndex: 'ptpPortStatus', title: '端口状态' },
     { dataIndex: 'enableState', title: '使能状态' },
     { dataIndex: 'ptpClockId', title: '时钟id' },
     { dataIndex: 'ptpDomain', title: '域号' },

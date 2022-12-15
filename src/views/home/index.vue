@@ -2,22 +2,22 @@
   <div class="h-[calc(100vh-48px)]">
     <div class="flex h-full">
       <div class="flex flex-col w-3/5">
+        <div>
+          <Upload :showUploadList="false" :customRequest="uploadFile">
+            <Button>状态导入</Button>
+          </Upload>
+        </div>
         <div class="h-[50vh]">
-          <Topology
-            :topology="typology"
-            @select="handleTopologySelect"
-            @unselect="handleTopologyUnselect"
-            ref="topologyIns"
-          />
+          <Topology :topology="typology" @select="handleTopologySelect" @unselect="handleTopologyUnselect" ref="topologyIns" />
         </div>
         <div class="flex overflow-auto">
           <div class="flex-1">
             <Card title="端口">
               <Tabs v-model:activeKey="activeKey" type="card">
-                <TabPane key="1" tab="1588">
+                <TabPane key="1588" tab="1588">
                   <T1588Table :selectedPortList="selectedNodePort" />
                 </TabPane>
-                <TabPane key="2" tab="同步">
+                <TabPane key="sync" tab="同步">
                   <SyncTable :selectedPortList="selectedNodePort" />
                 </TabPane>
               </Tabs>
@@ -38,7 +38,7 @@
       </div>
       <div class="flex-1 overflow-auto">
         <Card title="告警">
-          <WarnTable />
+          <WarnTable ref="warnTable" />
         </Card>
       </div>
     </div>
@@ -51,18 +51,19 @@
   import Topology from '/@/components/topology/index.vue';
   import { getTopology } from '/@/api/union';
   import { useRequest } from 'vue-request';
-  import { Table, TabPane, Tabs, Card, Input, Button } from 'ant-design-vue';
+  import { Table, TabPane, Tabs, Card, Input, Button, Upload, message } from 'ant-design-vue';
   import T1588Table from './component/1588Table.vue';
   import SyncTable from './component/syncTable.vue';
   import WarnTable from './component/warnTable.vue';
-  import { getDevPort } from '/@/api/union/index';
+  import { getDevPort, uploadXlsxFile } from '/@/api/union/index';
   import { computed, ref, reactive } from 'vue';
   import cytoscape from 'cytoscape';
   import Popup from './component/popup.vue';
 
-  const activeKey = ref('1');
+  const activeKey = ref('1588');
+  const warnTable = ref();
   const { data: typology, run: _getTopology } = useRequest(getTopology);
-  const { data: devPortdata } = useRequest(getDevPort);
+  const { data: devPortData, run: _getDevPort } = useRequest(getDevPort);
   const selectedNode = ref<cytoscape.CollectionReturnValue>();
   const popupPropList = ref([
     {
@@ -80,18 +81,15 @@
       return [];
     }
     const id = selectedNode.value.data('id');
-    return (devPortdata.value || [])
+    return (devPortData.value?.devPortList || [])
       .filter((d) => {
-        return d.DeviceName === id;
+        return d.deviceName === id;
       })
-      .map((d) => d.PortList)
+      .map((d) => d.portList)
       .flat();
   });
 
-  const showPopup = (
-    node: cytoscape.CollectionReturnValue,
-    options?: { clear?: boolean; onlyPort?: boolean },
-  ) => {
+  const showPopup = (node: cytoscape.CollectionReturnValue, options?: { clear?: boolean; onlyPort?: boolean }) => {
     if (options?.clear) {
       popupPropList.value = [];
     }
@@ -144,6 +142,15 @@
     if (node.length) {
       node.select();
       selectedNode.value = node;
+    }
+  };
+  const uploadFile = async (fileInfo) => {
+    const res = await uploadXlsxFile({ name: 'file', file: fileInfo.file });
+    if (res?.data?.body?.code === 200) {
+      message.success('上传成功');
+      _getTopology();
+      _getDevPort();
+      warnTable.value.update();
     }
   };
   // fabric.canvas()

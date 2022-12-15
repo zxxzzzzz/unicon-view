@@ -18,7 +18,7 @@
     if (!dataSource.value) {
       return [];
     }
-    return dataSource.value.filter((d) => props.selectedPortList.includes(d.name));
+    return dataSource.value.filter((d) => props.selectedPortList.includes(d.portName));
   });
 
   //  name: '端口名称',
@@ -31,9 +31,9 @@
   //     SSM: '时钟等级',
 
   const columns: TableProps['columns'] = [
-    { dataIndex: 'name', title: '端口名称' },
+    { dataIndex: 'portName', title: '端口名称' },
     { dataIndex: 'aliasName', title: '框-槽位-端口号' },
-    { dataIndex: 'state', title: '状态' },
+    { dataIndex: 'clockState', title: '状态' },
     { dataIndex: 'enableState', title: '端口使能状态' },
     { dataIndex: 'singleType', title: '信号类型' },
   ];

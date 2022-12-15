@@ -1,17 +1,19 @@
 const a = {
   alarm: [
     {
-      id: '告警 id',
-      type: '设备/网管',
-      alarmNo: '告警类别名称',
-      deviceId: '网元 id',
-      alarmLevel: '告警等级',
-      alarmModule: '告警源',
-      alarmDesc: '告警描述',
-      alarmState: '告警状态', //（产生、已确认未清除、未确认已清除）
-      alarmTime: '告警时间',
-      confirmTime: '确认时间',
-      clearTime: '清除时间',
+      alarmDesc: '端口名称=Trunk-Serial6/28:0 端口别名=TO CQ9BSC3-FOR-TN-ZSDCL0354TNGLXBSCJD 端口备注=--',
+      alarmLevel: '重要',
+      alarmModule: '水土机房-CX600X16-RSG03',
+      alarmNo: 'CESPW_OPPOSITE_ACFAULT',
+      alarmState: '未确认已清除',
+      alarmTime: '09/09/2021 17:23:22',
+      clearTime: '09/09/2021 17:23:36',
+      clearUser: ' < 网元 > ',
+      confirmTime: '-',
+      confirmUser: '-',
+      deviceId: '',
+      id: '2600605',
+      type: '',
     },
   ],
 };

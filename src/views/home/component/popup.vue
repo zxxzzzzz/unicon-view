@@ -4,16 +4,18 @@
       <DescriptionsItem label="名称" v-if="props.name">{{ props.name }}</DescriptionsItem>
       <DescriptionsItem label="ip" v-if="props.ip">{{ props.ip }}</DescriptionsItem>
       <DescriptionsItem label="端口">
-        <template v-for="port in props.portList" :key="port">
-          <div>{{ port }}</div>
-        </template>
+        <div class="h-48 overflow-auto">
+          <template v-for="port in props.portList" :key="port">
+            <div>{{ port }}</div>
+          </template>
+        </div>
       </DescriptionsItem>
     </Descriptions>
   </div>
 </template>
 <script lang="ts" setup>
-  import { Descriptions, DescriptionsItem, Card } from 'ant-design-vue';
-  import { computed, watch, withDefaults } from 'vue';
+  import { Descriptions, DescriptionsItem } from 'ant-design-vue';
+  import { computed, withDefaults } from 'vue';
   const props = withDefaults(
     defineProps<{
       position: { x: number; y: number };

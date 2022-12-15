@@ -8,31 +8,47 @@ import type { AllUserInfo, LoginHistory, OperationHistory, UserItem } from './mo
 import type { SetPortParam } from './model/params';
 import type { OperationSystem, DevParam, DevSyncParam, PortParam, AlarmParam } from './model/operationSystem';
 export { AllUserInfo, SetPortParam, I1588Params };
+import { UploadFileParams } from '/#/axios';
 
-export const getTopology = async (userName: string) => {
+export const getTopology = async () => {
   const topologyData = await defHttp.post<Topology>({
-    url: '/getTopography',
-    params: { userName },
+    url: '/GetTopography',
   });
-  const portList = await defHttp.post<DevPort>({ url: '/GetDevPort', params: { userName } });
-  // @ts-ignore
-  const deviceList = topologyData.DeviceList.map((d) => {
+  const portList = await defHttp.post<{ devPortList: DevPort }>({ url: '/GetDevPort' });
+  const deviceList = topologyData.deviceList.map((d) => {
     return {
       ...d,
-      portList: portList
-        .filter((p) => p.DeviceName === d.object)
-        .map((p) => p.PortList)
+      portList: (portList?.devPortList || [])
+        .filter((p) => p.deviceName === d.object)
+        .map((p) => p.portList)
         .flat(),
     };
   });
   return {
     deviceList: deviceList,
-    // @ts-ignore
-    linkList: topologyData.LinkList,
+    linkList: topologyData.linkList
+      .map((l) => {
+        const linkTypeList = (l.linkType || '').split('&');
+        if (linkTypeList.length <= 1) {
+          return l;
+        }
+        return linkTypeList.map((type) => {
+          return { ...l, linkType: type };
+        });
+      })
+      .flat(),
   };
 };
-export const getDevPort = async (userName: string) => {
-  return defHttp.post<DevPort>({ url: '/GetDevPort', params: { userName } });
+export const uploadXlsxFile = (params: UploadFileParams) => {
+  return defHttp.uploadFile(
+    {
+      url: '/uploadXlsxFile',
+    },
+    params,
+  );
+};
+export const getDevPort = async () => {
+  return defHttp.post<{ devPortList: DevPort }>({ url: '/GetDevPort' });
 };
 export const setPortParam = async (params: SetPortParam) => {
   return defHttp.post<Topology>({ url: '/SetPortParam', params });
@@ -43,8 +59,8 @@ export const getPort1588Param = async (userName: string) => {
 export const getSyncParam = async (userName: string) => {
   return defHttp.post<SyncParam>({ url: '/PortSyncParam', params: { userName } });
 };
-export const getHomeAlarm = async (userName: string) => {
-  return defHttp.post<Alarm>({ url: '/Alarm', params: { userName } });
+export const getHomeAlarm = async () => {
+  return defHttp.post<Alarm>({ url: '/Alarm' });
 };
 export const getOperationsSystem = async (userName: string) => {
   return defHttp.post<OperationSystem>({ url: '/OperationsSystem', params: { userName } });
