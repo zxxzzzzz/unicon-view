@@ -30,7 +30,6 @@
   import cytoscape from 'cytoscape';
   import type { SetPortParam } from '/@/api/union/index';
   import { getPort1588Param } from '/@/api/union/index';
-  import { getUserData } from '/@/api/union/index';
   import InputTable from './component/inputTable.vue';
 
   const { Modal, open } = useModal(SetPortParamModal);
@@ -50,13 +49,11 @@
     // }, 300);
   };
   const handleSend = async () => {
-    const data = ref<any>();
     AntModal.info({
       title: '发送',
       content: h(InputTable, {
-        onChange(d) {
-          console.log(d, 'd');
-          data.value = d;
+        onSend() {
+          _getTopology();
         },
       }),
       width: '100%',

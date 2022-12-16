@@ -75,7 +75,7 @@
     accuracy: number;
   };
   // defineProps<{}>();
-  // const emits = defineEmits(['change']);
+  const emits = defineEmits(['send']);
   const data1588Source = ref<Item1588[]>([]);
   const dataSyncSource = ref<ItemSync[]>([]);
   const activeKey = ref('1588');
@@ -147,6 +147,7 @@
       const data = getFormat1588Data();
       _getUserData(data);
     }
+    emits('send');
   };
   const stateOptions = ['master', 'slave', 'passive', 'initializing', 'listening', 'premaster', 'uncalibrated', 'faulty'].map((d) => ({ label: d, value: d }));
   const packageTypeOptions = ['level2', 'level3'].map((d) => ({ label: d, value: d }));
