@@ -13,16 +13,21 @@
         </TabPane>
       </Tabs>
     </div>
+    <div class="flex justify-end mt-2">
+      <Button @click="handleSend">发送</Button>
+    </div>
     <div>
-      <ResultTable />
+      <ResultTable :resultData="resultData" />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-  import { Table, Input, Button, Select, Tabs, TabPane } from 'ant-design-vue';
+  import { Table, Input, Button, Select, Tabs, TabPane, Switch } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
   import { h, ref, toRaw } from 'vue';
   import ResultTable from './resultTable.vue';
+  import { getUserData } from '/@/api/union/index';
+  import { useRequest } from 'vue-request';
 
   type Item1588 = {
     devName: string;
@@ -55,7 +60,7 @@
     physicalLayerStatus: string; //物理层状态
     enablePhysicalSlaveStatus: boolean; //使能物理层Slave协商状态
     E1PortTimeslot: string; //E1端口时隙
-    enbaleE1AISAlarmCheck: boolean; // E1端口ais信号告警检测使能
+    enableE1AISAlarmCheck: boolean; // E1端口ais信号告警检测使能
     systemPriority: number; //系统优先级int 0-255
     '2M-1Priority': number; //2M-1环优先级 int 0-255
     '2M-2Priority': number; // 2M-2环优先级int 0-255
@@ -70,42 +75,88 @@
     accuracy: number;
   };
   // defineProps<{}>();
-  const emits = defineEmits(['change']);
+  // const emits = defineEmits(['change']);
   const data1588Source = ref<Item1588[]>([]);
   const dataSyncSource = ref<ItemSync[]>([]);
   const activeKey = ref('1588');
+  const { data: resultData, run: _getUserData } = useRequest(getUserData, { manual: true });
 
   const handleAdd = () => {
-    data1588Source.value = [
-      ...data1588Source.value,
-      {
-        devName: '',
-        name: '',
-        state: '',
-        ptpClockId: '',
-        ptpDomain: '',
-        ptpProtocol: '',
-        ptpClockClass: '',
-        ptpPriority1: '',
-        ptpPriority2: '',
-        timeSource: '',
-        announceIntv: '',
-        syncIntv: '',
-        delayIntv: '',
-        packageType: '',
-        broadcastType: '',
-        delayMechanism: '',
-        timeStampSendMode: '',
-        accuracy: '',
-      },
-    ];
-    emits('change', getFormat1588Data());
+    if (activeKey.value === '1588') {
+      data1588Source.value = [
+        ...data1588Source.value,
+        {
+          devName: '',
+          name: '',
+          state: '',
+          ptpClockId: '',
+          ptpDomain: '',
+          ptpProtocol: '',
+          ptpClockClass: '',
+          ptpPriority1: '',
+          ptpPriority2: '',
+          timeSource: '',
+          announceIntv: '',
+          syncIntv: '',
+          delayIntv: '',
+          packageType: '',
+          broadcastType: '',
+          delayMechanism: '',
+          timeStampSendMode: '',
+          accuracy: '',
+        },
+      ];
+    }
+    if (activeKey.value === 'sync') {
+      dataSyncSource.value = [
+        ...dataSyncSource.value,
+        {
+          devName: '',
+          name: '',
+          aliasName: '',
+          enableTimeSync: false, //使能时钟同步
+          closeESMCSend: false, //关闭ESMC报文发送
+          clockStatus: '', //时钟源状态
+          referenceClock: false, //参考时钟源
+          physicalLayerStatus: '', //物理层状态
+          enablePhysicalSlaveStatus: false, //使能物理层Slave协商状态
+          E1PortTimeslot: '', //E1端口时隙
+          enableE1AISAlarmCheck: false, // E1端口ais信号告警检测使能
+          systemPriority: 0, //系统优先级int 0-255
+          '2M-1Priority': 0, //2M-1环优先级 int 0-255
+          '2M-2Priority': 0, // 2M-2环优先级int 0-255
+          SSMMode: '', //SSM提取模式
+          inSSMLevel: '', //输入SSM等级
+          clockIDMode: '', //时钟ID提取模式
+          inClockID: '', //输入时钟ID
+          timeslot: '', //时隙
+          signalStyle: '', //信号类型
+          '2MPLL': '', //2M锁相环
+          timeStamp: '时间戳',
+          accuracy: 0,
+        },
+      ];
+    }
+  };
+  const handleSend = () => {
+    if (activeKey.value === 'sync') {
+      const data = getFormatSyncData();
+      _getUserData(data);
+    }
+    if (activeKey.value === '1588') {
+      const data = getFormat1588Data();
+      _getUserData(data);
+    }
   };
   const stateOptions = ['master', 'slave', 'passive', 'initializing', 'listening', 'premaster', 'uncalibrated', 'faulty'].map((d) => ({ label: d, value: d }));
   const packageTypeOptions = ['level2', 'level3'].map((d) => ({ label: d, value: d }));
   const broadcastTypeOptions = ['unicast', 'multicast'].map((d) => ({ label: d, value: d }));
   const delayMechanismOptions = ['E2E', 'P2P'].map((d) => ({ label: d, value: d }));
   const timeStampSendModeOptions = ['oneStep', 'twoStep'].map((d) => ({ label: d, value: d }));
+  const clockStatusOptions = ['normal', 'abnormal'].map((d) => ({ label: d, value: d }));
+  const physicalLayerStatusOptions = ['NA', 'Down', 'Up'].map((d) => ({ label: d, value: d }));
+  const SSMModeOptions = ['Auto', 'Manual'].map((d) => ({ label: d, value: d }));
+  const clockIDModeOptions = ['Auto', 'Manual'].map((d) => ({ label: d, value: d }));
 
   const getFormat1588Data = () => {
     return {
@@ -114,15 +165,22 @@
       portList: toRaw(data1588Source.value),
     };
   };
+  const getFormatSyncData = () => {
+    return {
+      dataType: 'syncE',
+      devName: dataSyncSource.value?.[0]?.devName || '',
+      portList: toRaw(dataSyncSource.value),
+    };
+  };
   const columns1588: TableProps['columns'] = [
     {
       dataIndex: 'devName',
       title: '网元名称',
       customRender({ index }) {
         return h(Input, {
+          value: data1588Source.value[index].devName,
           'onUpdate:value'(e) {
             data1588Source.value[index].devName = e;
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -132,9 +190,9 @@
       title: '端口名称',
       customRender({ index }) {
         return h(Input, {
+          value: data1588Source.value[index].name,
           'onUpdate:value'(e) {
             data1588Source.value[index].name = e;
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -144,11 +202,11 @@
       title: '端口状态',
       customRender({ index }) {
         return h(Select, {
+          value: data1588Source.value[index].state,
           options: stateOptions,
           class: 'w-20',
           'onUpdate:value'(e) {
             data1588Source.value[index].state = e?.toString?.() || '';
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -158,9 +216,9 @@
       title: '时钟id',
       customRender({ index }) {
         return h(Input, {
+          value: data1588Source.value[index].ptpClockId,
           'onUpdate:value'(e) {
             data1588Source.value[index].ptpClockId = e;
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -170,9 +228,9 @@
       title: '域号',
       customRender({ index }) {
         return h(Input, {
+          value: data1588Source.value[index].ptpDomain,
           'onUpdate:value'(e) {
             data1588Source.value[index].ptpDomain = e;
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -182,9 +240,9 @@
       title: '协议标准',
       customRender({ index }) {
         return h(Input, {
+          value: data1588Source.value[index].ptpProtocol,
           'onUpdate:value'(e) {
             data1588Source.value[index].ptpProtocol = e;
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -194,9 +252,9 @@
       title: '时钟等级',
       customRender({ index }) {
         return h(Input, {
+          value: data1588Source.value[index].ptpClockClass,
           'onUpdate:value'(e) {
             data1588Source.value[index].ptpClockClass = e;
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -206,9 +264,9 @@
       title: '优先级1',
       customRender({ index }) {
         return h(Input, {
+          value: data1588Source.value[index].ptpPriority1,
           'onUpdate:value'(e) {
             data1588Source.value[index].ptpPriority1 = e;
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -218,9 +276,9 @@
       title: '优先级2',
       customRender({ index }) {
         return h(Input, {
+          value: data1588Source.value[index].ptpPriority2,
           'onUpdate:value'(e) {
             data1588Source.value[index].ptpPriority2 = e;
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -230,9 +288,9 @@
       title: '时间源',
       customRender({ index }) {
         return h(Input, {
+          value: data1588Source.value[index].timeSource,
           'onUpdate:value'(e) {
             data1588Source.value[index].timeSource = e;
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -242,9 +300,9 @@
       title: '通知间隔',
       customRender({ index }) {
         return h(Input, {
+          value: data1588Source.value[index].announceIntv,
           'onUpdate:value'(e) {
             data1588Source.value[index].announceIntv = e;
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -254,9 +312,9 @@
       title: '同步间隔',
       customRender({ index }) {
         return h(Input, {
+          value: data1588Source.value[index].syncIntv,
           'onUpdate:value'(e) {
             data1588Source.value[index].syncIntv = e;
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -266,9 +324,9 @@
       title: '延时间隔',
       customRender({ index }) {
         return h(Input, {
+          value: data1588Source.value[index].delayIntv,
           'onUpdate:value'(e) {
             data1588Source.value[index].delayIntv = e;
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -278,11 +336,11 @@
       title: '报文封装类型',
       customRender({ index }) {
         return h(Select, {
+          value: data1588Source.value[index].packageType,
           options: packageTypeOptions,
           class: 'w-20',
           'onUpdate:value'(e) {
             data1588Source.value[index].packageType = e?.toString?.() || '';
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -292,11 +350,11 @@
       title: '报文播发类型',
       customRender({ index }) {
         return h(Select, {
+          value: data1588Source.value[index].broadcastType,
           options: broadcastTypeOptions,
           class: 'w-20',
           'onUpdate:value'(e) {
             data1588Source.value[index].broadcastType = e?.toString?.() || '';
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -306,11 +364,11 @@
       title: '延时机制',
       customRender({ index }) {
         return h(Select, {
+          value: data1588Source.value[index].delayMechanism,
           options: delayMechanismOptions,
           class: 'w-20',
           'onUpdate:value'(e) {
             data1588Source.value[index].delayMechanism = e?.toString?.() || '';
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -320,11 +378,11 @@
       title: '时间戳发送模式',
       customRender({ index }) {
         return h(Select, {
+          value: data1588Source.value[index].timeStampSendMode,
           options: timeStampSendModeOptions,
           class: 'w-20',
           'onUpdate:value'(e) {
             data1588Source.value[index].timeStampSendMode = e?.toString?.() || '';
-            emits('change', getFormat1588Data());
           },
         });
       },
@@ -334,23 +392,24 @@
       title: '精度预期',
       customRender({ index }) {
         return h(Input, {
+          value: data1588Source.value[index].accuracy,
           'onUpdate:value'(e) {
             data1588Source.value[index].accuracy = e;
-            emits('change', getFormat1588Data());
           },
         });
       },
     },
   ];
+  // 同步的
   const columnsSync: TableProps['columns'] = [
     {
       dataIndex: 'devName',
       title: '网元名称',
       customRender({ index }) {
         return h(Input, {
+          value: dataSyncSource.value[index].devName,
           'onUpdate:value'(e) {
-            data1588Source.value[index].devName = e;
-            emits('change', getFormat1588Data());
+            dataSyncSource.value[index].devName = e;
           },
         });
       },
@@ -360,199 +419,205 @@
       title: '端口名称',
       customRender({ index }) {
         return h(Input, {
+          value: dataSyncSource.value[index].name,
           'onUpdate:value'(e) {
-            data1588Source.value[index].name = e;
-            emits('change', getFormat1588Data());
+            dataSyncSource.value[index].name = e;
           },
         });
       },
     },
     {
-      dataIndex: 'state',
+      dataIndex: 'enableTimeSync',
       title: '使能时钟同步',
       customRender({ index }) {
+        return h(Switch, {
+          checked: dataSyncSource.value[index].enableTimeSync,
+          size: 'small',
+          'onUpdate:checked'(e) {
+            dataSyncSource.value[index].enableTimeSync = e.valueOf() as boolean;
+          },
+        });
+      },
+    },
+    {
+      dataIndex: 'closeESMCSend',
+      title: '关闭ESMC报文发送',
+      customRender({ index }) {
+        return h(Switch, {
+          checked: dataSyncSource.value[index].closeESMCSend,
+          size: 'small',
+          'onUpdate:checked'(e) {
+            dataSyncSource.value[index].closeESMCSend = e.valueOf() as boolean;
+          },
+        });
+      },
+    },
+    {
+      dataIndex: 'clockStatus',
+      title: '时钟源状态',
+      customRender({ index }) {
         return h(Select, {
-          options: stateOptions,
+          value: dataSyncSource.value[index].clockStatus,
+          class: 'w-20',
+          options: clockStatusOptions,
+          'onUpdate:value'(e) {
+            dataSyncSource.value[index].clockStatus = e?.toString?.() || '';
+          },
+        });
+      },
+    },
+    {
+      dataIndex: 'referenceClock',
+      title: '参考时钟源',
+      customRender({ index }) {
+        return h(Switch, {
+          checked: dataSyncSource.value[index].referenceClock,
+          size: 'small',
+          'onUpdate:checked'(e) {
+            dataSyncSource.value[index].referenceClock = e.valueOf() as boolean;
+          },
+        });
+      },
+    },
+    {
+      dataIndex: 'physicalLayerStatus',
+      title: '物理层状态',
+      customRender({ index }) {
+        return h(Select, {
+          value: dataSyncSource.value[index].physicalLayerStatus,
+          class: 'w-20',
+          options: physicalLayerStatusOptions,
+          'onUpdate:value'(e) {
+            dataSyncSource.value[index].physicalLayerStatus = e?.toString?.() || '';
+          },
+        });
+      },
+    },
+    {
+      dataIndex: 'enablePhysicalSlaveStatus',
+      title: '使能物理层Slave协商状态',
+      customRender({ index }) {
+        return h(Switch, {
+          checked: dataSyncSource.value[index].enablePhysicalSlaveStatus,
+          size: 'small',
+          'onUpdate:checked'(e) {
+            dataSyncSource.value[index].enablePhysicalSlaveStatus = e.valueOf() as boolean;
+          },
+        });
+      },
+    },
+    {
+      dataIndex: 'E1PortTimeslot',
+      title: 'E1端口时隙',
+      customRender({ index }) {
+        return h(Input, {
+          value: dataSyncSource.value[index].E1PortTimeslot,
+          'onUpdate:value'(e) {
+            dataSyncSource.value[index].E1PortTimeslot = e;
+          },
+        });
+      },
+    },
+    {
+      dataIndex: 'enableE1AISAlarmCheck',
+      title: 'E1端口ais信号告警检测使能',
+      customRender({ index }) {
+        return h(Switch, {
+          checked: dataSyncSource.value[index].enableE1AISAlarmCheck,
+          size: 'small',
+          'onUpdate:checked'(e) {
+            dataSyncSource.value[index].enableE1AISAlarmCheck = e.valueOf() as boolean;
+          },
+        });
+      },
+    },
+    {
+      dataIndex: 'systemPriority',
+      title: '系统优先级',
+      customRender({ index }) {
+        return h(Input, {
+          value: dataSyncSource.value[index].systemPriority,
+          'onUpdate:value'(e) {
+            dataSyncSource.value[index].systemPriority = parseFloat(e);
+          },
+        });
+      },
+    },
+    {
+      dataIndex: '2M-1Priority',
+      title: '2M-1环优先级',
+      customRender({ index }) {
+        return h(Input, {
+          value: dataSyncSource.value[index]['2M-1Priority'],
+          'onUpdate:value'(e) {
+            dataSyncSource.value[index]['2M-1Priority'] = parseFloat(e);
+          },
+        });
+      },
+    },
+    {
+      dataIndex: '2M-2Priority',
+      title: '2M-2环优先级',
+      customRender({ index }) {
+        return h(Input, {
+          value: dataSyncSource.value[index]['2M-2Priority'],
+          'onUpdate:value'(e) {
+            dataSyncSource.value[index]['2M-2Priority'] = parseFloat(e);
+          },
+        });
+      },
+    },
+    {
+      dataIndex: 'SSMMode',
+      title: 'SSM提取模式',
+      customRender({ index }) {
+        return h(Select, {
+          value: dataSyncSource.value[index].SSMMode,
+          options: SSMModeOptions,
           class: 'w-20',
           'onUpdate:value'(e) {
-            data1588Source.value[index].state = e?.toString?.() || '';
-            emits('change', getFormat1588Data());
+            dataSyncSource.value[index].SSMMode = e?.toString?.() || '';
           },
         });
       },
     },
     {
-      dataIndex: 'ptpClockId',
-      title: '时钟id',
+      dataIndex: 'inSSMLevel',
+      title: '输入SSM等级',
       customRender({ index }) {
         return h(Input, {
-          'onUpdate:value'(e) {
-            data1588Source.value[index].ptpClockId = e;
-            emits('change', getFormat1588Data());
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'ptpDomain',
-      title: '域号',
-      customRender({ index }) {
-        return h(Input, {
-          'onUpdate:value'(e) {
-            data1588Source.value[index].ptpDomain = e;
-            emits('change', getFormat1588Data());
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'ptpProtocol',
-      title: '协议标准',
-      customRender({ index }) {
-        return h(Input, {
-          'onUpdate:value'(e) {
-            data1588Source.value[index].ptpProtocol = e;
-            emits('change', getFormat1588Data());
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'ptpClockClass',
-      title: '时钟等级',
-      customRender({ index }) {
-        return h(Input, {
-          'onUpdate:value'(e) {
-            data1588Source.value[index].ptpClockClass = e;
-            emits('change', getFormat1588Data());
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'ptpPriority1',
-      title: '优先级1',
-      customRender({ index }) {
-        return h(Input, {
-          'onUpdate:value'(e) {
-            data1588Source.value[index].ptpPriority1 = e;
-            emits('change', getFormat1588Data());
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'ptpPriority2',
-      title: '优先级2',
-      customRender({ index }) {
-        return h(Input, {
-          'onUpdate:value'(e) {
-            data1588Source.value[index].ptpPriority2 = e;
-            emits('change', getFormat1588Data());
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'timeSource',
-      title: '时间源',
-      customRender({ index }) {
-        return h(Input, {
-          'onUpdate:value'(e) {
-            data1588Source.value[index].timeSource = e;
-            emits('change', getFormat1588Data());
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'announceIntv',
-      title: '通知间隔',
-      customRender({ index }) {
-        return h(Input, {
-          'onUpdate:value'(e) {
-            data1588Source.value[index].announceIntv = e;
-            emits('change', getFormat1588Data());
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'syncIntv',
-      title: '同步间隔',
-      customRender({ index }) {
-        return h(Input, {
-          'onUpdate:value'(e) {
-            data1588Source.value[index].syncIntv = e;
-            emits('change', getFormat1588Data());
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'delayIntv',
-      title: '延时间隔',
-      customRender({ index }) {
-        return h(Input, {
-          'onUpdate:value'(e) {
-            data1588Source.value[index].delayIntv = e;
-            emits('change', getFormat1588Data());
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'packageType',
-      title: '报文封装类型',
-      customRender({ index }) {
-        return h(Select, {
-          options: packageTypeOptions,
+          value: dataSyncSource.value[index].inSSMLevel,
           class: 'w-20',
           'onUpdate:value'(e) {
-            data1588Source.value[index].packageType = e?.toString?.() || '';
-            emits('change', getFormat1588Data());
+            dataSyncSource.value[index].inSSMLevel = e;
           },
         });
       },
     },
     {
-      dataIndex: 'broadcastType',
-      title: '报文播发类型',
+      dataIndex: 'clockIDMode',
+      title: '时钟ID提取模式',
       customRender({ index }) {
         return h(Select, {
-          options: broadcastTypeOptions,
+          value: dataSyncSource.value[index].clockIDMode,
+          options: clockIDModeOptions,
           class: 'w-20',
           'onUpdate:value'(e) {
-            data1588Source.value[index].broadcastType = e?.toString?.() || '';
-            emits('change', getFormat1588Data());
+            dataSyncSource.value[index].clockIDMode = e?.toString?.() || '';
           },
         });
       },
     },
     {
-      dataIndex: 'delayMechanism',
-      title: '延时机制',
+      dataIndex: 'inClockID',
+      title: '输入时钟ID',
       customRender({ index }) {
         return h(Select, {
-          options: delayMechanismOptions,
-          class: 'w-20',
-          'onUpdate:value'(e) {
-            data1588Source.value[index].delayMechanism = e?.toString?.() || '';
-            emits('change', getFormat1588Data());
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'timeStampSendMode',
-      title: '时间戳发送模式',
-      customRender({ index }) {
-        return h(Select, {
+          value: dataSyncSource.value[index].inClockID,
           options: timeStampSendModeOptions,
           class: 'w-20',
           'onUpdate:value'(e) {
-            data1588Source.value[index].timeStampSendMode = e?.toString?.() || '';
-            emits('change', getFormat1588Data());
+            dataSyncSource.value[index].inClockID = e?.toString?.() || '';
           },
         });
       },
@@ -562,9 +627,10 @@
       title: '精度预期',
       customRender({ index }) {
         return h(Input, {
+          value: dataSyncSource.value[index].accuracy,
+          class: 'w-20',
           'onUpdate:value'(e) {
-            data1588Source.value[index].accuracy = e;
-            emits('change', getFormat1588Data());
+            dataSyncSource.value[index].accuracy = parseFloat(e);
           },
         });
       },

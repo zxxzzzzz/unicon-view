@@ -89,7 +89,7 @@ export const getUserOperation = async (userName: string) => {
 export const setUserInformation = async (params: { userList: UserItem[] }) => {
   return defHttp.post<AllUserInfo>({ url: '/SetUserAuthority', params });
 };
-export const getUserData = async (params: { username: string; msg: string }) => {
+export const getUserData = async (params: any) => {
   return defHttp.post<PortParam & { username: string; devname: string }>({
     url: '/UserData',
     params,

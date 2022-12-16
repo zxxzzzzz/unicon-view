@@ -2,109 +2,89 @@
   <div>
     <Tabs v-model:activeKey="activeResultKey">
       <TabPane key="1588" tab="1588">
-        <Table :columns="columns1588" :dataSource="data1588Source" :pagination="false" />
+        <Table :columns="columns1588" :dataSource="data1588Source" />
       </TabPane>
       <TabPane key="sync" tab="sync">
-        <Table :columns="columnsSync" :dataSource="data1588Source" :pagination="false" />
+        <Table :columns="columnsSync" :dataSource="dataSyncSource" />
       </TabPane>
       <TabPane key="link" tab="链路信息">
-        <Table :columns="linkSync" :dataSource="data1588Source" :pagination="false" />
+        <Table :columns="linkSync" :dataSource="dataLinkSource" />
       </TabPane>
     </Tabs>
   </div>
 </template>
 <script lang="ts" setup>
-  import { Table, Input, Button, Select, Tabs, TabPane } from 'ant-design-vue';
+  import { Table, Tabs, TabPane } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
-  import { h, ref, toRaw } from 'vue';
+  import { ref, computed } from 'vue';
 
   type Item1588 = {
     devName: string;
-    name: string;
-    state: string;
+    accuracy: string;
+    enableState: string;
+    portName: string;
+    ptpClockClass: string;
     ptpClockId: string;
     ptpDomain: string;
-    ptpProtocol: string;
-    ptpClockClass: string;
-    ptpPriority1: string;
-    ptpPriority2: string;
+    ptpPriority: string;
+    state: string;
     timeSource: string;
-    announceIntv: string;
-    syncIntv: string;
-    delayIntv: string;
-    packageType: string;
-    broadcastType: string;
-    delayMechanism: string;
-    timeStampSendMode: string;
-    accuracy: string;
   };
   type ItemSync = {
-    devName: string;
-    name: string;
-    state: string;
-    ptpClockId: string;
-    ptpDomain: string;
-    ptpProtocol: string;
-    ptpClockClass: string;
-    ptpPriority1: string;
-    ptpPriority2: string;
-    timeSource: string;
-    announceIntv: string;
-    syncIntv: string;
-    delayIntv: string;
-    packageType: string;
-    broadcastType: string;
-    delayMechanism: string;
-    timeStampSendMode: string;
     accuracy: string;
+    clockStatus: string;
+    enableTimeSync: string;
+    outClockID: string;
+    outSSMLevel: string;
+    physicalLayerStatus: string;
+    portName: string;
+    referenceClock: string;
+    signalStyle: string;
+    systemPriority: string;
+    timeStamp: string;
   };
-  // defineProps<{}>();
-  const emits = defineEmits(['change']);
-  const data1588Source = ref<Item1588[]>([]);
-  const dataSyncSource = ref<ItemSync[]>([]);
+  type ItemLink = {
+    Dev1: string;
+    connectDev2: string;
+    linkType: string;
+    object: string;
+    port1: string;
+    port2: string;
+  };
+  const props = defineProps<{ resultData: any }>();
+
+  const data1588Source = computed<Item1588[]>(() => {
+    if (props.resultData?.dataType === 'ptp') {
+      return (props.resultData?.devParamList || [])
+        .map((dev) => {
+          return (dev?.portParamList || []).map((p) => ({ ...p, devName: dev.devName }));
+        })
+        .flat();
+    }
+    return [];
+  });
+  const dataSyncSource = computed<ItemSync[]>(() => {
+    if (props.resultData?.dataType === 'syncE') {
+      return (props.resultData?.devParamList || [])
+        .map((dev) => {
+          return (dev?.portParamList || []).map((p) => ({ ...p, devName: dev.devName }));
+        })
+        .flat();
+    }
+    return [];
+  });
+  const dataLinkSource = computed<ItemLink[]>(() => {
+    return props.resultData?.linkParamList || [];
+  });
   const activeResultKey = ref('1588');
 
-  const handleAdd = () => {
-    data1588Source.value = [
-      ...data1588Source.value,
-      {
-        devName: '',
-        name: '',
-        state: '',
-        ptpClockId: '',
-        ptpDomain: '',
-        ptpProtocol: '',
-        ptpClockClass: '',
-        ptpPriority1: '',
-        ptpPriority2: '',
-        timeSource: '',
-        announceIntv: '',
-        syncIntv: '',
-        delayIntv: '',
-        packageType: '',
-        broadcastType: '',
-        delayMechanism: '',
-        timeStampSendMode: '',
-        accuracy: '',
-      },
-    ];
-    emits('change', getFormat1588Data());
-  };
-
-  const getFormat1588Data = () => {
-    return {
-      dataType: 'ptp',
-      devName: data1588Source.value?.[0]?.devName || '',
-      portList: toRaw(data1588Source.value),
-    };
-  };
   const columns1588: TableProps['columns'] = [
     {
       dataIndex: 'devName',
       title: '网元名称',
     },
     {
-      dataIndex: 'name',
+      dataIndex: 'portName',
       title: '端口名称',
     },
     {
@@ -142,39 +122,39 @@
       title: '网元名称',
     },
     {
-      dataIndex: 'name',
+      dataIndex: 'portName',
       title: '端口名称',
     },
     {
-      dataIndex: 'state',
+      dataIndex: 'enableTimeSync',
       title: '使能时钟同步',
     },
     {
-      dataIndex: 'ptpClockId',
+      dataIndex: 'clockStatus',
       title: '时钟源状态',
     },
     {
-      dataIndex: 'ptpDomain',
+      dataIndex: 'referenceClock',
       title: '参考时钟源',
     },
     {
-      dataIndex: 'ptpClockClass',
+      dataIndex: 'physicalLayerStatus',
       title: '物理层状态',
     },
     {
-      dataIndex: 'ptpPriority1',
+      dataIndex: 'signalStyle',
       title: 'E1端口ais信号告警检测使能',
     },
     {
-      dataIndex: 'timeSource',
+      dataIndex: 'systemPriority',
       title: '系统优先级',
     },
     {
-      dataIndex: 'accuracy',
+      dataIndex: 'outSSMLevel',
       title: '输出SSM等级',
     },
     {
-      dataIndex: 'accuracy',
+      dataIndex: 'outClockID',
       title: '输出时钟ID',
     },
     {
@@ -184,27 +164,27 @@
   ];
   const linkSync: TableProps['columns'] = [
     {
-      dataIndex: 'devName',
+      dataIndex: 'object',
       title: '链路名称',
     },
     {
-      dataIndex: 'name',
+      dataIndex: 'Dev1',
       title: '源网元',
     },
     {
-      dataIndex: 'state',
+      dataIndex: 'port1',
       title: '源端口',
     },
     {
-      dataIndex: 'ptpClockId',
+      dataIndex: 'connectDev2',
       title: '宿网元',
     },
     {
-      dataIndex: 'ptpDomain',
+      dataIndex: 'port1',
       title: '宿端口',
     },
     {
-      dataIndex: 'ptpClockClass',
+      dataIndex: 'linkType',
       title: '同步方式',
     },
   ];

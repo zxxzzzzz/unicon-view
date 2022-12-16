@@ -9,32 +9,8 @@
         <Card title="仿真结果">
           <div>
             <div class="flex justify-end mt-2">
-              <Button @click="handleSend">发送</Button>
-              <Button @click="handleResult">查看结果</Button>
+              <Button @click="handleSend">仿真</Button>
             </div>
-          </div>
-          <div @dblclick="handleTableDblclick" ref="dragTable" :style="isTableDrag ? style + ';position: fixed' : ''">
-            <Table :columns="portTableColumnList" :dataSource="userData?.portlist || []" />
-            <!-- <template v-for="port in userData?.portlist || []" :key="port.name">
-              <Descriptions title="结果" :column="2" bordered>
-                <DescriptionsItem label="端口名称">{{ port.name }}</DescriptionsItem>
-                <DescriptionsItem label="框-槽位-端口号">{{ port.aliasName }}</DescriptionsItem>
-                <DescriptionsItem label="端口状态">{{ port.state }}</DescriptionsItem>
-                <DescriptionsItem label="使能状态">{{ port.enableState }}</DescriptionsItem>
-                <DescriptionsItem label="时钟id">{{ port.ptpClockId }}</DescriptionsItem>
-                <DescriptionsItem label="域号">{{ port.ptpDomain }}</DescriptionsItem>
-                <DescriptionsItem label="时钟等级">{{ port.ptpClockClass }}</DescriptionsItem>
-                <DescriptionsItem label="优先级1">{{ port.ptpPriority1 }}</DescriptionsItem>
-                <DescriptionsItem label="优先级2">{{ port.ptpPriority2 }}</DescriptionsItem>
-                <DescriptionsItem label="时间源">{{ port.timeSource }}</DescriptionsItem>
-                <DescriptionsItem label="通知间隔">{{ port.announceIntv }}</DescriptionsItem>
-                <DescriptionsItem label="同步间隔">{{ port.syncIntv }}</DescriptionsItem>
-                <DescriptionsItem label="延时间隔">{{ port.delayIntv }}</DescriptionsItem>
-                <DescriptionsItem label="报文封装类型">{{ port.packageType }}</DescriptionsItem>
-                <DescriptionsItem label="报文播发类型">{{ port.broadcastType }}</DescriptionsItem>
-                <DescriptionsItem label="延时机制">{{ port.delayMechanism }}</DescriptionsItem>
-              </Descriptions>
-            </template> -->
           </div>
         </Card>
       </div>
