@@ -20,7 +20,7 @@
 </template>
 <script lang="ts" setup>
   import Topology from '/@/components/topology/index.vue';
-  import { getTopology } from '/@/api/union';
+  import { getTopology1 } from '/@/api/union';
   import { useRequest } from 'vue-request';
   import { Button, Card, Input, Descriptions, DescriptionsItem, Table, Modal as AntModal } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
@@ -31,34 +31,12 @@
   import type { SetPortParam } from '/@/api/union/index';
   import { getPort1588Param } from '/@/api/union/index';
   import { getUserData } from '/@/api/union/index';
-  import { useDraggable, useElementBounding } from '@vueuse/core';
   import InputTable from './component/inputTable.vue';
 
   const { Modal, open } = useModal(SetPortParamModal);
   // const activeKey = ref('1');
-  const { data: topology, run: _getTopology } = useRequest(getTopology);
+  const { data: topology, run: _getTopology } = useRequest(getTopology1);
   const { data: port1588ParamData, run } = useRequest(getPort1588Param);
-  const { data: userData, run: _getUserData } = useRequest(getUserData, { manual: true });
-  const Textarea = Input.TextArea;
-  const dragTable = ref<HTMLElement>();
-  const pos = useElementBounding(dragTable);
-  const isTableDrag = ref(false);
-  const initPos = computed(() => {
-    return {
-      x: pos.x.value,
-      y: pos.y.value,
-    };
-  });
-  const { x, y, style } = useDraggable(dragTable, {
-    initialValue: { x: 300, y: 300 },
-  });
-  const msg = ref('');
-
-  const portTableColumnList: TableProps['columns'] = [
-    { dataIndex: 'name', key: 'name', title: '名称' },
-    { dataIndex: 'aliasName', key: 'name', title: '框-槽位-端口号' },
-    { dataIndex: 'state', key: 'name', title: '端口状态' },
-  ];
 
   const handleTap = async (node: cytoscape.CollectionReturnValue) => {
     try {
@@ -73,7 +51,7 @@
   };
   const handleSend = async () => {
     const data = ref<any>();
-    AntModal.confirm({
+    AntModal.info({
       title: '发送',
       content: h(InputTable, {
         onChange(d) {
@@ -82,13 +60,7 @@
         },
       }),
       width: '100%',
-      onOk() {
-        _getUserData(data.value);
-      },
+      onOk() {},
     });
-  };
-  const handleResult = () => {};
-  const handleTableDblclick = () => {
-    isTableDrag.value = true;
   };
 </script>

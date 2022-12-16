@@ -39,6 +39,35 @@ export const getTopology = async () => {
       .flat(),
   };
 };
+export const getTopology1 = async () => {
+  const topologyData = await defHttp.post<Topology>({
+    url: '/GetTopography1',
+  });
+  const portList = await defHttp.post<{ devPortList: DevPort }>({ url: '/GetDevPort' });
+  const deviceList = topologyData.deviceList.map((d) => {
+    return {
+      ...d,
+      portList: (portList?.devPortList || [])
+        .filter((p) => p.deviceName === d.object)
+        .map((p) => p.portList)
+        .flat(),
+    };
+  });
+  return {
+    deviceList: deviceList,
+    linkList: topologyData.linkList
+      .map((l) => {
+        const linkTypeList = (l.linkType || '').split('&');
+        if (linkTypeList.length <= 1) {
+          return l;
+        }
+        return linkTypeList.map((type) => {
+          return { ...l, linkType: type };
+        });
+      })
+      .flat(),
+  };
+};
 export const uploadXlsxFile = (params: UploadFileParams) => {
   return defHttp.uploadFile(
     {
