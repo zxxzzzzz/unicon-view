@@ -186,6 +186,7 @@
     {
       dataIndex: 'linkType',
       title: '同步方式',
+      
     },
   ];
 </script>
