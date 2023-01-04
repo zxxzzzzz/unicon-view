@@ -2,10 +2,18 @@
   <div class="h-[calc(100vh-48px)]">
     <div class="flex h-full">
       <div class="flex flex-col w-full">
-        <div>
-          <Upload :showUploadList="false" :customRequest="uploadFile">
-            <Button>状态导入</Button>
-          </Upload>
+        <div class="flex">
+          <div>
+            <Upload :showUploadList="false" :customRequest="uploadFile">
+              <Button>状态导入</Button>
+            </Upload>
+          </div>
+          <div class="ml-2">
+            <Button @click="handleAlarmClick">告警信息</Button>
+          </div>
+          <div class="ml-2">
+            <Button @click="handlePortClick">端口信息</Button>
+          </div>
         </div>
         <div class="h-[50vh]">
           <Topology :topology="typology" @select="handleTopologySelect" @unselect="handleTopologyUnselect" ref="topologyIns" />
@@ -56,7 +64,7 @@
   import SyncTable from './component/syncTable.vue';
   import WarnTable from './component/warnTable.vue';
   import { getDevPort, uploadXlsxFile } from '/@/api/union/index';
-  import { computed, ref, reactive, onMounted } from 'vue';
+  import { computed, ref, reactive, onMounted, onBeforeUnmount } from 'vue';
   import cytoscape from 'cytoscape';
   import Popup from './component/popup.vue';
 
@@ -89,12 +97,22 @@
       .flat();
   });
 
-  onMounted(() => {
-    let strWindowFeatures = `menubar=no,location=no,resizable=no,scrollbars=no,status=no,width=900,height=900`;
+  let alarmWindow: Window | null = null;
+  const handleAlarmClick = () => {
+    if (alarmWindow) {
+      alarmWindow.focus();
+      return;
+    }
+    let strWindowFeatures = `width=900,height=900`;
     const alarmUrl = location.origin + '/#/data/homeAlarm';
-    window.open(alarmUrl, '', strWindowFeatures);
-  });
+    alarmWindow = window.open(alarmUrl, 'alarm', strWindowFeatures);
+  };
 
+  onBeforeUnmount(() => {
+    if (alarmWindow) {
+      alarmWindow.close();
+    }
+  });
   const showPopup = (node: cytoscape.CollectionReturnValue, options?: { clear?: boolean; onlyPort?: boolean }) => {
     if (options?.clear) {
       popupPropList.value = [];
