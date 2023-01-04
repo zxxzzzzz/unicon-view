@@ -1,7 +1,7 @@
 <template>
   <div class="h-[calc(100vh-48px)]">
     <div class="flex h-full">
-      <div class="flex flex-col w-3/5">
+      <div class="flex flex-col w-full">
         <div>
           <Upload :showUploadList="false" :customRequest="uploadFile">
             <Button>状态导入</Button>
@@ -36,11 +36,11 @@
           </div>
         </div>
       </div>
-      <div class="flex-1 overflow-auto">
+      <!-- <div class="flex-1 overflow-auto">
         <Card title="告警">
           <WarnTable ref="warnTable" />
         </Card>
-      </div>
+      </div> -->
     </div>
     <template v-for="popupProp in popupPropList" :key="popupProp.name">
       <Popup v-bind="popupProp" />
@@ -56,7 +56,7 @@
   import SyncTable from './component/syncTable.vue';
   import WarnTable from './component/warnTable.vue';
   import { getDevPort, uploadXlsxFile } from '/@/api/union/index';
-  import { computed, ref, reactive } from 'vue';
+  import { computed, ref, reactive, onMounted } from 'vue';
   import cytoscape from 'cytoscape';
   import Popup from './component/popup.vue';
 
@@ -87,6 +87,12 @@
       })
       .map((d) => d.portList)
       .flat();
+  });
+
+  onMounted(() => {
+    let strWindowFeatures = `menubar=no,location=no,resizable=no,scrollbars=no,status=no,width=900,height=900`;
+    const alarmUrl = location.origin + '/#/data/homeAlarm';
+    window.open(alarmUrl, '', strWindowFeatures);
   });
 
   const showPopup = (node: cytoscape.CollectionReturnValue, options?: { clear?: boolean; onlyPort?: boolean }) => {

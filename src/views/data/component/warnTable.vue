@@ -9,7 +9,7 @@
   import { Table } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
   import { useRequest } from 'vue-request';
-  import { getHomeAlarm } from '/@/api/union/index';
+  import { getHomeAlarm } from '/@/api/union';
   // defineProps<{}>();
   const { data: dataSource, run: _getHomeAlarm } = useRequest(getHomeAlarm, {
     formatResult: (d) => {
