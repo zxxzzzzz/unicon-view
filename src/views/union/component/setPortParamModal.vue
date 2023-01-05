@@ -1,24 +1,15 @@
 <template>
   <Modal v-model:visible="visible" @ok="handleOk" :footer="null" width="800px" title="设置">
     <div class="p-1">
-      <div class="flex bg-[rgb(240,240,240)]">
+      <div class="flex bg-[rgb(240,240,240)] overflow-auto">
         <template v-for="(port, index) in portList" :key="port">
-          <div
-            :class="`p-1 border ${index === portIndex ? 'bg-white' : ''}`"
-            @click="handlePortClick(index)"
-            >{{ port }}</div
-          >
+          <div :class="`p-1 border ${index === portIndex ? 'bg-white' : ''}`" @click="handlePortClick(index)">{{ port }}</div>
         </template>
       </div>
       <div class="main flex">
         <div class="bg-[rgb(240,240,240)] w-20">
           <template v-for="(text, index) in typeList" :key="text">
-            <div
-              :class="`h-16 justify-center items-center flex ${
-                index === typeIndex ? 'bg-white' : ''
-              }`"
-              @click="handleTypeClick(index)"
-            >
+            <div :class="`h-16 justify-center items-center flex ${index === typeIndex ? 'bg-white' : ''}`" @click="handleTypeClick(index)">
               <div>{{ text }}</div>
             </div>
           </template>
@@ -153,18 +144,7 @@
   </Modal>
 </template>
 <script lang="ts" setup>
-  import {
-    Modal,
-    Form,
-    FormItem,
-    Tabs,
-    TabPane,
-    Card,
-    Input,
-    Checkbox,
-    Select,
-    InputNumber,
-  } from 'ant-design-vue';
+  import { Modal, Form, FormItem, Tabs, TabPane, Card, Input, Checkbox, Select, InputNumber } from 'ant-design-vue';
   import type { I1588Params } from '/@/api/union/index';
   import { computed, reactive, Ref, ref, watch } from 'vue';
   import {

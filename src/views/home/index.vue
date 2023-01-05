@@ -2,23 +2,26 @@
   <div class="h-[calc(100vh-48px)]">
     <div class="flex h-full">
       <div class="flex flex-col w-full">
-        <div class="flex">
+        <div class="flex p-4 bg-white">
           <div>
             <Upload :showUploadList="false" :customRequest="uploadFile">
               <Button>状态导入</Button>
             </Upload>
           </div>
           <div class="ml-2">
-            <Button @click="handleAlarmClick">告警信息</Button>
+            <Button @click="handleInfoClick">信息</Button>
           </div>
-          <div class="ml-2">
-            <Button @click="handlePortClick">端口信息</Button>
+          <div class="ml-2 border border-solid border-gray-400 p-2">
+            <div class="flex items-center">
+              <div class="whitespace-nowrap mr-4">ip地址</div>
+              <Input v-model:value="ip" placeholder="请输入ip地址" />
+            </div>
           </div>
         </div>
-        <div class="h-[50vh]">
+        <div class="h-full">
           <Topology :topology="typology" @select="handleTopologySelect" @unselect="handleTopologyUnselect" ref="topologyIns" />
         </div>
-        <div class="flex overflow-auto">
+        <!-- <div class="flex overflow-auto">
           <div class="flex-1">
             <Card title="端口">
               <Tabs v-model:activeKey="activeKey" type="card">
@@ -42,7 +45,7 @@
               </div>
             </Card>
           </div>
-        </div>
+        </div> -->
       </div>
       <!-- <div class="flex-1 overflow-auto">
         <Card title="告警">
@@ -60,11 +63,8 @@
   import { getTopology } from '/@/api/union';
   import { useRequest } from 'vue-request';
   import { Table, TabPane, Tabs, Card, Input, Button, Upload, message } from 'ant-design-vue';
-  import T1588Table from './component/1588Table.vue';
-  import SyncTable from './component/syncTable.vue';
-  import WarnTable from './component/warnTable.vue';
   import { getDevPort, uploadXlsxFile } from '/@/api/union/index';
-  import { computed, ref, reactive, onMounted, onBeforeUnmount } from 'vue';
+  import { computed, ref, reactive, onMounted, onBeforeUnmount, watch } from 'vue';
   import cytoscape from 'cytoscape';
   import Popup from './component/popup.vue';
 
@@ -83,6 +83,22 @@
     },
   ]);
   const ip = ref('');
+  // 匹配用户输入ip,高亮节点
+  watch(ip, () => {
+    if (!topologyIns.value) {
+      return;
+    }
+    const cy = topologyIns.value.getCy();
+    if (!cy) {
+      return;
+    }
+    cy.$('node').unselect();
+    const node = cy.$(`node[ip="${ip.value}"]`);
+    if (node.length) {
+      node.select();
+      selectedNode.value = node;
+    }
+  });
   const topologyIns = ref<InstanceType<typeof Topology>>();
   const selectedNodePort = computed(() => {
     if (!selectedNode.value) {
@@ -97,20 +113,42 @@
       .flat();
   });
 
-  let alarmWindow: Window | null = null;
-  const handleAlarmClick = () => {
-    if (alarmWindow) {
-      alarmWindow.focus();
+  let infoWindow: Window | null = null;
+  let portListStr = '';
+  const updateInfoWindow = () => {
+    if (infoWindow) {
+      const curPortListStr = JSON.stringify(selectedNodePort.value);
+      if (portListStr !== curPortListStr) {
+        infoWindow.location.replace(location.origin + '/#/data/home' + `?portList=${btoa(curPortListStr)}`);
+      }
+    }
+  };
+  const handleInfoClick = () => {
+    // 如果弹窗已经打开 就复用该弹窗
+    if (infoWindow) {
+      updateInfoWindow();
+      infoWindow.focus();
       return;
     }
-    let strWindowFeatures = `width=900,height=900`;
-    const alarmUrl = location.origin + '/#/data/homeAlarm';
-    alarmWindow = window.open(alarmUrl, 'alarm', strWindowFeatures);
+    let strWindowFeatures = `width=900,height=900,left=999999px,top=999999px`;
+    portListStr = JSON.stringify(selectedNodePort.value);
+    const alarmUrl = location.origin + '/#/data/home' + `?portList=${btoa(portListStr)}`;
+    infoWindow = window.open(alarmUrl, 'alarm', strWindowFeatures);
+    // 弹窗被关闭时，引用的变量置为null
+    if (infoWindow) {
+      infoWindow.onload = () => {
+        if (infoWindow) {
+          infoWindow.onunload = () => {
+            infoWindow = null;
+          };
+        }
+      };
+    }
   };
-
   onBeforeUnmount(() => {
-    if (alarmWindow) {
-      alarmWindow.close();
+    // 页面卸载时 弹窗要关闭
+    if (infoWindow) {
+      infoWindow.close();
     }
   });
   const showPopup = (node: cytoscape.CollectionReturnValue, options?: { clear?: boolean; onlyPort?: boolean }) => {
@@ -145,27 +183,18 @@
     if (node.isNode()) {
       showPopup(node, { clear: true });
       selectedNode.value = node;
+      ip.value = selectedNode.value.data('ip');
+      if (infoWindow) {
+        updateInfoWindow();
+        infoWindow.focus();
+      }
     }
   };
   const handleTopologyUnselect = (node: cytoscape.CollectionReturnValue) => {
     selectedNode.value = void 0;
     popupPropList.value = [];
   };
-  const handleSearch = () => {
-    if (!topologyIns.value) {
-      return;
-    }
-    const cy = topologyIns.value.getCy();
-    if (!cy) {
-      return;
-    }
-    cy.$('node').unselect();
-    const node = cy.$(`node[ip="${ip.value}"]`);
-    if (node.length) {
-      node.select();
-      selectedNode.value = node;
-    }
-  };
+
   const uploadFile = async (fileInfo) => {
     const res = await uploadXlsxFile({ name: 'file', file: fileInfo.file });
     if (res?.data?.body?.code === 200) {
