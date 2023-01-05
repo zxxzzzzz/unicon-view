@@ -1,15 +1,15 @@
 <template>
-  <Table :columns="columns" :dataSource="dataSource" :pagination="pagination" />
+  <Table :columns="columns" :dataSource="props.dataSource" :pagination="pagination" />
 </template>
 <script lang="ts" setup>
   import { Table } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
-  import { useRequest } from 'vue-request';
-  import { getDevParam } from '/@/api/union';
-  // defineProps<{}>();
-  const { data: dataSource, run: _getDevParam } = useRequest(getDevParam, {
-    formatResult: (d) => d.devlist,
-  });
+  // import { useRequest } from 'vue-request';
+  // import { getDevParam } from '/@/api/union';
+  const props = defineProps<{ dataSource: any }>();
+  // const { data: dataSource, run: _getDevParam } = useRequest(getDevParam, {
+  //   formatResult: (d) => d.devlist,
+  // });
 
   // id: '网元 id',
   // name: '网元名称',

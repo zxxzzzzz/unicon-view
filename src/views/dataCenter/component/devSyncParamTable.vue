@@ -1,15 +1,15 @@
 <template>
-  <Table :columns="columns" :dataSource="dataSource" :pagination="pagination" />
+  <Table :columns="columns" :dataSource="props.dataSource" :pagination="pagination" />
 </template>
 <script lang="ts" setup>
   import { Table } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
-  import { useRequest } from 'vue-request';
-  import { getDevSyncParam } from '/@/api/union';
-  // defineProps<{}>();
-  const { data: dataSource, run: _getDevSyncParam } = useRequest(getDevSyncParam, {
-    formatResult: (d) => d.devinforlist,
-  });
+  // import { useRequest } from 'vue-request';
+  // import { getDevSyncParam } from '/@/api/union';
+  const props = defineProps<{ dataSource: any }>();
+  // const { data: dataSource, run: _getDevSyncParam } = useRequest(getDevSyncParam, {
+  //   formatResult: (d) => d.devinforlist,
+  // });
 
   //  deviceId: '网元 ID',
   // refTimeInput: '参考时间源端口',

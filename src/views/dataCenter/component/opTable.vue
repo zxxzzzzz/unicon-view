@@ -1,15 +1,16 @@
 <template>
-  <Table :columns="columns" :dataSource="dataSource" :pagination="pagination" />
+  <Table :columns="columns" :dataSource="props.dataSource" :pagination="pagination" />
 </template>
 <script lang="ts" setup>
   import { Table } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
-  import { useRequest } from 'vue-request';
-  import { getOperationsSystem } from '/@/api/union';
+  // import { useRequest } from 'vue-request';
+  // import { getOperationsSystem } from '/@/api/union';
   // defineProps<{}>();
-  const { data: dataSource, run: _getOperationsSystem } = useRequest(getOperationsSystem, {
-    formatResult: (d) => d.Systemlist,
-  });
+  const props = defineProps<{ dataSource: any }>();
+  // const { data: dataSource, run: _getOperationsSystem } = useRequest(getOperationsSystem, {
+  //   formatResult: (d) => d.Systemlist,
+  // });
 
   // name: 'ee9e416e-2886-11e6-a71d-7824af3f',
   //       userLabel: 'UL_SS_EMS',

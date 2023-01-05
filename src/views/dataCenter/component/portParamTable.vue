@@ -1,15 +1,15 @@
 <template>
-  <Table :columns="columns" :dataSource="dataSource" :pagination="pagination" />
+  <Table :columns="columns" :dataSource="props.dataSource" :pagination="pagination" />
 </template>
 <script lang="ts" setup>
   import { Table } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
-  import { useRequest } from 'vue-request';
-  import { getPortParam } from '/@/api/union';
-  // defineProps<{}>();
-  const { data: dataSource, run: _getPortParam } = useRequest(getPortParam, {
-    formatResult: (d) => d.portlist,
-  });
+  // import { useRequest } from 'vue-request';
+  // import { getPortParam } from '/@/api/union';
+  const props = defineProps<{ dataSource: any }>();
+  // const { data: dataSource, run: _getPortParam } = useRequest(getPortParam, {
+  //   formatResult: (d) => d.portlist,
+  // });
 
   // name: '端口名称',
   // aliasName: '框-槽位-端口号',
