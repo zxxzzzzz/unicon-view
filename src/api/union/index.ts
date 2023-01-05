@@ -5,6 +5,7 @@ import type { Topology, DevPort } from './model/topology';
 import type { SyncParam } from './model/syncParam';
 import type { Alarm } from './model/alarm';
 import type { AllUserInfo, LoginHistory, OperationHistory, UserItem } from './model/user';
+import type { ComBoxItem } from './model/comBox';
 import type { SetPortParam } from './model/params';
 import type { OperationSystem, DevParam, DevSyncParam, PortParam, AlarmParam } from './model/operationSystem';
 export { AllUserInfo, SetPortParam, I1588Params };
@@ -121,6 +122,12 @@ export const setUserInformation = async (params: { userList: UserItem[] }) => {
 export const getUserData = async (params: any) => {
   return defHttp.post<PortParam & { username: string; devname: string }>({
     url: '/UserData',
+    params,
+  });
+};
+export const getComBoxInfor = async (params: any) => {
+  return defHttp.post<{ devList: ComBoxItem[] }>({
+    url: '/GetComBoxInfor',
     params,
   });
 };

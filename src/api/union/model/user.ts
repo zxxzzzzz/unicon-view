@@ -18,8 +18,8 @@ const loginItem = {
   username: '用户名称',
   state: '登录状态',
   position: '登录地点',
-  'start-time': '登录起始时间',
-  'end-time': '登录结束时间',
+  startTime: '登录起始时间',
+  endTime: '登录结束时间',
 };
 
 const operationItem = {
@@ -33,5 +33,5 @@ const operationItem = {
 
 export type AllUserInfo = typeof a;
 export type UserItem = typeof userItem;
-export type LoginHistory = { Userlist: typeof loginItem[] };
-export type OperationHistory = { Userlist: typeof operationItem[] };
+export type LoginHistory = { userList: typeof loginItem[] };
+export type OperationHistory = { userList: typeof operationItem[] };

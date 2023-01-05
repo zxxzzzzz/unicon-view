@@ -12,8 +12,6 @@
   import type { AllUserInfo } from '/@/api/union';
   import { useRequest } from 'vue-request';
   import { computed, h, reactive, ref } from 'vue';
-  import LoginTable from './component/loginTable.vue';
-  import UserOperationTable from './component/userOperationTable.vue';
   // defineProps<{  }>();
 
   const selectedRoleList = reactive<string[]>([]);

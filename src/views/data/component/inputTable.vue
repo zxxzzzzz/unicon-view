@@ -24,9 +24,9 @@
 <script lang="ts" setup>
   import { Table, Input, Button, Select, Tabs, TabPane, Switch } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
-  import { h, ref, toRaw } from 'vue';
+  import { h, ref, toRaw, computed } from 'vue';
   import ResultTable from './resultTable.vue';
-  import { getUserData } from '/@/api/union/index';
+  import { getUserData, getComBoxInfor } from '/@/api/union/index';
   import { useRequest } from 'vue-request';
 
   type Item1588 = {
@@ -80,6 +80,7 @@
   const dataSyncSource = ref<ItemSync[]>([]);
   const activeKey = ref('1588');
   const { data: resultData, run: _getUserData } = useRequest(getUserData, { manual: true });
+  const { data: comData, run: _getComBoxInfor } = useRequest(getComBoxInfor);
 
   const handleAdd = () => {
     if (activeKey.value === '1588') {
@@ -149,15 +150,33 @@
     }
     emits('send');
   };
-  const stateOptions = ['master', 'slave', 'passive', 'initializing', 'listening', 'premaster', 'uncalibrated', 'faulty'].map((d) => ({ label: d, value: d }));
-  const packageTypeOptions = ['level2', 'level3'].map((d) => ({ label: d, value: d }));
-  const broadcastTypeOptions = ['unicast', 'multicast'].map((d) => ({ label: d, value: d }));
-  const delayMechanismOptions = ['E2E', 'P2P'].map((d) => ({ label: d, value: d }));
-  const timeStampSendModeOptions = ['oneStep', 'twoStep'].map((d) => ({ label: d, value: d }));
-  const clockStatusOptions = ['normal', 'abnormal'].map((d) => ({ label: d, value: d }));
-  const physicalLayerStatusOptions = ['NA', 'Down', 'Up'].map((d) => ({ label: d, value: d }));
-  const SSMModeOptions = ['Auto', 'Manual'].map((d) => ({ label: d, value: d }));
-  const clockIDModeOptions = ['Auto', 'Manual'].map((d) => ({ label: d, value: d }));
+  const stateOptions = ['master', 'slave', 'passive', 'initializing', 'listening', 'premaster', 'uncalibrated', 'faulty'].map((d) => ({ title: d, value: d }));
+  const packageTypeOptions = ['level2', 'level3'].map((d) => ({ title: d, value: d }));
+  const broadcastTypeOptions = ['unicast', 'multicast'].map((d) => ({ title: d, value: d }));
+  const delayMechanismOptions = ['E2E', 'P2P'].map((d) => ({ title: d, value: d }));
+  const timeStampSendModeOptions = ['oneStep', 'twoStep'].map((d) => ({ title: d, value: d }));
+  const clockStatusOptions = ['normal', 'abnormal'].map((d) => ({ title: d, value: d }));
+  const physicalLayerStatusOptions = ['NA', 'Down', 'Up'].map((d) => ({ title: d, value: d }));
+  const SSMModeOptions = ['Auto', 'Manual'].map((d) => ({ title: d, value: d }));
+  const clockIDModeOptions = ['Auto', 'Manual'].map((d) => ({ title: d, value: d }));
+  const devNameOptions = computed(() => {
+    return (comData.value?.devList || []).map((d) => {
+      return {
+        title: d.devName,
+        value: d.devName,
+      };
+    });
+  });
+  // const portOptions = computed(() => {
+  //   return (comData.value?.devList || []).map(d => {
+  //     return (d.portList || []).map((p) => {
+  //       return {
+  //         label:p.portName,
+  //         value:p.portName
+  //       }
+  //     })
+  //   }).flat();
+  // });
 
   const getFormat1588Data = () => {
     return {
@@ -178,10 +197,13 @@
       dataIndex: 'devName',
       title: '网元名称',
       customRender({ index }) {
-        return h(Input, {
+        return h(Select, {
           value: data1588Source.value[index].devName,
+          options: devNameOptions.value,
+          class: 'w-40',
           'onUpdate:value'(e) {
-            data1588Source.value[index].devName = e;
+            console.log(e, 'eeeeeee');
+            data1588Source.value[index].devName = e?.toString?.() || '';
           },
         });
       },
@@ -190,10 +212,17 @@
       dataIndex: 'name',
       title: '端口名称',
       customRender({ index }) {
-        return h(Input, {
+        return h(Select, {
+          class: 'w-30',
           value: data1588Source.value[index].name,
+          options: ((comData.value?.devList || []).find((d) => d.devName === data1588Source.value[index].devName)?.portList || []).map((p) => {
+            return {
+              title: p.portName,
+              value: p.portName,
+            };
+          }),
           'onUpdate:value'(e) {
-            data1588Source.value[index].name = e;
+            data1588Source.value[index].name = e?.toString?.() || '';
           },
         });
       },

@@ -8,7 +8,7 @@
   import { getUserOperation } from '/@/api/union';
   // defineProps<{}>();
   const { data: dataSource, run: _getUserOperation } = useRequest(getUserOperation, {
-    formatResult: (d) => d.Userlist,
+    formatResult: (d) => d.userList,
   });
 
   // username: '用户名称',
@@ -19,12 +19,12 @@
   // 'end-time': '操作结束时间',
 
   const columns: TableProps['columns'] = [
-    { dataIndex: 'username', title: '用户名称' },
+    { dataIndex: 'userName', title: '用户名称' },
     { dataIndex: 'position', title: '登录地点' },
-    { dataIndex: 'Module', title: '操作模块' },
+    { dataIndex: 'module', title: '操作模块' },
     { dataIndex: 'msg', title: '操作内容' },
-    { dataIndex: 'start-time', title: '登录起始时间' },
-    { dataIndex: 'end-time', title: '登录结束时间' },
+    { dataIndex: 'startTime', title: '登录起始时间' },
+    { dataIndex: 'endTime', title: '登录结束时间' },
   ];
   const pagination: TableProps['pagination'] = {
     pageSize: 20,

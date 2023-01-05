@@ -45,7 +45,6 @@
         device: node.data() as any,
         port1588Param: port1588ParamData.value?.ptp || [],
       });
-      console.log(portParam);
     } catch (error) {}
     // setTimeout(async () => {
     // }, 300);
