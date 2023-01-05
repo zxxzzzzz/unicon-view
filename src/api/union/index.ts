@@ -131,7 +131,7 @@ export const getComBoxInfor = async (params: any) => {
     params,
   });
 };
-export const getSystemData = async (params: any) => {
+export const getSystemData = async (params?: any) => {
   return defHttp.post<PortParam & OperationSystem & DevParam & DevSyncParam & AlarmParam>({
     url: '/GetSystemData',
     params,

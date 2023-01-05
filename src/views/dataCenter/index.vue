@@ -34,28 +34,61 @@
   import PortParamTable from './component/portParamTable.vue';
   import AlarmParamTable from './component/alarmParamTable.vue';
   import { Tabs, TabPane, Card, RangePicker, Button } from 'ant-design-vue';
-  import { ref, computed } from 'vue';
+  import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
   import { Dayjs } from 'dayjs';
   import { useRequest } from 'vue-request';
   import { getSystemData } from '/@/api/union/index';
   // defineProps<{  }>();
   type RangeValue = [Dayjs, Dayjs];
   const activeKey = ref('1');
+  const timeId = ref(0);
+  const cacheData = ref<any>();
   const dateRange = ref<RangeValue>();
-  const { data } = useRequest(getSystemData);
+  const { run: _getSystemData } = useRequest(getSystemData, {
+    onSuccess(data) {
+      // 初始化值
+      if (!cacheData.value) {
+        cacheData.value = {};
+      }
+      // 只更新有返回值的字段
+      if (data.alarmList) {
+        cacheData.value.alarmList = data.alarmList;
+      }
+      if (data.devList) {
+        cacheData.value.devList = data.devList;
+      }
+      if (data.devinforList) {
+        cacheData.value.devinforList = data.devinforList;
+      }
+      if (data.portList) {
+        cacheData.value.portList = data.portList;
+      }
+      if (data.systemList) {
+        cacheData.value.systemList = data.systemList;
+      }
+    },
+  });
   const portList = computed(() => {
-    return data.value?.portList;
+    return cacheData.value?.portList;
   });
   const alarmList = computed(() => {
-    return data.value?.alarmList || [];
+    return cacheData.value?.alarmList || [];
   });
   const devList = computed(() => {
-    return data.value?.devList || [];
+    return cacheData.value?.devList || [];
   });
   const devinforList = computed(() => {
-    return data.value?.devinforList || [];
+    return cacheData.value?.devinforList || [];
   });
   const systemList = computed(() => {
-    return data.value?.systemList || [];
+    return cacheData.value?.systemList || [];
+  });
+  onMounted(() => {
+    timeId.value = setInterval(() => {
+      _getSystemData();
+    }, 30 * 60 * 1000) as any as number;
+  });
+  onBeforeUnmount(() => {
+    clearInterval(timeId.value);
   });
 </script>
