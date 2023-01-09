@@ -35,4 +35,9 @@ export interface GetUserInfoModel {
   avatar: string;
   // 介绍
   desc?: string;
+  userList: {
+    authority: string;
+    position: string;
+    userName: string;
+  }[];
 }
