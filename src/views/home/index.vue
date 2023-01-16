@@ -21,37 +21,7 @@
         <div class="h-full">
           <Topology :topology="typology" @select="handleTopologySelect" @unselect="handleTopologyUnselect" ref="topologyIns" />
         </div>
-        <!-- <div class="flex overflow-auto">
-          <div class="flex-1">
-            <Card title="端口">
-              <Tabs v-model:activeKey="activeKey" type="card">
-                <TabPane key="1588" tab="1588">
-                  <T1588Table :selectedPortList="selectedNodePort" />
-                </TabPane>
-                <TabPane key="sync" tab="同步">
-                  <SyncTable :selectedPortList="selectedNodePort" />
-                </TabPane>
-              </Tabs>
-            </Card>
-          </div>
-          <div class="flex-1">
-            <Card title="搜索">
-              <div class="flex items-center">
-                <div class="whitespace-nowrap mr-4">ip地址</div>
-                <Input v-model:value="ip" placeholder="请输入ip地址" />
-              </div>
-              <div class="flex justify-end mt-4">
-                <Button @click="handleSearch"> 搜索</Button>
-              </div>
-            </Card>
-          </div>
-        </div> -->
       </div>
-      <!-- <div class="flex-1 overflow-auto">
-        <Card title="告警">
-          <WarnTable ref="warnTable" />
-        </Card>
-      </div> -->
     </div>
     <template v-for="popupProp in popupPropList" :key="popupProp.name">
       <Popup v-bind="popupProp" />

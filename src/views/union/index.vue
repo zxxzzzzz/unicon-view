@@ -2,22 +2,12 @@
   <div class="h-[calc(100vh-48px)]">
     <div class="p-4 bg-white">
       <div>
-        <Button @click="handleSimulation"> 仿真</Button>
+        <Button @click="handleSimulation">仿真</Button>
       </div>
     </div>
     <div class="flex h-[calc(100%-48px)]">
       <div class="h-full w-full">
         <Topology :topology="topology" @tap="handleTap" />
-        <!-- </div>
-      <div class="flex-1 overflow-auto">
-        <Card title="仿真结果">
-          <div>
-            <div class="flex justify-end mt-2">
-              <Button @click="handleSend">仿真</Button>
-            </div>
-          </div>
-        </Card>
-      </div> -->
       </div>
       <Modal />
     </div> </div
@@ -46,21 +36,7 @@
         port1588Param: port1588ParamData.value?.ptp || [],
       });
     } catch (error) {}
-    // setTimeout(async () => {
-    // }, 300);
   };
-  // const handleSend = async () => {
-  //   AntModal.info({
-  //     title: '发送',
-  //     content: h(InputTable, {
-  //       onSend() {
-  //         _getTopology();
-  //       },
-  //     }),
-  //     width: '100%',
-  //     onOk() {},
-  //   });
-  // };
 
   let infoWindow: Window | null = null;
   // let portListQuery = '';

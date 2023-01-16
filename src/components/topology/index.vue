@@ -5,6 +5,7 @@
   import cytoscape from 'cytoscape';
   import { Topology } from '/@/api/union/model/topology';
   import { ref, computed, watch, nextTick } from 'vue';
+  import { message } from 'ant-design-vue';
 
   const props = defineProps<{ topology: Topology | undefined }>();
   const canvas = ref<HTMLDivElement>();
@@ -52,84 +53,90 @@
     () => {
       nextTick(() => {
         if (canvas.value) {
-          cy = cytoscape({
-            container: canvas.value, // container to render in
-            // @ts-ignore
-            elements: {
-              nodes: elements.value.nodes,
-              edges: elements.value.edges,
-            },
-            layout: {
-              name: 'preset',
-            },
-            style: [
-              {
-                selector: 'node',
-                style: {
-                  label: 'data(id)',
-                },
+          try {
+            cy = cytoscape({
+              container: canvas.value, // container to render in
+              // @ts-ignore
+              elements: {
+                nodes: elements.value.nodes,
+                edges: elements.value.edges,
               },
-              {
-                selector: 'edge',
-                style: {
-                  'curve-style': 'haystack',
-                  'haystack-radius': 0.5,
-                },
+              layout: {
+                name: 'preset',
               },
-              {
-                selector: 'edge.ptp',
-                style: {
-                  'line-style': 'dashed',
-                  'line-dash-pattern': [10, 3],
-                  'line-color': 'blue',
+              style: [
+                {
+                  selector: 'node',
+                  style: {
+                    label: 'data(id)',
+                  },
                 },
-              },
-              {
-                selector: 'edge.syncE',
-                style: {
-                  'line-style': 'dashed',
-                  'line-dash-pattern': [10, 3],
-                  'line-color': 'red',
+                {
+                  selector: 'edge',
+                  style: {
+                    'curve-style': 'bezier',
+                  },
                 },
-              },
-            ],
-            wheelSensitivity: 0.1,
-          });
-          cy.on('select ', 'node', (evt) => {
-            var node = evt.target;
-            emits('select', node);
-          });
-          cy.on('select ', 'edge', (evt) => {
-            var node = evt.target;
-            emits('select', node);
-            // var node = evt.target;
-            // emits('select', node);
-            // console.log(evt.target.targetEndpoint().data());
-          });
-          cy.on('unselect ', 'node', (evt) => {
-            var node = evt.target;
-            emits('unselect', node);
-          });
-          cy.on('unselect ', 'edge', (evt) => {
-            var node = evt.target;
-            emits('unselect', node);
-          });
-          cy.on('tap', 'node', function (evt) {
-            var node = evt.target;
-            emits('tap', node);
-          });
-          cy.on('cxttap', 'node', function (evt) {
-            var node = evt.target;
-            emits('cxttap', node);
-          });
-          cy.on('drag', 'node', function (evt) {
-            var node = evt.target;
-            emits('drag', node);
-          });
-          cy.on('dragfree', 'node', function (evt) {
-            var node = evt.target;
-            emits('dragfree', node);
-          });
+                {
+                  selector: 'edge.ptp',
+                  style: {
+                    'line-style': 'dashed',
+                    'target-arrow-shape': 'triangle',
+                    'line-dash-pattern': [10, 3],
+                    'target-arrow-color': 'blue',
+                    'line-color': 'blue',
+                  },
+                },
+                {
+                  selector: 'edge.syncE',
+                  style: {
+                    'line-style': 'dashed',
+                    'target-arrow-shape': 'triangle',
+                    'line-dash-pattern': [10, 3],
+                    'line-color': 'red',
+                    'target-arrow-color': 'red',
+                  },
+                },
+              ],
+              wheelSensitivity: 0.1,
+            });
+          } catch (error: any) {
+            message.error((error as Error).message, 10);
+          }
+          if (cy) {
+            cy.on('select ', 'node', (evt) => {
+              var node = evt.target;
+              emits('select', node);
+            });
+            cy.on('select ', 'edge', (evt) => {
+              var node = evt.target;
+              emits('select', node);
+            });
+            cy.on('unselect ', 'node', (evt) => {
+              var node = evt.target;
+              emits('unselect', node);
+            });
+            cy.on('unselect ', 'edge', (evt) => {
+              var node = evt.target;
+              emits('unselect', node);
+            });
+            cy.on('tap', 'node', function (evt) {
+              var node = evt.target;
+              emits('tap', node);
+            });
+            cy.on('cxttap', 'node', function (evt) {
+              var node = evt.target;
+              emits('cxttap', node);
+            });
+            cy.on('drag', 'node', function (evt) {
+              var node = evt.target;
+              emits('drag', node);
+            });
+            cy.on('dragfree', 'node', function (evt) {
+              var node = evt.target;
+              emits('dragfree', node);
+            });
+          }
         }
       });
     },

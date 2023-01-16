@@ -167,17 +167,6 @@
       };
     });
   });
-  // const portOptions = computed(() => {
-  //   return (comData.value?.devList || []).map(d => {
-  //     return (d.portList || []).map((p) => {
-  //       return {
-  //         label:p.portName,
-  //         value:p.portName
-  //       }
-  //     })
-  //   }).flat();
-  // });
-
   const getFormat1588Data = () => {
     return {
       dataType: 'ptp',
@@ -200,9 +189,8 @@
         return h(Select, {
           value: data1588Source.value[index].devName,
           options: devNameOptions.value,
-          class: 'w-40',
+          class: 'w-50',
           'onUpdate:value'(e) {
-            console.log(e, 'eeeeeee');
             data1588Source.value[index].devName = e?.toString?.() || '';
           },
         });
@@ -213,7 +201,7 @@
       title: '端口名称',
       customRender({ index }) {
         return h(Select, {
-          class: 'w-30',
+          class: 'w-40',
           value: data1588Source.value[index].name,
           options: ((comData.value?.devList || []).find((d) => d.devName === data1588Source.value[index].devName)?.portList || []).map((p) => {
             return {
@@ -436,10 +424,12 @@
       dataIndex: 'devName',
       title: '网元名称',
       customRender({ index }) {
-        return h(Input, {
+        return h(Select, {
+          options: devNameOptions.value,
+          class: 'w-50',
           value: dataSyncSource.value[index].devName,
           'onUpdate:value'(e) {
-            dataSyncSource.value[index].devName = e;
+            dataSyncSource.value[index].devName = e?.toString?.() || '';
           },
         });
       },
@@ -448,10 +438,17 @@
       dataIndex: 'name',
       title: '端口名称',
       customRender({ index }) {
-        return h(Input, {
+        return h(Select, {
+          options: ((comData.value?.devList || []).find((d) => d.devName === dataSyncSource.value[index]?.devName)?.portList || []).map((p) => {
+            return {
+              title: p.portName,
+              value: p.portName,
+            };
+          }),
+          class: 'w-40',
           value: dataSyncSource.value[index].name,
           'onUpdate:value'(e) {
-            dataSyncSource.value[index].name = e;
+            dataSyncSource.value[index].name = e?.toString?.() || '';
           },
         });
       },
