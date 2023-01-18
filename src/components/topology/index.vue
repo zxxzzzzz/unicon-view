@@ -4,7 +4,7 @@
 <script lang="ts" setup>
   import cytoscape from 'cytoscape';
   import { Topology } from '/@/api/union/model/topology';
-  import { ref, computed, watch, nextTick } from 'vue';
+  import { ref, computed, watch, nextTick, toRaw } from 'vue';
   import { message } from 'ant-design-vue';
 
   const props = defineProps<{ topology: Topology | undefined }>();
@@ -145,6 +145,30 @@
   defineExpose({
     getCy() {
       return cy;
+    },
+    getTopology() {
+      if (!cy) {
+        return {};
+      }
+      const deviceList = cy
+        .nodes()
+        .toArray()
+        .map((node) => {
+          const data = node.data();
+          const pos = node.position();
+          return {
+            object: data.id,
+            type: data.type,
+            ip: data.ip,
+            posX: pos.x,
+            posY: pos.y,
+          };
+        });
+      const linkList = toRaw(props.topology?.linkList || []);
+      return {
+        deviceList,
+        linkList,
+      };
     },
   });
 </script>

@@ -11,6 +11,9 @@
           <div class="ml-2">
             <Button @click="handleInfoClick">信息</Button>
           </div>
+          <div class="ml-2">
+            <Button @click="handleSave">保存拓扑图</Button>
+          </div>
           <div class="ml-2 border border-solid border-gray-400 p-2">
             <div class="flex items-center">
               <div class="whitespace-nowrap mr-4">ip地址</div>
@@ -30,15 +33,14 @@
 </template>
 <script lang="ts" setup>
   import Topology from '/@/components/topology/index.vue';
-  import { getTopology } from '/@/api/union';
+  import { getTopology, setTopography } from '/@/api/union';
   import { useRequest } from 'vue-request';
-  import { Table, TabPane, Tabs, Card, Input, Button, Upload, message } from 'ant-design-vue';
+  import { Input, Button, Upload, message } from 'ant-design-vue';
   import { getDevPort, uploadXlsxFile } from '/@/api/union/index';
-  import { computed, ref, reactive, onMounted, onBeforeUnmount, watch } from 'vue';
+  import { computed, ref, onBeforeUnmount, watch } from 'vue';
   import cytoscape from 'cytoscape';
   import Popup from './component/popup.vue';
 
-  const activeKey = ref('1588');
   const warnTable = ref();
   const { data: typology, run: _getTopology } = useRequest(getTopology);
   const { data: devPortData, run: _getDevPort } = useRequest(getDevPort);
@@ -173,6 +175,16 @@
       _getDevPort();
       warnTable.value.update();
     }
+  };
+  const handleSave = async () => {
+    if (!topologyIns.value) {
+      return;
+    }
+    const data = topologyIns.value.getTopology();
+    try {
+      await setTopography(data);
+      message.success('保存拓扑图成功');
+    } catch (error) {}
   };
   // fabric.canvas()
   // defineProps<{  }>();

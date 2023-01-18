@@ -137,3 +137,9 @@ export const getSystemData = async (params?: any) => {
     params,
   });
 };
+export const setTopography = async (params?: any) => {
+  return defHttp.post<any>({
+    url: '/SetTopography',
+    params,
+  });
+};
