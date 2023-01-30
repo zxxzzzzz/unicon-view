@@ -29,6 +29,7 @@
       return {
         data: { id: d.object, ip: d.ip, type: d.type, portList: d.portList },
         position: { x: d.posX, y: d.posY },
+        classes: [d.type],
       };
     });
     const edges = topology.linkList.map((l, index) => {
@@ -69,6 +70,36 @@
                   selector: 'node',
                   style: {
                     label: 'data(id)',
+                  },
+                },
+                {
+                  selector: 'node.core',
+                  style: {
+                    width: 50,
+                    height: 36.5,
+                    'background-image': '/resource/img/core.png',
+                    'background-fit': 'contain',
+                    'background-opacity': 0,
+                  },
+                },
+                {
+                  selector: 'node.convergence',
+                  style: {
+                    width: 50,
+                    height: 36.3,
+                    'background-image': '/resource/img/convergence.png',
+                    'background-fit': 'contain',
+                    'background-opacity': 0,
+                  },
+                },
+                {
+                  selector: 'node.access',
+                  style: {
+                    width: 50,
+                    height: 35.7,
+                    'background-image': '/resource/img/access.png',
+                    'background-fit': 'contain',
+                    'background-opacity': 0,
                   },
                 },
                 {

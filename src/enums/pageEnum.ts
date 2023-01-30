@@ -14,4 +14,5 @@ export enum PageNameEnum {
   USER_INFO = 'userInfo',
   DATA = 'dataCenter',
   UNION = 'union',
+  SYSTEM_ALARM = 'systemAlarm',
 }

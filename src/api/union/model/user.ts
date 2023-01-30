@@ -1,5 +1,5 @@
 const a = {
-  AuthList: ['操作员', '普通用户', '重庆'],
+  authList: ['操作员', '普通用户', '重庆'],
   userList: [
     {
       authority: '操作员',

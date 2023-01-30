@@ -13,13 +13,11 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { Table, Select, Card, Tabs, TabPane } from 'ant-design-vue';
-  import { computed, h, reactive, ref } from 'vue';
+  import { Card, Tabs, TabPane } from 'ant-design-vue';
+  import { ref } from 'vue';
   import LoginTable from './component/loginTable.vue';
   import UserOperationTable from './component/userOperationTable.vue';
   // defineProps<{  }>();
 
-  const selectedRoleList = reactive<string[]>([]);
   const activeKey = ref('6');
-  console.log(selectedRoleList, 'selectedRoleList');
 </script>
