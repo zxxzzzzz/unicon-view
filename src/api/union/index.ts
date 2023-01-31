@@ -143,3 +143,9 @@ export const setTopography = async (params?: any) => {
     params,
   });
 };
+export const getCsvFile = async (params?: { startTime: string; endTime: string; dataType: string }) => {
+  return defHttp.post<any>({
+    url: '/GetCsvFile',
+    params,
+  });
+};

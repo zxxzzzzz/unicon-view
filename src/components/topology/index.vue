@@ -6,6 +6,7 @@
   import { Topology } from '/@/api/union/model/topology';
   import { ref, computed, watch, nextTick, toRaw } from 'vue';
   import { message } from 'ant-design-vue';
+  import img from './img';
 
   const props = defineProps<{ topology: Topology | undefined }>();
   const canvas = ref<HTMLDivElement>();
@@ -77,17 +78,18 @@
                   style: {
                     width: 50,
                     height: 36.5,
-                    'background-image': '/resource/img/core.png',
+                    'background-image': img.core,
                     'background-fit': 'contain',
                     'background-opacity': 0,
                   },
                 },
+                // convergence
                 {
                   selector: 'node.convergence',
                   style: {
                     width: 50,
                     height: 36.3,
-                    'background-image': '/resource/img/convergence.png',
+                    'background-image': img.convergence,
                     'background-fit': 'contain',
                     'background-opacity': 0,
                   },
@@ -97,7 +99,7 @@
                   style: {
                     width: 50,
                     height: 35.7,
-                    'background-image': '/resource/img/access.png',
+                    'background-image': img.access,
                     'background-fit': 'contain',
                     'background-opacity': 0,
                   },
