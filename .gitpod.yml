@@ -3,4 +3,4 @@ ports:
     onOpen: open-preview
 tasks:
   - init: pnpm install
-    command: pnpm run dev
+    command: pnpm run preview
