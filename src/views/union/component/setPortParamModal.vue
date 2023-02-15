@@ -3,7 +3,7 @@
     <div class="p-1">
       <div class="flex bg-[rgb(240,240,240)] overflow-auto">
         <template v-for="(port, index) in portList" :key="port">
-          <div :class="`p-1 border ${index === portIndex ? 'bg-white' : ''}`" @click="handlePortClick(index)">{{ port }}</div>
+          <div :class="`p-1 border ${index === portIndex ? 'bg-white' : ''}`" @click="handlePortClick(index)">{{ port.portName }}</div>
         </template>
       </div>
       <div class="main flex">
@@ -19,7 +19,7 @@
             <Form :labelCol="{ span: 8 }">
               <div class="flex flex-wrap justify-between">
                 <FormItem label="端口id" class="w-[48%]">
-                  <Input v-model:value="portParamState[0].name" />
+                  <Input v-model:value="portParamState[0].portId" />
                 </FormItem>
                 <FormItem label="优先级2" class="w-[48%]">
                   <InputNumber v-model:value="portParamState[0].ptpPriority2" />
@@ -160,13 +160,55 @@
     delayMechanismOptions,
     timeStampSendModeOptions,
   } from './option';
+
+  interface Port {
+    '2M-1Pariotity': string;
+    '2M-2Pariotity': string;
+    '2MPLL': string;
+    E1PortTimeslot: string;
+    SSMMode: string;
+    aliasName: string;
+    announceIntv: string;
+    broadcastType: string;
+    clockIDMode: string;
+    clockStatus: string;
+    closeESMCSend: string;
+    delayIntv: string;
+    delayMechanism: string;
+    enablePhysicalSlaveStatus: string;
+    enableState: string;
+    enableTimeSync: string;
+    enbaleE1AISAlarmCheck: string;
+    inClockID: string;
+    inSSMLevel: string;
+    packageType: string;
+    physicalLayerStatus: string;
+    portId: string;
+    portName: string;
+    ptpClockClass: string;
+    ptpClockId: string;
+    ptpDomain: string;
+    ptpPortStatus: string;
+    ptpPriority1: string;
+    ptpPriority2: string;
+    ptpPtofile: string;
+    referenceClock: string;
+    signalStyle: string;
+    state: string;
+    syncIntv: string;
+    systemPriority: string;
+    timeSlot: string;
+    timeSource: string;
+    timeStamp: string;
+    timeStampSend: string;
+  }
   const visible = ref(false);
   const typeList = ['1588', '同步以太'];
   const portIndex = ref(0);
   const typeIndex = ref(0);
   const props = defineProps<{
     device: {
-      portList: string[];
+      portList: Port[];
       object: string;
       type: string;
       ip: string;
@@ -180,32 +222,55 @@
     return props?.device?.portList || [];
   });
   const portParamState = reactive(
-    Array(10)
+    Array(999)
       .fill(0)
       .map(() => ({
-        name: '',
+        '2M-1Pariotity': '',
+        '2M-2Pariotity': '',
+        '2MPLL': '',
+        E1PortTimeslot: '',
+        SSMMode: '',
         aliasName: '',
-        state: '',
+        announceIntv: '',
+        broadcastType: '',
+        clockIDMode: '',
+        clockStatus: '',
+        closeESMCSend: '',
+        delayIntv: '',
+        delayMechanism: '',
+        enablePhysicalSlaveStatus: '',
         enableState: '',
-        ptpClockId: '', //时钟id
-        ptpDomain: '', //域号
-        ptpClockClass: '', //时钟等级
-        ptpPriority1: '', //优先级1
-        ptpPriority2: '', //优先级2
-        timeSource: '', //时间源
-        announceIntv: '', //通知间隔
-        syncIntv: '', //同步间隔
-        delayIntv: '', //延时间隔
-        packageType: '', //报文封装类型
-        broadcastType: '', //报文播发类型
-        delayMechanism: '', //延时机制
+        enableTimeSync: '',
+        enbaleE1AISAlarmCheck: '',
+        inClockID: '',
+        inSSMLevel: '',
+        packageType: '',
+        physicalLayerStatus: '',
+        portId: '',
+        portName: '',
+        ptpClockClass: '',
+        ptpClockId: '',
+        ptpDomain: '',
+        ptpPortStatus: '',
+        ptpPriority1: '',
+        ptpPriority2: '',
+        ptpPtofile: '',
+        referenceClock: '',
+        signalStyle: '',
+        state: '',
+        syncIntv: '',
+        systemPriority: '',
+        timeSlot: '',
+        timeSource: '',
+        timeStamp: '',
+        timeStampSend: '',
       })),
   );
   watch(
     () => props.port1588Param,
     () => {
       portList.value.map((port, index) => {
-        const matchedParam = props.port1588Param.find((p) => p.name === port) || {
+        const matchedParam = props.port1588Param.find((p) => p.portName === port.portName) || {
           name: '',
           aliasName: '',
           state: '',
@@ -223,7 +288,10 @@
           broadcastType: '', //报文播发类型
           delayMechanism: '', //延时机制
         };
-        portParamState[index] = matchedParam;
+        portParamState[index] = {
+          ...portList[index],
+          ...matchedParam,
+        };
       });
     },
   );
