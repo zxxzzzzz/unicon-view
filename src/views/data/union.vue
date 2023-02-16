@@ -9,7 +9,9 @@
   import InputTable from './component/inputTable.vue';
   import { Card } from 'ant-design-vue';
   const props = defineProps<{}>();
-  const handleSend = () => {
+  const handleSend = (data) => {
+    // @ts-ignore
+    window.__data__ = data;
     window.dispatchEvent(new Event('data'));
   };
 </script>

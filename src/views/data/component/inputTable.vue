@@ -139,16 +139,17 @@
       ];
     }
   };
-  const handleSend = () => {
+  const handleSend = async () => {
     if (activeKey.value === 'sync') {
       const data = getFormatSyncData();
-      _getUserData(data);
+      const t = await _getUserData(data);
+      emits('send', t);
     }
     if (activeKey.value === '1588') {
       const data = getFormat1588Data();
-      _getUserData(data);
+      const t = await _getUserData(data);
+      emits('send', t);
     }
-    emits('send');
   };
   const stateOptions = ['master', 'slave', 'passive', 'initializing', 'listening', 'premaster', 'uncalibrated', 'faulty'].map((d) => ({ title: d, value: d }));
   const packageTypeOptions = ['level2', 'level3'].map((d) => ({ title: d, value: d }));

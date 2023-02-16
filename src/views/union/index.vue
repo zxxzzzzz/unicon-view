@@ -35,6 +35,7 @@
         device: node.data() as any,
         port1588Param: port1588ParamData.value?.ptp || [],
       });
+      console.log(portParam);
     } catch (error) {}
   };
 
@@ -59,7 +60,17 @@
         }
       };
       infoWindow.addEventListener('data', () => {
-        _getTopology();
+        // @ts-ignore
+        const data = infoWindow.__data__;
+        const linkParamList = data?.linkParamList || [];
+        (topology.value?.linkList || []).map((l) => {
+          const link = linkParamList.find((lp) => lp.object === l.object);
+          if (link) {
+            return link;
+          }
+          return l;
+        });
+        // _getTopology();
       });
     }
   };
