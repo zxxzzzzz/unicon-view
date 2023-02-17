@@ -30,14 +30,14 @@
                 <FormItem label="时间源" class="w-[48%]">
                   <InputNumber v-model:value="portParamState[portIndex].timeSource" />
                 </FormItem>
-                <FormItem label="ptp端口状态" class="w-[48%]">
-                  <Select :options="ptpPortStatusOptions" />
-                </FormItem>
+                <!-- <FormItem label="ptp端口状态" class="w-[48%]">
+                  <Select :options="ptpPortStatusOptions" v-model:value="portParamState[portIndex].ptpPortStatus" />
+                </FormItem> -->
                 <FormItem label="通知间隔" class="w-[48%]">
                   <InputNumber v-model:value="portParamState[portIndex].announceIntv" />
                 </FormItem>
                 <FormItem label="使能状态" class="w-[48%]">
-                  <Select :options="enableOptions" />
+                  <Select :options="enableOptions" v-model:value="portParamState[portIndex].enableState" />
                 </FormItem>
                 <FormItem label="同步间隔" class="w-[48%]">
                   <InputNumber v-model:value="portParamState[portIndex].syncIntv" />
@@ -74,6 +74,9 @@
                 </FormItem>
                 <FormItem label="优先级1" class="w-[48%]">
                   <InputNumber v-model:value="portParamState[portIndex].ptpPriority1" />
+                </FormItem>
+                <FormItem label="精度预期" class="w-[48%]">
+                  <InputNumber v-model:value="portParamState[portIndex].accuracy" />
                 </FormItem>
               </div>
             </Form>
@@ -159,7 +162,7 @@
     clockStatusOptions,
     physicalLayerStatusOptions,
     portStateOptions,
-    ptpPortStatusOptions,
+    // ptpPortStatusOptions,
     enableOptions,
     packageTypeOptions,
     broadcastTypeOptions,
@@ -182,7 +185,7 @@
     delayIntv: string;
     delayMechanism: string;
     enablePhysicalSlaveStatus: boolean;
-    enableState: boolean;
+    enableState: string;
     enableTimeSync: boolean;
     enableE1AISAlarmCheck: boolean;
     inClockID: string;
@@ -207,6 +210,7 @@
     timeSource: string;
     timeStamp: string;
     timeStampSend: string;
+    accuracy: string;
   }
   const visible = ref(false);
   const typeList = ['1588', '同步以太'];
@@ -215,11 +219,9 @@
   const props = defineProps<{
     device: {
       portList: Port[];
-      object: string;
+      id: string;
       type: string;
       ip: string;
-      posX: number;
-      posY: number;
     };
     port1588Param: I1588Params['ptp'];
   }>();
@@ -245,7 +247,7 @@
         delayIntv: '',
         delayMechanism: '',
         enablePhysicalSlaveStatus: false,
-        enableState: false,
+        enableState: '',
         enableTimeSync: false,
         enableE1AISAlarmCheck: false,
         inClockID: '',
@@ -270,6 +272,7 @@
         timeSource: '',
         timeStamp: '',
         timeStampSend: '',
+        accuracy: '',
       })),
   );
   const initPortParamState = () => {

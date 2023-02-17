@@ -1,11 +1,12 @@
 import { defHttp } from '/@/utils/http/axios';
 import { LoginParams, LoginResultModel, GetUserInfoModel } from './model/userModel';
+import dayjs from 'dayjs';
 
 import { ErrorMessageMode } from '/#/axios';
 
 enum Api {
   Login = '/UserLoginJudgment',
-  Logout = '/logout',
+  Logout = '/UserLogin',
   GetUserInfo = '/GetUserInformation',
   GetPermCode = '/getPermCode',
   TestRetry = '/testRetry',
@@ -38,7 +39,15 @@ export function getPermCode() {
 }
 
 export function doLogout() {
-  return defHttp.get({ url: Api.Logout });
+  return defHttp.post({
+    url: Api.Logout,
+    params: {
+      state: 'offline',
+      position: '',
+      startTime: '',
+      endTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    },
+  });
 }
 
 export function testRetry() {

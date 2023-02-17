@@ -16,12 +16,12 @@
   import Topology from '/@/components/topology/index.vue';
   import { getTopology1 } from '/@/api/union';
   import { useRequest } from 'vue-request';
-  import { Button } from 'ant-design-vue';
+  import { Button, message } from 'ant-design-vue';
   import { onBeforeUnmount } from 'vue';
   import { useModal } from '/@/hooks/component/useModal';
   import SetPortParamModal from './component/setPortParamModal.vue';
   import cytoscape from 'cytoscape';
-  import type { SetPortParam } from '/@/api/union/index';
+  import { setPortParam, setSyncEParam } from '/@/api/union/index';
   import { getPort1588Param } from '/@/api/union/index';
 
   const { Modal, open } = useModal(SetPortParamModal);
@@ -31,11 +31,17 @@
 
   const handleTap = async (node: cytoscape.CollectionReturnValue) => {
     try {
-      const portParam = await open<SetPortParam['portlist']>({
-        device: node.data() as any,
+      const device = node.data() as any;
+      const paramList = await open<any>({
+        device,
         port1588Param: port1588ParamData.value?.ptp || [],
       });
-      console.log(portParam);
+      const param = {
+        devName: device.id,
+        portList: paramList.map((p) => ({ ...p, name: p.portName })),
+      };
+      await Promise.all([setPortParam(param), setSyncEParam(param)]);
+      message.success('设置成功');
     } catch (error) {}
   };
 
@@ -61,16 +67,20 @@
       };
       infoWindow.addEventListener('data', () => {
         // @ts-ignore
-        const data = infoWindow.__data__;
-        const linkParamList = data?.linkParamList || [];
-        (topology.value?.linkList || []).map((l) => {
-          const link = linkParamList.find((lp) => lp.object === l.object);
-          if (link) {
-            return link;
-          }
-          return l;
-        });
-        // _getTopology();
+        // const data = infoWindow.__data__;
+        // const linkParamList = data?.linkParamList || [];
+        // (topology.value?.linkList || []).map((l) => {
+        //   const link = linkParamList.find((lp) => lp.object === l.object);
+        //   if (link) {
+        //     console.log(link, 'link');
+        //     return link;
+        //   }
+        //   return l;
+        // });
+        // if (topology.value) {
+        //   topology.value = { ...topology.value };
+        // }
+        _getTopology();
       });
     }
   };

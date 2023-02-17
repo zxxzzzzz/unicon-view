@@ -27,6 +27,7 @@
     (event: 'dragfree', node: cytoscape.CollectionReturnValue): void;
   }>();
   const elements = computed(() => {
+    console.log('upupup');
     const topology = props.topology;
     if (!topology) {
       return {
