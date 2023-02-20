@@ -8,9 +8,9 @@
             <Button @click="handleDownloadData">下载数据</Button>
           </div>
         </template>
-        <TabPane tab="操作" key="操作">
+        <!-- <TabPane tab="操作" key="操作">
           <OpTable :dataSource="systemList" />
-        </TabPane>
+        </TabPane> -->
         <TabPane tab="端口" key="端口">
           <PortParamTable :dataSource="portList" />
         </TabPane>
