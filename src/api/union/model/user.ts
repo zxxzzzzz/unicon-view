@@ -10,7 +10,7 @@ const a = {
 };
 const userItem = {
   userName: 'wc',
-  position: 'zxcasdqwe',
+  position: [{ province: '', city: [{ cityName: '' }] }],
   authority: '操作员',
 };
 

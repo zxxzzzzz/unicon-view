@@ -119,7 +119,7 @@ export const getUserLogin = async (userName: string) => {
 export const getUserOperation = async (userName: string) => {
   return defHttp.post<OperationHistory>({ url: '/GetUserOperation', params: { userName } });
 };
-export const setUserInformation = async (params: { userList: UserItem[] }) => {
+export const SetUserAuthority = async (params: { userList: UserItem[] }) => {
   return defHttp.post<AllUserInfo>({ url: '/SetUserAuthority', params });
 };
 export const getUserData = async (params: any) => {

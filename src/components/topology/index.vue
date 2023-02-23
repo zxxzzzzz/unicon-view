@@ -26,8 +26,11 @@
     (event: 'drag', node: cytoscape.CollectionReturnValue): void;
     (event: 'dragfree', node: cytoscape.CollectionReturnValue): void;
   }>();
+  const formatType = (s: string) => {
+    console.log(s.replace(/[()-]+/g, ''), 'for');
+    return s.replace(/[()-]+/g, '');
+  };
   const elements = computed(() => {
-    console.log('upupup');
     const topology = props.topology;
     if (!topology) {
       return {
@@ -39,7 +42,7 @@
       return {
         data: { id: d.object, ip: d.ip, type: d.type, portList: d.portList },
         position: { x: d.posX, y: d.posY },
-        classes: [d.type],
+        classes: [formatType(d.type)],
       };
     });
     const edges = topology.linkList.map((l, index) => {
@@ -83,32 +86,52 @@
                   },
                 },
                 {
-                  selector: 'node.core',
+                  selector: 'node.ATN950B',
                   style: {
                     width: 50,
                     height: 36.5,
-                    'background-image': img.core,
+                    'background-image': img.atn950b,
                     'background-fit': 'contain',
                     'background-opacity': 0,
                   },
                 },
                 // convergence
                 {
-                  selector: 'node.convergence',
+                  selector: `node.${formatType('CX600-X16-DO(V8)')}`,
                   style: {
                     width: 50,
                     height: 36.3,
-                    'background-image': img.convergence,
+                    'background-image': img.cx600x16,
                     'background-fit': 'contain',
                     'background-opacity': 0,
                   },
                 },
                 {
-                  selector: 'node.access',
+                  selector: `node.${formatType('CX600-X16A-DO(V8)')}`,
                   style: {
                     width: 50,
                     height: 35.7,
-                    'background-image': img.access,
+                    'background-image': img.cx600x16a,
+                    'background-fit': 'contain',
+                    'background-opacity': 0,
+                  },
+                },
+                {
+                  selector: `node.${formatType('CX600-X8-DO(V8)')}`,
+                  style: {
+                    width: 50,
+                    height: 35.7,
+                    'background-image': img.cx600x8,
+                    'background-fit': 'contain',
+                    'background-opacity': 0,
+                  },
+                },
+                {
+                  selector: 'node.Service',
+                  style: {
+                    width: 50,
+                    height: 35.7,
+                    'background-image': img.service,
                     'background-fit': 'contain',
                     'background-opacity': 0,
                   },
