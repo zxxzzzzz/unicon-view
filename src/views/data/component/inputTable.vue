@@ -6,10 +6,14 @@
     <div>
       <Tabs v-model:activeKey="activeKey">
         <TabPane key="1588" tab="1588">
-          <Table :columns="columns1588" :dataSource="data1588Source" :pagination="false" />
+          <div class="overflow-auto w-full">
+            <Table :columns="columns1588" :dataSource="data1588Source" :pagination="false" />
+          </div>
         </TabPane>
         <TabPane key="sync" tab="sync">
-          <Table :columns="columnsSync" :dataSource="dataSyncSource" :pagination="false" />
+          <div class="overflow-auto w-full">
+            <Table :columns="columnsSync" :dataSource="dataSyncSource" :pagination="false" />
+          </div>
         </TabPane>
       </Tabs>
     </div>
@@ -235,6 +239,7 @@
       title: '时钟id',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: data1588Source.value[index].ptpClockId,
           'onUpdate:value'(e) {
             data1588Source.value[index].ptpClockId = e;
@@ -247,6 +252,7 @@
       title: '域号',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: data1588Source.value[index].ptpDomain,
           'onUpdate:value'(e) {
             data1588Source.value[index].ptpDomain = e;
@@ -259,6 +265,7 @@
       title: '协议标准',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: data1588Source.value[index].ptpProtocol,
           'onUpdate:value'(e) {
             data1588Source.value[index].ptpProtocol = e;
@@ -271,6 +278,7 @@
       title: '时钟等级',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: data1588Source.value[index].ptpClockClass,
           'onUpdate:value'(e) {
             data1588Source.value[index].ptpClockClass = e;
@@ -283,6 +291,7 @@
       title: '优先级1',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: data1588Source.value[index].ptpPriority1,
           'onUpdate:value'(e) {
             data1588Source.value[index].ptpPriority1 = e;
@@ -295,6 +304,7 @@
       title: '优先级2',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: data1588Source.value[index].ptpPriority2,
           'onUpdate:value'(e) {
             data1588Source.value[index].ptpPriority2 = e;
@@ -307,6 +317,7 @@
       title: '时间源',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: data1588Source.value[index].timeSource,
           'onUpdate:value'(e) {
             data1588Source.value[index].timeSource = e;
@@ -319,6 +330,7 @@
       title: '通知间隔',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: data1588Source.value[index].announceIntv,
           'onUpdate:value'(e) {
             data1588Source.value[index].announceIntv = e;
@@ -331,6 +343,7 @@
       title: '同步间隔',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: data1588Source.value[index].syncIntv,
           'onUpdate:value'(e) {
             data1588Source.value[index].syncIntv = e;
@@ -343,6 +356,7 @@
       title: '延时间隔',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: data1588Source.value[index].delayIntv,
           'onUpdate:value'(e) {
             data1588Source.value[index].delayIntv = e;
@@ -357,7 +371,7 @@
         return h(Select, {
           value: data1588Source.value[index].packageType,
           options: packageTypeOptions,
-          class: 'w-20',
+          class: '!w-20',
           'onUpdate:value'(e) {
             data1588Source.value[index].packageType = e?.toString?.() || '';
           },
@@ -371,7 +385,7 @@
         return h(Select, {
           value: data1588Source.value[index].broadcastType,
           options: broadcastTypeOptions,
-          class: 'w-20',
+          class: '!w-20',
           'onUpdate:value'(e) {
             data1588Source.value[index].broadcastType = e?.toString?.() || '';
           },
@@ -385,7 +399,7 @@
         return h(Select, {
           value: data1588Source.value[index].delayMechanism,
           options: delayMechanismOptions,
-          class: 'w-20',
+          class: '!w-20',
           'onUpdate:value'(e) {
             data1588Source.value[index].delayMechanism = e?.toString?.() || '';
           },
@@ -399,7 +413,7 @@
         return h(Select, {
           value: data1588Source.value[index].timeStampSendMode,
           options: timeStampSendModeOptions,
-          class: 'w-20',
+          class: '!w-20',
           'onUpdate:value'(e) {
             data1588Source.value[index].timeStampSendMode = e?.toString?.() || '';
           },
@@ -411,6 +425,7 @@
       title: '精度预期',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: data1588Source.value[index].accuracy,
           'onUpdate:value'(e) {
             data1588Source.value[index].accuracy = e;
@@ -427,7 +442,7 @@
       customRender({ index }) {
         return h(Select, {
           options: devNameOptions.value,
-          class: 'w-50',
+          class: '!w-50',
           value: dataSyncSource.value[index].devName,
           'onUpdate:value'(e) {
             dataSyncSource.value[index].devName = e?.toString?.() || '';
@@ -446,7 +461,7 @@
               value: p.portName,
             };
           }),
-          class: 'w-40',
+          class: '!w-40',
           value: dataSyncSource.value[index].name,
           'onUpdate:value'(e) {
             dataSyncSource.value[index].name = e?.toString?.() || '';
@@ -485,8 +500,8 @@
       title: '时钟源状态',
       customRender({ index }) {
         return h(Select, {
+          class: '!w-20',
           value: dataSyncSource.value[index].clockStatus,
-          class: 'w-20',
           options: clockStatusOptions,
           'onUpdate:value'(e) {
             dataSyncSource.value[index].clockStatus = e?.toString?.() || '';
@@ -513,7 +528,7 @@
       customRender({ index }) {
         return h(Select, {
           value: dataSyncSource.value[index].physicalLayerStatus,
-          class: 'w-20',
+          class: '!w-20',
           options: physicalLayerStatusOptions,
           'onUpdate:value'(e) {
             dataSyncSource.value[index].physicalLayerStatus = e?.toString?.() || '';
@@ -539,6 +554,7 @@
       title: 'E1端口时隙',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-40',
           value: dataSyncSource.value[index].E1PortTimeslot,
           'onUpdate:value'(e) {
             dataSyncSource.value[index].E1PortTimeslot = e;
@@ -564,6 +580,7 @@
       title: '系统优先级',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: dataSyncSource.value[index].systemPriority,
           'onUpdate:value'(e) {
             dataSyncSource.value[index].systemPriority = parseFloat(e);
@@ -576,6 +593,7 @@
       title: '2M-1环优先级',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: dataSyncSource.value[index]['2M-1Priority'],
           'onUpdate:value'(e) {
             dataSyncSource.value[index]['2M-1Priority'] = parseFloat(e);
@@ -588,6 +606,7 @@
       title: '2M-2环优先级',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: dataSyncSource.value[index]['2M-2Priority'],
           'onUpdate:value'(e) {
             dataSyncSource.value[index]['2M-2Priority'] = parseFloat(e);
@@ -600,9 +619,9 @@
       title: 'SSM提取模式',
       customRender({ index }) {
         return h(Select, {
+          class: '!w-20',
           value: dataSyncSource.value[index].SSMMode,
           options: SSMModeOptions,
-          class: 'w-20',
           'onUpdate:value'(e) {
             dataSyncSource.value[index].SSMMode = e?.toString?.() || '';
           },
@@ -614,8 +633,8 @@
       title: '输入SSM等级',
       customRender({ index }) {
         return h(Input, {
+          class: '!w-20',
           value: dataSyncSource.value[index].inSSMLevel,
-          class: 'w-20',
           'onUpdate:value'(e) {
             dataSyncSource.value[index].inSSMLevel = e;
           },
@@ -629,7 +648,7 @@
         return h(Select, {
           value: dataSyncSource.value[index].clockIDMode,
           options: clockIDModeOptions,
-          class: 'w-20',
+          class: '!w-20',
           'onUpdate:value'(e) {
             dataSyncSource.value[index].clockIDMode = e?.toString?.() || '';
           },
@@ -643,7 +662,7 @@
         return h(Select, {
           value: dataSyncSource.value[index].inClockID,
           options: timeStampSendModeOptions,
-          class: 'w-20',
+          class: '!w-20',
           'onUpdate:value'(e) {
             dataSyncSource.value[index].inClockID = e?.toString?.() || '';
           },
@@ -656,7 +675,7 @@
       customRender({ index }) {
         return h(Input, {
           value: dataSyncSource.value[index].accuracy,
-          class: 'w-20',
+          class: '!w-20',
           'onUpdate:value'(e) {
             dataSyncSource.value[index].accuracy = parseFloat(e);
           },

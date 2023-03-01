@@ -2,13 +2,19 @@
   <div>
     <Tabs v-model:activeKey="activeResultKey">
       <TabPane key="1588" tab="1588">
-        <Table :columns="columns1588" :dataSource="data1588Source" />
+        <div class="overflow-auto w-full">
+          <Table :columns="columns1588" :dataSource="data1588Source" />
+        </div>
       </TabPane>
       <TabPane key="sync" tab="sync">
-        <Table :columns="columnsSync" :dataSource="dataSyncSource" />
+        <div class="overflow-auto w-full">
+          <Table :columns="columnsSync" :dataSource="dataSyncSource" />
+        </div>
       </TabPane>
       <TabPane key="link" tab="链路信息">
-        <Table :columns="linkSync" :dataSource="dataLinkSource" />
+        <div class="overflow-auto w-full">
+          <Table :columns="linkSync" :dataSource="dataLinkSource" />
+        </div>
       </TabPane>
     </Tabs>
   </div>
