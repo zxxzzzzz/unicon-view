@@ -14,7 +14,7 @@
             </div>
           </template>
         </div>
-        <div class="content mt-1 ml-1 bg-[rgb(240,240,240)] w-full p-4">
+        <div class="content mt-1 ml-1 bg-[rgb(240,240,240)] w-full p-4" v-if="portParamState?.length">
           <div v-if="typeIndex === 0">
             <Form :labelCol="{ span: 8 }">
               <div class="flex flex-wrap justify-between">
@@ -88,58 +88,58 @@
             <Form :labelCol="{ span: 13 }">
               <div class="flex flex-wrap justify-between">
                 <FormItem label="使能时钟同步" class="w-[50%]">
-                  <Checkbox v-model:checked="portParamState[portIndex].enableTimeSync" />
+                  <Checkbox v-model:checked="portParamState[portIndex].enableTimeSync" @change="handleChange" />
                 </FormItem>
                 <FormItem label="2M-1环优先级" class="w-[50%]">
-                  <InputNumber v-model:value="portParamState[portIndex]['2M-1Pariotity']" />
+                  <InputNumber v-model:value="portParamState[portIndex]['2M-1Pariotity']" @change="handleChange" />
                 </FormItem>
                 <FormItem label="关闭ESMC报文发送" class="w-[50%]">
-                  <Checkbox v-model:checked="portParamState[portIndex].closeESMCSend" />
+                  <Checkbox v-model:checked="portParamState[portIndex].closeESMCSend" @change="handleChange" />
                 </FormItem>
                 <FormItem label="2M-2环优先级" class="w-[50%]">
-                  <InputNumber v-model:value="portParamState[portIndex]['2M-2Pariotity']" />
+                  <InputNumber v-model:value="portParamState[portIndex]['2M-2Pariotity']" @change="handleChange" />
                 </FormItem>
                 <FormItem label="时钟源状态" class="w-[50%]">
-                  <Select :options="clockStatusOptions" v-model:value="portParamState[portIndex].clockStatus" />
+                  <Select :options="clockStatusOptions" v-model:value="portParamState[portIndex].clockStatus" @change="handleChange" />
                 </FormItem>
                 <FormItem label="SSM提取模式" class="w-[50%]">
-                  <Select :options="SSMModeOptions" v-model:value="portParamState[portIndex].SSMMode" />
+                  <Select :options="SSMModeOptions" v-model:value="portParamState[portIndex].SSMMode" @change="handleChange" />
                 </FormItem>
                 <FormItem label="参考时钟源" class="w-[50%]">
-                  <Checkbox v-model:checked="portParamState[portIndex].referenceClock" />
+                  <Checkbox v-model:checked="portParamState[portIndex].referenceClock" @change="handleChange" />
                 </FormItem>
                 <FormItem label="输入SSM等级" class="w-[50%]">
-                  <Input v-model:value="portParamState[portIndex].inSSMLevel" />
+                  <Input v-model:value="portParamState[portIndex].inSSMLevel" @change="handleChange" />
                 </FormItem>
                 <FormItem label="物理层状态" class="w-[50%]">
-                  <Select :options="physicalLayerStatusOptions" v-model:value="portParamState[portIndex].physicalLayerStatus" />
+                  <Select :options="physicalLayerStatusOptions" v-model:value="portParamState[portIndex].physicalLayerStatus" @change="handleChange" />
                 </FormItem>
                 <FormItem label="时钟ID提取模式" class="w-[50%]">
-                  <Select :options="clockIDModeOptions" v-model:value="portParamState[portIndex].clockIDMode" />
+                  <Select :options="clockIDModeOptions" v-model:value="portParamState[portIndex].clockIDMode" @change="handleChange" />
                 </FormItem>
                 <FormItem label="使能Slave物理层状态" class="w-[50%]">
-                  <Checkbox v-model:checked="portParamState[portIndex].enablePhysicalSlaveStatus" />
+                  <Checkbox v-model:checked="portParamState[portIndex].enablePhysicalSlaveStatus" @change="handleChange" />
                 </FormItem>
                 <FormItem label="输入时钟ID" class="w-[50%]">
-                  <Input v-model:value="portParamState[portIndex].inClockID" />
+                  <Input v-model:value="portParamState[portIndex].inClockID" @change="handleChange" />
                 </FormItem>
                 <FormItem label="E1端口时隙" class="w-[50%]">
-                  <Input v-model:value="portParamState[portIndex].E1PortTimeslot" />
+                  <Input v-model:value="portParamState[portIndex].E1PortTimeslot" @change="handleChange" />
                 </FormItem>
                 <FormItem label="时隙" class="w-[50%]">
-                  <Input v-model:value="portParamState[portIndex].timeSlot" />
+                  <Input v-model:value="portParamState[portIndex].timeSlot" @change="handleChange" />
                 </FormItem>
                 <FormItem label="E1端口ais信号告警检测使能" class="w-[50%]">
-                  <Checkbox v-model:checked="portParamState[portIndex].enableE1AISAlarmCheck" />
+                  <Checkbox v-model:checked="portParamState[portIndex].enableE1AISAlarmCheck" @change="handleChange" />
                 </FormItem>
                 <FormItem label="信号类型" class="w-[50%]">
-                  <Input v-model:value="portParamState[portIndex].signalStyle" />
+                  <Input v-model:value="portParamState[portIndex].signalStyle" @change="handleChange" />
                 </FormItem>
                 <FormItem label="系统优先级" class="w-[50%]">
-                  <InputNumber v-model:value="portParamState[portIndex].systemPriority" />
+                  <InputNumber v-model:value="portParamState[portIndex].systemPriority" @change="handleChange" />
                 </FormItem>
                 <FormItem label="2M锁相环" class="w-[50%]">
-                  <Input v-model:value="portParamState[portIndex]['2MPLL']" />
+                  <Input v-model:value="portParamState[portIndex]['2MPLL']" @change="handleChange" />
                 </FormItem>
               </div>
             </Form>
@@ -212,10 +212,14 @@
     timeStampSend: string;
     accuracy: string;
   }
+  enum PARAM_TYPE {
+    _1588,
+    sync,
+  }
   const visible = ref(false);
   const typeList = ['1588', '同步以太'];
   const portIndex = ref(0);
-  const typeAndPortIndexMarkList = ref<[number, number][]>([]);
+  const typeAndPortIndexMarkList = ref<{ type: PARAM_TYPE; portIndex: number }[]>([]);
   const typeIndex = ref(0);
   const props = defineProps<{
     device: {
@@ -297,6 +301,7 @@
         }, {} as Partial<Port>),
       };
     });
+    console.log(t, 't');
     portParamState.value = t;
   };
   watch(
@@ -306,13 +311,26 @@
     },
   );
   const handleOk = () => {
-    const indexList = typeAndPortIndexMarkList.value.flat();
-    const param = portParamState.value.filter((_p, index) => indexList.includes(index));
-    emits('sure', toRaw(param));
+    const _1588IndexList = typeAndPortIndexMarkList.value.filter((d) => d.type === PARAM_TYPE._1588).map((d) => d.portIndex);
+    const syncIndexList = typeAndPortIndexMarkList.value.filter((d) => d.type === PARAM_TYPE.sync).map((d) => d.portIndex);
+    const _1588Param = portParamState.value.filter((_p, index) => _1588IndexList.includes(index));
+    const syncParam = portParamState.value.filter((_p, index) => syncIndexList.includes(index));
+    emits(
+      'sure',
+      toRaw({
+        _1588: _1588Param,
+        sync: syncParam,
+      }),
+    );
     visible.value = false;
   };
   const handleChange = () => {
-    typeAndPortIndexMarkList.value = [...typeAndPortIndexMarkList.value, [typeIndex.value, portIndex.value]];
+    if (typeIndex.value === 0) {
+      typeAndPortIndexMarkList.value = [...typeAndPortIndexMarkList.value, { type: PARAM_TYPE._1588, portIndex: portIndex.value }];
+    }
+    if (typeIndex.value === 1) {
+      typeAndPortIndexMarkList.value = [...typeAndPortIndexMarkList.value, { type: PARAM_TYPE.sync, portIndex: portIndex.value }];
+    }
   };
   const handlePortClick = (index: number) => {
     portIndex.value = index;

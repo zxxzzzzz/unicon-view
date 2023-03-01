@@ -253,6 +253,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
 export const defHttp = createAxios({
   requestOptions: {
     apiUrl: 'https://61hy290880.goho.co',
+    // apiUrl: 'http://47.97.166.4:8888',
   },
 });
 

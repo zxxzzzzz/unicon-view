@@ -27,7 +27,6 @@
     (event: 'dragfree', node: cytoscape.CollectionReturnValue): void;
   }>();
   const formatType = (s: string) => {
-    console.log(s.replace(/[()-]+/g, ''), 'for');
     return s.replace(/[()-]+/g, '');
   };
   const elements = computed(() => {
