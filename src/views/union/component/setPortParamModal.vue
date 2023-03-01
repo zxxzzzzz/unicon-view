@@ -232,7 +232,7 @@
   }>();
   const emits = defineEmits(['sure']);
   const portList = computed(() => {
-    return props?.device?.portList || [];
+    return (props?.device?.portList || []).filter((d) => d.aliasName);
   });
   const portParamState = ref<Port[]>(
     Array(999)
@@ -301,7 +301,6 @@
         }, {} as Partial<Port>),
       };
     });
-    console.log(t, 't');
     portParamState.value = t;
   };
   watch(

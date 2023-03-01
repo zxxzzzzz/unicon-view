@@ -86,8 +86,8 @@ export const setPortParam = async (params: any) => {
 export const setSyncEParam = async (params: any) => {
   return defHttp.post<Topology>({ url: '/SetSyncEParam', params });
 };
-export const getPort1588Param = async (userName: string) => {
-  return defHttp.post<I1588Params>({ url: '/Port1588Param', params: { userName } });
+export const getPort1588Param = async () => {
+  return defHttp.post<I1588Params>({ url: '/Port1588Param' });
 };
 export const getSyncParam = async (userName: string) => {
   return defHttp.post<SyncParam>({ url: '/PortSyncParam', params: { userName } });

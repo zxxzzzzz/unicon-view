@@ -28,7 +28,7 @@
   const { Modal, open } = useModal(SetPortParamModal);
   // const activeKey = ref('1');
   const { data: topology, run: _getTopology } = useRequest(getTopology1);
-  const { data: port1588ParamData } = useRequest(getPort1588Param);
+  const { data: port1588ParamData, run: _getPort1588Param } = useRequest(getPort1588Param);
 
   const handleTap = async (node: cytoscape.CollectionReturnValue) => {
     try {
@@ -59,6 +59,8 @@
         };
         await setSyncEParam(param);
       }
+      await _getTopology();
+      await _getPort1588Param();
       message.success('设置成功');
     } catch (error) {}
   };
