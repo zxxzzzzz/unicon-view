@@ -33,21 +33,29 @@
   const handleTap = async (node: cytoscape.CollectionReturnValue) => {
     try {
       const device = node.data() as any;
-      const { _1588Param, syncParam } = await open<any>({
+      const { _1588, sync } = await open<any>({
         device,
         port1588Param: port1588ParamData.value?.ptp || [],
       });
-      if (_1588Param?.length) {
+      const toStr = (o: any) => {
+        return Object.keys(o).reduce((re, key) => {
+          if (typeof o[key] === 'boolean') {
+            return { ...re, [key]: `${o[key]}` };
+          }
+          return { ...re, [key]: o[key] };
+        }, {} as any);
+      };
+      if (_1588?.length) {
         const param = {
           devName: device.id,
-          portList: _1588Param.map((p) => ({ ...p, name: p.portName })),
+          portList: _1588.map((p) => ({ ...toStr(p), name: p.portName })),
         };
         await setPortParam(param);
       }
-      if (syncParam?.length) {
+      if (sync?.length) {
         const param = {
           devName: device.id,
-          portList: syncParam.map((p) => ({ ...p, name: p.portName })),
+          portList: sync.map((p) => ({ ...toStr(p), name: p.portName })),
         };
         await setSyncEParam(param);
       }
