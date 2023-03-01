@@ -1,27 +1,30 @@
 <template>
   <div>
     <Card>
-      <Table :columns="columns" :dataSource="[]" />
+      <Table :columns="columns" :dataSource="alarmDataSource" />
     </Card>
   </div>
 </template>
 <script lang="ts" setup>
-  import { Table, Select, Card, Cascader } from 'ant-design-vue';
+  import { Table, Card } from 'ant-design-vue';
   import type { TableProps } from 'ant-design-vue';
-  import { getUserInformation, setUserInformation } from '/@/api/union';
+  import { getSystemAlarm } from '/@/api/union';
   import { useRequest } from 'vue-request';
-  import { computed, h, ref } from 'vue';
+  import { computed } from 'vue';
 
-  // const { data } = useRequest(getUserInformation, {});
+  const { data: alarmData } = useRequest(getSystemAlarm, {});
+  const alarmDataSource = computed(() => {
+    return alarmData.value?.alarmList || [];
+  });
 
   const columns: TableProps<any>['columns'] = [
     {
-      dataIndex: 'position',
+      dataIndex: 'alarmTime',
       title: '告警时间',
     },
-    { dataIndex: 'userName', title: '告警模块' },
+    { dataIndex: 'alarmModule', title: '告警模块' },
     {
-      dataIndex: 'authority',
+      dataIndex: 'alarmMsg',
       title: '告警内容',
     },
   ];

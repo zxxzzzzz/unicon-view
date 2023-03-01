@@ -146,6 +146,12 @@ export const setTopography = async (params?: any) => {
     params,
   });
 };
+export const getSystemAlarm = async (params?: any) => {
+  return defHttp.post<any>({
+    url: '/GetSystemAlarm',
+    params,
+  });
+};
 export const getCsvFile = async (params?: { startTime: string; endTime: string; dataType: string }) => {
   return defHttp.post<any>({
     url: '/GetCsvFile',
