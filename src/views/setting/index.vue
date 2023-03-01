@@ -24,7 +24,7 @@
     onSuccess(_data) {
       userList.value = _data.userList.map((u) => ({
         authority: u.authority,
-        position: [[cityList.find((c) => c.children.some((cc) => cc.name === u.position))?.name || '', u.position]],
+        position: u.position ? [[cityList.find((c) => c.children.some((cc) => cc.name === u.position))?.name || '', u.position]] : [],
         userName: u.userName,
       }));
     },
@@ -49,6 +49,7 @@
           dropdownClassName: 'h-160 city',
           expandTrigger: 'hover',
           multiple: true,
+          disabled: data.value?.userList?.length === 1,
           async onChange(v) {
             const pMap = (v as [string, string][]).reduce((re, sl) => {
               if (re[sl[0]]) {

@@ -10,8 +10,9 @@
         <Topology :topology="topology" @tap="handleTap" />
       </div>
       <Modal />
-    </div> </div
-></template>
+    </div>
+  </div>
+</template>
 <script lang="ts" setup>
   import Topology from '/@/components/topology/index.vue';
   import { getTopology1 } from '/@/api/union';
@@ -32,7 +33,6 @@
   const handleTap = async (node: cytoscape.CollectionReturnValue) => {
     try {
       const device = node.data() as any;
-      console.log(device, 'device');
       const { _1588Param, syncParam } = await open<any>({
         device,
         port1588Param: port1588ParamData.value?.ptp || [],
