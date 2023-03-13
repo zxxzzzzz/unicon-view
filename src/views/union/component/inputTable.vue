@@ -28,6 +28,7 @@
   import ResultTable from './resultTable.vue';
   import { getUserData } from '/@/api/union/index';
   import { useRequest } from 'vue-request';
+  import { string } from 'vue-types';
 
   type Item1588 = {
     devName: string;
@@ -48,6 +49,11 @@
     delayMechanism: string;
     timeStampSendMode: string;
     accuracy: string;
+    clockAccuracy: string;
+    offsetScaledLogVariance: string;
+    localPriority: string;
+    portIdentity: string;
+    clockIdentity: string;
   };
   type ItemSync = {
     devName: string;
@@ -104,6 +110,11 @@
           delayMechanism: '',
           timeStampSendMode: '',
           accuracy: '',
+          clockAccuracy: '',
+          offsetScaledLogVariance: '',
+          localPriority: '',
+          portIdentity: '',
+          clockIdentity: '',
         },
       ];
     }
@@ -213,13 +224,13 @@
       },
     },
     {
-      dataIndex: 'ptpClockId',
-      title: '时钟id',
+      dataIndex: 'clockAccuracy',
+      title: '时钟精度',
       customRender({ index }) {
         return h(Input, {
-          value: data1588Source.value[index].ptpClockId,
+          value: data1588Source.value[index].clockAccuracy,
           'onUpdate:value'(e) {
-            data1588Source.value[index].ptpClockId = e;
+            data1588Source.value[index].clockAccuracy = e;
           },
         });
       },
@@ -237,13 +248,13 @@
       },
     },
     {
-      dataIndex: 'ptpProtocol',
-      title: '协议标准',
+      dataIndex: 'offsetScaledLogVariance',
+      title: '偏移缩放精度',
       customRender({ index }) {
         return h(Input, {
-          value: data1588Source.value[index].ptpProtocol,
+          value: data1588Source.value[index].offsetScaledLogVariance,
           'onUpdate:value'(e) {
-            data1588Source.value[index].ptpProtocol = e;
+            data1588Source.value[index].offsetScaledLogVariance = e;
           },
         });
       },
@@ -285,121 +296,121 @@
       },
     },
     {
-      dataIndex: 'timeSource',
-      title: '时间源',
+      dataIndex: 'localPriority',
+      title: '本地优先级',
       customRender({ index }) {
         return h(Input, {
-          value: data1588Source.value[index].timeSource,
+          value: data1588Source.value[index].localPriority,
           'onUpdate:value'(e) {
-            data1588Source.value[index].timeSource = e;
+            data1588Source.value[index].localPriority = e;
           },
         });
       },
     },
     {
-      dataIndex: 'announceIntv',
-      title: '通知间隔',
+      dataIndex: 'portIdentity',
+      title: '端口标识符',
       customRender({ index }) {
         return h(Input, {
-          value: data1588Source.value[index].announceIntv,
+          value: data1588Source.value[index].portIdentity,
           'onUpdate:value'(e) {
-            data1588Source.value[index].announceIntv = e;
+            data1588Source.value[index].portIdentity = e;
           },
         });
       },
     },
     {
-      dataIndex: 'syncIntv',
-      title: '同步间隔',
+      dataIndex: 'clockIdentity',
+      title: '时钟标识符',
       customRender({ index }) {
         return h(Input, {
-          value: data1588Source.value[index].syncIntv,
+          value: data1588Source.value[index].clockIdentity,
           'onUpdate:value'(e) {
-            data1588Source.value[index].syncIntv = e;
+            data1588Source.value[index].clockIdentity = e;
           },
         });
       },
     },
-    {
-      dataIndex: 'delayIntv',
-      title: '延时间隔',
-      customRender({ index }) {
-        return h(Input, {
-          value: data1588Source.value[index].delayIntv,
-          'onUpdate:value'(e) {
-            data1588Source.value[index].delayIntv = e;
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'packageType',
-      title: '报文封装类型',
-      customRender({ index }) {
-        return h(Select, {
-          value: data1588Source.value[index].packageType,
-          options: packageTypeOptions,
-          class: 'w-20',
-          'onUpdate:value'(e) {
-            data1588Source.value[index].packageType = e?.toString?.() || '';
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'broadcastType',
-      title: '报文播发类型',
-      customRender({ index }) {
-        return h(Select, {
-          value: data1588Source.value[index].broadcastType,
-          options: broadcastTypeOptions,
-          class: 'w-20',
-          'onUpdate:value'(e) {
-            data1588Source.value[index].broadcastType = e?.toString?.() || '';
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'delayMechanism',
-      title: '延时机制',
-      customRender({ index }) {
-        return h(Select, {
-          value: data1588Source.value[index].delayMechanism,
-          options: delayMechanismOptions,
-          class: 'w-20',
-          'onUpdate:value'(e) {
-            data1588Source.value[index].delayMechanism = e?.toString?.() || '';
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'timeStampSendMode',
-      title: '时间戳发送模式',
-      customRender({ index }) {
-        return h(Select, {
-          value: data1588Source.value[index].timeStampSendMode,
-          options: timeStampSendModeOptions,
-          class: 'w-20',
-          'onUpdate:value'(e) {
-            data1588Source.value[index].timeStampSendMode = e?.toString?.() || '';
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'accuracy',
-      title: '精度预期',
-      customRender({ index }) {
-        return h(Input, {
-          value: data1588Source.value[index].accuracy,
-          'onUpdate:value'(e) {
-            data1588Source.value[index].accuracy = e;
-          },
-        });
-      },
-    },
+    // {
+    //   dataIndex: 'delayIntv',
+    //   title: '延时间隔',
+    //   customRender({ index }) {
+    //     return h(Input, {
+    //       value: data1588Source.value[index].delayIntv,
+    //       'onUpdate:value'(e) {
+    //         data1588Source.value[index].delayIntv = e;
+    //       },
+    //     });
+    //   },
+    // },
+    // {
+    //   dataIndex: 'packageType',
+    //   title: '报文封装类型',
+    //   customRender({ index }) {
+    //     return h(Select, {
+    //       value: data1588Source.value[index].packageType,
+    //       options: packageTypeOptions,
+    //       class: 'w-20',
+    //       'onUpdate:value'(e) {
+    //         data1588Source.value[index].packageType = e?.toString?.() || '';
+    //       },
+    //     });
+    //   },
+    // },
+    // {
+    //   dataIndex: 'broadcastType',
+    //   title: '报文播发类型',
+    //   customRender({ index }) {
+    //     return h(Select, {
+    //       value: data1588Source.value[index].broadcastType,
+    //       options: broadcastTypeOptions,
+    //       class: 'w-20',
+    //       'onUpdate:value'(e) {
+    //         data1588Source.value[index].broadcastType = e?.toString?.() || '';
+    //       },
+    //     });
+    //   },
+    // },
+    // {
+    //   dataIndex: 'delayMechanism',
+    //   title: '延时机制',
+    //   customRender({ index }) {
+    //     return h(Select, {
+    //       value: data1588Source.value[index].delayMechanism,
+    //       options: delayMechanismOptions,
+    //       class: 'w-20',
+    //       'onUpdate:value'(e) {
+    //         data1588Source.value[index].delayMechanism = e?.toString?.() || '';
+    //       },
+    //     });
+    //   },
+    // },
+    // {
+    //   dataIndex: 'timeStampSendMode',
+    //   title: '时间戳发送模式',
+    //   customRender({ index }) {
+    //     return h(Select, {
+    //       value: data1588Source.value[index].timeStampSendMode,
+    //       options: timeStampSendModeOptions,
+    //       class: 'w-20',
+    //       'onUpdate:value'(e) {
+    //         data1588Source.value[index].timeStampSendMode = e?.toString?.() || '';
+    //       },
+    //     });
+    //   },
+    // },
+    // {
+    //   dataIndex: 'accuracy',
+    //   title: '精度预期',
+    //   customRender({ index }) {
+    //     return h(Input, {
+    //       value: data1588Source.value[index].accuracy,
+    //       'onUpdate:value'(e) {
+    //         data1588Source.value[index].accuracy = e;
+    //       },
+    //     });
+    //   },
+    // },
   ];
   // 同步的
   const columnsSync: TableProps['columns'] = [
@@ -440,19 +451,19 @@
         });
       },
     },
-    {
-      dataIndex: 'closeESMCSend',
-      title: '关闭ESMC报文发送',
-      customRender({ index }) {
-        return h(Switch, {
-          checked: dataSyncSource.value[index].closeESMCSend,
-          size: 'small',
-          'onUpdate:checked'(e) {
-            dataSyncSource.value[index].closeESMCSend = e.valueOf() as boolean;
-          },
-        });
-      },
-    },
+    // {
+    //   dataIndex: 'closeESMCSend',
+    //   title: '关闭ESMC报文发送',
+    //   customRender({ index }) {
+    //     return h(Switch, {
+    //       checked: dataSyncSource.value[index].closeESMCSend,
+    //       size: 'small',
+    //       'onUpdate:checked'(e) {
+    //         dataSyncSource.value[index].closeESMCSend = e.valueOf() as boolean;
+    //       },
+    //     });
+    //   },
+    // },
     {
       dataIndex: 'clockStatus',
       title: '时钟源状态',
@@ -480,108 +491,108 @@
         });
       },
     },
-    {
-      dataIndex: 'physicalLayerStatus',
-      title: '物理层状态',
-      customRender({ index }) {
-        return h(Select, {
-          value: dataSyncSource.value[index].physicalLayerStatus,
-          class: 'w-20',
-          options: physicalLayerStatusOptions,
-          'onUpdate:value'(e) {
-            dataSyncSource.value[index].physicalLayerStatus = e?.toString?.() || '';
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'enablePhysicalSlaveStatus',
-      title: '使能物理层Slave协商状态',
-      customRender({ index }) {
-        return h(Switch, {
-          checked: dataSyncSource.value[index].enablePhysicalSlaveStatus,
-          size: 'small',
-          'onUpdate:checked'(e) {
-            dataSyncSource.value[index].enablePhysicalSlaveStatus = e.valueOf() as boolean;
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'E1PortTimeslot',
-      title: 'E1端口时隙',
-      customRender({ index }) {
-        return h(Input, {
-          value: dataSyncSource.value[index].E1PortTimeslot,
-          'onUpdate:value'(e) {
-            dataSyncSource.value[index].E1PortTimeslot = e;
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'enableE1AISAlarmCheck',
-      title: 'E1端口ais信号告警检测使能',
-      customRender({ index }) {
-        return h(Switch, {
-          checked: dataSyncSource.value[index].enableE1AISAlarmCheck,
-          size: 'small',
-          'onUpdate:checked'(e) {
-            dataSyncSource.value[index].enableE1AISAlarmCheck = e.valueOf() as boolean;
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'systemPriority',
-      title: '系统优先级',
-      customRender({ index }) {
-        return h(Input, {
-          value: dataSyncSource.value[index].systemPriority,
-          'onUpdate:value'(e) {
-            dataSyncSource.value[index].systemPriority = parseFloat(e);
-          },
-        });
-      },
-    },
-    {
-      dataIndex: '2M-1Priority',
-      title: '2M-1环优先级',
-      customRender({ index }) {
-        return h(Input, {
-          value: dataSyncSource.value[index]['2M-1Priority'],
-          'onUpdate:value'(e) {
-            dataSyncSource.value[index]['2M-1Priority'] = parseFloat(e);
-          },
-        });
-      },
-    },
-    {
-      dataIndex: '2M-2Priority',
-      title: '2M-2环优先级',
-      customRender({ index }) {
-        return h(Input, {
-          value: dataSyncSource.value[index]['2M-2Priority'],
-          'onUpdate:value'(e) {
-            dataSyncSource.value[index]['2M-2Priority'] = parseFloat(e);
-          },
-        });
-      },
-    },
-    {
-      dataIndex: 'SSMMode',
-      title: 'SSM提取模式',
-      customRender({ index }) {
-        return h(Select, {
-          value: dataSyncSource.value[index].SSMMode,
-          options: SSMModeOptions,
-          class: 'w-20',
-          'onUpdate:value'(e) {
-            dataSyncSource.value[index].SSMMode = e?.toString?.() || '';
-          },
-        });
-      },
-    },
+    // {
+    //   dataIndex: 'physicalLayerStatus',
+    //   title: '物理层状态',
+    //   customRender({ index }) {
+    //     return h(Select, {
+    //       value: dataSyncSource.value[index].physicalLayerStatus,
+    //       class: 'w-20',
+    //       options: physicalLayerStatusOptions,
+    //       'onUpdate:value'(e) {
+    //         dataSyncSource.value[index].physicalLayerStatus = e?.toString?.() || '';
+    //       },
+    //     });
+    //   },
+    // },
+    // {
+    //   dataIndex: 'enablePhysicalSlaveStatus',
+    //   title: '使能物理层Slave协商状态',
+    //   customRender({ index }) {
+    //     return h(Switch, {
+    //       checked: dataSyncSource.value[index].enablePhysicalSlaveStatus,
+    //       size: 'small',
+    //       'onUpdate:checked'(e) {
+    //         dataSyncSource.value[index].enablePhysicalSlaveStatus = e.valueOf() as boolean;
+    //       },
+    //     });
+    //   },
+    // },
+    // {
+    //   dataIndex: 'E1PortTimeslot',
+    //   title: 'E1端口时隙',
+    //   customRender({ index }) {
+    //     return h(Input, {
+    //       value: dataSyncSource.value[index].E1PortTimeslot,
+    //       'onUpdate:value'(e) {
+    //         dataSyncSource.value[index].E1PortTimeslot = e;
+    //       },
+    //     });
+    //   },
+    // },
+    // {
+    //   dataIndex: 'enableE1AISAlarmCheck',
+    //   title: 'E1端口ais信号告警检测使能',
+    //   customRender({ index }) {
+    //     return h(Switch, {
+    //       checked: dataSyncSource.value[index].enableE1AISAlarmCheck,
+    //       size: 'small',
+    //       'onUpdate:checked'(e) {
+    //         dataSyncSource.value[index].enableE1AISAlarmCheck = e.valueOf() as boolean;
+    //       },
+    //     });
+    //   },
+    // },
+    // {
+    //   dataIndex: 'systemPriority',
+    //   title: '系统优先级',
+    //   customRender({ index }) {
+    //     return h(Input, {
+    //       value: dataSyncSource.value[index].systemPriority,
+    //       'onUpdate:value'(e) {
+    //         dataSyncSource.value[index].systemPriority = parseFloat(e);
+    //       },
+    //     });
+    //   },
+    // },
+    // {
+    //   dataIndex: '2M-1Priority',
+    //   title: '2M-1环优先级',
+    //   customRender({ index }) {
+    //     return h(Input, {
+    //       value: dataSyncSource.value[index]['2M-1Priority'],
+    //       'onUpdate:value'(e) {
+    //         dataSyncSource.value[index]['2M-1Priority'] = parseFloat(e);
+    //       },
+    //     });
+    //   },
+    // },
+    // {
+    //   dataIndex: '2M-2Priority',
+    //   title: '2M-2环优先级',
+    //   customRender({ index }) {
+    //     return h(Input, {
+    //       value: dataSyncSource.value[index]['2M-2Priority'],
+    //       'onUpdate:value'(e) {
+    //         dataSyncSource.value[index]['2M-2Priority'] = parseFloat(e);
+    //       },
+    //     });
+    //   },
+    // },
+    // {
+    //   dataIndex: 'SSMMode',
+    //   title: 'SSM提取模式',
+    //   customRender({ index }) {
+    //     return h(Select, {
+    //       value: dataSyncSource.value[index].SSMMode,
+    //       options: SSMModeOptions,
+    //       class: 'w-20',
+    //       'onUpdate:value'(e) {
+    //         dataSyncSource.value[index].SSMMode = e?.toString?.() || '';
+    //       },
+    //     });
+    //   },
+    // },
     {
       dataIndex: 'inSSMLevel',
       title: '输入SSM等级',
@@ -623,18 +634,18 @@
         });
       },
     },
-    {
-      dataIndex: 'accuracy',
-      title: '精度预期',
-      customRender({ index }) {
-        return h(Input, {
-          value: dataSyncSource.value[index].accuracy,
-          class: 'w-20',
-          'onUpdate:value'(e) {
-            dataSyncSource.value[index].accuracy = parseFloat(e);
-          },
-        });
-      },
-    },
+    // {
+    //   dataIndex: 'accuracy',
+    //   title: '精度预期',
+    //   customRender({ index }) {
+    //     return h(Input, {
+    //       value: dataSyncSource.value[index].accuracy,
+    //       class: 'w-20',
+    //       'onUpdate:value'(e) {
+    //         dataSyncSource.value[index].accuracy = parseFloat(e);
+    //       },
+    //     });
+    //   },
+    // },
   ];
 </script>

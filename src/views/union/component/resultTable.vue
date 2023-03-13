@@ -84,17 +84,33 @@
       title: '网元名称',
     },
     {
+      dataIndex: 'clockAccuracy',
+      title: '时钟精度',
+    },
+    {
+      dataIndex: 'offsetScaledLogVariance',
+      title: '偏移缩放精度',
+    },
+    {
+      dataIndex: 'clockIdentity',
+      title: '时钟标识符',
+    },
+    {
       dataIndex: 'portName',
       title: '端口名称',
+    },
+    {
+      dataIndex: 'portIdentity',
+      title: '端口标识符',
     },
     {
       dataIndex: 'state',
       title: '端口状态',
     },
-    {
-      dataIndex: 'ptpClockId',
-      title: '时钟id',
-    },
+    // {
+    //   dataIndex: 'ptpClockId',
+    //   title: '时钟id',
+    // },
     {
       dataIndex: 'ptpDomain',
       title: '域号',
@@ -103,10 +119,10 @@
       dataIndex: 'ptpClockClass',
       title: '时钟等级',
     },
-    {
-      dataIndex: 'ptpPriority1',
-      title: '优先级1',
-    },
+    // {
+    //   dataIndex: 'ptpPriority1',
+    //   title: '优先级1',
+    // },
     {
       dataIndex: 'timeSource',
       title: '时间源',
@@ -186,7 +202,6 @@
     {
       dataIndex: 'linkType',
       title: '同步方式',
-      
     },
   ];
 </script>
