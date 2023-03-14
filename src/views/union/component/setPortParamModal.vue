@@ -1,9 +1,10 @@
 <template>
   <Modal v-model:visible="visible" @ok="handleOk" :footer="null" width="800px" title="设置">
     <div class="p-1">
-      <div class="flex bg-[rgb(240,240,240)] overflow-auto">
+      <div class="flex bg-[rgb(220,220,220)] overflow-auto">
+        <div :class="`py-1 px-2 border-2 font-bold ${typeIndex === 2 ? 'bg-white' : ''}`" @click="handleDevAttrClick">网元属性</div>
         <template v-for="(port, index) in portParamState" :key="port">
-          <div :class="`p-1 border ${index === portIndex ? 'bg-white' : ''}`" @click="handlePortClick(index)">{{ port.portName }}</div>
+          <div :class="`py-1 px-2 font-bold border-2 ${index === portIndex && typeIndex !== 2 ? 'bg-white' : ''}`" @click="handlePortClick(index)">{{ port.portName }}</div>
         </template>
       </div>
       <div class="main flex">
@@ -18,6 +19,9 @@
           <div v-if="typeIndex === 0">
             <Form :labelCol="{ span: 8 }">
               <div class="flex flex-wrap justify-between">
+                <FormItem label="连接对象" class="w-[48%]">
+                  <Input v-model:value="portParamState[portIndex].connDevPort" @change="handleChange" :disabled="true" />
+                </FormItem>
                 <FormItem label="端口号" class="w-[48%]">
                   <Input v-model:value="portParamState[portIndex].portNumber" @change="handleChange" />
                 </FormItem>
@@ -53,9 +57,6 @@
                 </FormItem>
                 <FormItem label="本地优先级" class="w-[48%]">
                   <Input v-model:value="portParamState[portIndex].localPriority" @change="handleChange" />
-                </FormItem>
-                <FormItem label="连接对象" class="w-[48%]">
-                  <Input v-model:value="portParamState[portIndex].connDevPort" @change="handleChange" />
                 </FormItem>
                 <!-- <FormItem label="播发类型" class="w-[48%]">
                   <Select :options="broadcastTypeOptions" v-model:value="portParamState[portIndex].broadcastType" @change="handleChange" />
@@ -151,13 +152,13 @@
             <Form :labelCol="{ span: 13 }">
               <div class="flex flex-wrap justify-between">
                 <FormItem label="时钟精度" class="w-[50%]">
-                  <Input v-model:checked="portParamState[portIndex].clockAccuracy" @update:checked="handleChange" />
+                  <Input v-model:value="devAttr.clockAccuracy" />
                 </FormItem>
                 <FormItem label="偏移缩放精度" class="w-[50%]">
-                  <Input v-model:value="portParamState[portIndex].offsetScaledLogVariance" @change="handleChange" />
+                  <Input v-model:value="devAttr.offsetScaledLogVariance" />
                 </FormItem>
                 <FormItem label="时钟标识符" class="w-[50%]">
-                  <Input v-model:checked="portParamState[portIndex].clockIdentity" @update:checked="handleChange" />
+                  <Input v-model:value="devAttr.clockIdentity" />
                 </FormItem>
               </div>
             </Form>
@@ -216,10 +217,7 @@
     portIdentity: string;
     portNumber: string;
     precisionExpect: string;
-    offsetScaledLogVariance: string;
-    clockIdentity: string;
     connDevPort: string;
-    clockAccuracy: string;
     portName: string;
     ptpClockClass: string;
     ptpClockId: string;
@@ -227,7 +225,6 @@
     ptpPortStatus: string;
     ptpPriority1: string;
     ptpPriority2: string;
-    ptpPtofile: string;
     referenceClock: boolean;
     signalStyle: string;
     state: string;
@@ -239,13 +236,59 @@
     timeStampSend: string;
     accuracy: string;
   }
+  const _initPort = {
+    '2M-1Pariotity': '',
+    '2M-2Pariotity': '',
+    '2MPLL': '',
+    E1PortTimeslot: '',
+    SSMMode: '',
+    aliasName: '',
+    announceIntv: '',
+    broadcastType: '',
+    clockIDMode: '',
+    clockStatus: '',
+    closeESMCSend: false,
+    delayIntv: '',
+    delayMechanism: '',
+    enablePhysicalSlaveStatus: false,
+    enableState: '',
+    enableTimeSync: false,
+    enableE1AISAlarmCheck: false,
+    inClockID: '',
+    inSSMLevel: '',
+    packageType: '',
+    portId: '',
+    portIdentity: '',
+    physicalLayerStatus: '',
+    syncEPrecisionExpect: '',
+    localPriority: '',
+    portNumber: '',
+    precisionExpect: '',
+    connDevPort: '',
+    portName: '',
+    ptpClockClass: '',
+    ptpClockId: '',
+    ptpDomain: '',
+    ptpPortStatus: '',
+    ptpPriority1: '',
+    ptpPriority2: '',
+    referenceClock: false,
+    signalStyle: '',
+    state: '',
+    syncIntv: '',
+    systemPriority: '',
+    timeSlot: '',
+    timeSource: '',
+    timeStamp: '',
+    timeStampSend: '',
+    accuracy: '',
+  };
   enum PARAM_TYPE {
     _1588,
     sync,
-    devAttr,
   }
   const visible = ref(false);
-  const typeList = ['1588', '同步以太', '网元属性'];
+  const typeList = ['1588', '同步以太'];
   const portIndex = ref(0);
   const typeAndPortIndexMarkList = ref<{ type: PARAM_TYPE; portIndex: number }[]>([]);
   const typeIndex = ref(0);
@@ -262,61 +305,13 @@
   const portList = computed(() => {
     return (props?.device?.portList || []).filter((d) => d.aliasName);
   });
-  const portParamState = ref<Port[]>(
-    Array(999)
-      .fill(0)
-      .map(() => ({
-        '2M-1Pariotity': '',
-        '2M-2Pariotity': '',
-        '2MPLL': '',
-        E1PortTimeslot: '',
-        SSMMode: '',
-        aliasName: '',
-        announceIntv: '',
-        broadcastType: '',
-        clockIDMode: '',
-        clockStatus: '',
-        closeESMCSend: false,
-        delayIntv: '',
-        delayMechanism: '',
-        enablePhysicalSlaveStatus: false,
-        enableState: '',
-        enableTimeSync: false,
-        enableE1AISAlarmCheck: false,
-        inClockID: '',
-        inSSMLevel: '',
-        packageType: '',
-        portId: '',
-        portIdentity: '',
-        physicalLayerStatus: '',
-        syncEPrecisionExpect: '',
-        localPriority: '',
-        portNumber: '',
-        precisionExpect: '',
-        offsetScaledLogVariance: '',
-        clockIdentity: '',
-        connDevPort: '',
-        clockAccuracy: '',
-        portName: '',
-        ptpClockClass: '',
-        ptpClockId: '',
-        ptpDomain: '',
-        ptpPortStatus: '',
-        ptpPriority1: '',
-        ptpPriority2: '',
-        ptpPtofile: '',
-        referenceClock: false,
-        signalStyle: '',
-        state: '',
-        syncIntv: '',
-        systemPriority: '',
-        timeSlot: '',
-        timeSource: '',
-        timeStamp: '',
-        timeStampSend: '',
-        accuracy: '',
-      })),
-  );
+  // 网元属性
+  const devAttr = ref({
+    offsetScaledLogVariance: '',
+    clockIdentity: '',
+    clockAccuracy: '',
+  });
+  const portParamState = ref<Port[]>([]);
   const initPortParamState = () => {
     const t: Port[] = portList.value.map((port) => {
       const matchedParam = props.port1588Param.find((p) => p.portName === port.portName);
@@ -325,6 +320,7 @@
         return { ...port };
       }
       return {
+        ..._initPort,
         ...port,
         ...Object.keys(matchedParam).reduce((re, key) => {
           if (matchedParam[key] !== '') {
@@ -340,6 +336,13 @@
     });
     portParamState.value = t;
   };
+  const initDevAttr = () => {
+    devAttr.value = {
+      offsetScaledLogVariance: '',
+      clockIdentity: '',
+      clockAccuracy: '',
+    };
+  };
   watch(
     () => props.port1588Param,
     () => {
@@ -349,14 +352,13 @@
   const handleOk = () => {
     const _1588IndexList = typeAndPortIndexMarkList.value.filter((d) => d.type === PARAM_TYPE._1588).map((d) => d.portIndex);
     const syncIndexList = typeAndPortIndexMarkList.value.filter((d) => d.type === PARAM_TYPE.sync).map((d) => d.portIndex);
-    const devIndexList = typeAndPortIndexMarkList.value.filter((d) => d.type === PARAM_TYPE.devAttr).map((d) => d.portIndex);
     const _1588Param = portParamState.value.filter((_p, index) => _1588IndexList.includes(index));
     const syncParam = portParamState.value.filter((_p, index) => syncIndexList.includes(index));
-    const devParam = portParamState.value.filter((_p, index) => devIndexList.includes(index));
+    console.log(_1588Param, '_1588Param');
     emits('sure', {
       _1588: toRaw(_1588Param),
       sync: toRaw(syncParam),
-      dev: toRaw(devParam),
+      devAttr: toRaw(devAttr.value),
     });
     visible.value = false;
   };
@@ -370,14 +372,21 @@
   };
   const handlePortClick = (index: number) => {
     portIndex.value = index;
+    typeIndex.value = 0;
   };
   const handleTypeClick = (index: number) => {
     typeIndex.value = index;
+  };
+  const handleDevAttrClick = () => {
+    typeIndex.value = 2;
   };
   defineExpose({
     open() {
       visible.value = true;
       initPortParamState();
+      initDevAttr();
+      typeIndex.value = 0;
+      portIndex.value = 0;
     },
     close() {},
   });

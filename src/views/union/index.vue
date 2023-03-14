@@ -33,7 +33,7 @@
   const handleTap = async (node: cytoscape.CollectionReturnValue) => {
     try {
       const device = node.data() as any;
-      const { _1588, sync } = await open<any>({
+      const { _1588, sync, devAttr } = await open<any>({
         device,
         port1588Param: port1588ParamData.value?.ptp || [],
       });
@@ -47,6 +47,7 @@
       };
       if (_1588?.length) {
         const param = {
+          ...devAttr,
           devName: device.id,
           portList: _1588.map((p) => ({ ...toStr(p), name: p.portName })),
         };
@@ -54,10 +55,20 @@
       }
       if (sync?.length) {
         const param = {
+          ...devAttr,
           devName: device.id,
           portList: sync.map((p) => ({ ...toStr(p), name: p.portName })),
         };
         await setSyncEParam(param);
+      }
+      // 强制设置下网元属性
+      if (!sync?.length && !_1588?.length) {
+        const param = {
+          ...devAttr,
+          devName: device.id,
+          portList: null,
+        };
+        await setPortParam(param);
       }
       await _getTopology();
       await _getPort1588Param();
