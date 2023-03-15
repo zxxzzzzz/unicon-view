@@ -61,3 +61,10 @@ export const timeStampSendModeOptions = [
   { label: 'oneStep', value: 'oneStep' },
   { label: 'twoStep', value: 'twoStep' },
 ];
+// PRC,SSUA,SSUB,EEC inSSMLevel 输入SSM等级
+export const inSSMLevelOptions = [
+  { label: 'PRC', value: 'PRC' },
+  { label: 'SSUA', value: 'SSUA' },
+  { label: 'SSUB', value: 'SSUB' },
+  { label: 'EEC', value: 'EEC' },
+];

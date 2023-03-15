@@ -110,7 +110,7 @@
                   <Checkbox v-model:checked="portParamState[portIndex].referenceClock" @update:checked="handleChange" />
                 </FormItem>
                 <FormItem label="输入SSM等级" class="w-[50%]">
-                  <Input v-model:value="portParamState[portIndex].inSSMLevel" @change="handleChange" />
+                  <Select :options="inSSMLevelOptions" v-model:value="portParamState[portIndex].inSSMLevel" @change="handleChange" />
                 </FormItem>
                 <FormItem label="物理层状态" class="w-[50%]">
                   <Select :options="physicalLayerStatusOptions" v-model:value="portParamState[portIndex].physicalLayerStatus" @change="handleChange" />
@@ -187,6 +187,7 @@
     // broadcastTypeOptions,
     delayMechanismOptions,
     // timeStampSendModeOptions,
+    inSSMLevelOptions,
   } from './option';
 
   interface Port {
