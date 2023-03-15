@@ -49,7 +49,7 @@ export const getTopology1 = async () => {
     return {
       ...d,
       portList: (portList?.devPortList || [])
-        .filter((p) => p.deviceName === d.object)
+        .filter((p) => p.devName === d.object)
         .map((p) => p.portList)
         .flat(),
     };

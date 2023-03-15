@@ -33,6 +33,7 @@
   const handleTap = async (node: cytoscape.CollectionReturnValue) => {
     try {
       const device = node.data() as any;
+      console.log(device, 'dddd');
       const { _1588, sync, devAttr } = await open<any>({
         device,
         port1588Param: port1588ParamData.value?.ptp || [],

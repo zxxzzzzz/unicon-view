@@ -40,23 +40,23 @@
     ptpClockId: string;
     ptpDomain: string;
     ptpProtocol: string;
-    ptpClockClass: string;
-    ptpPriority1: string;
-    ptpPriority2: string;
-    timeSource: string;
-    announceIntv: string;
-    syncIntv: string;
-    delayIntv: string;
+    ptpClockClass: number;
+    ptpPriority1: number;
+    ptpPriority2: number;
+    timeSource: number;
+    announceIntv: number;
+    syncIntv: number;
+    delayIntv: number;
     packageType: string;
     broadcastType: string;
     delayMechanism: string;
     timeStampSendMode: string;
     accuracy: string;
-    clockAccuracy: string;
-    offsetScaledLogVariance: string;
+    clockAccuracy: number;
+    offsetScaledLogVariance: number;
     localPriority: string;
-    portIdentity: string;
-    clockIdentity: string;
+    portIdentity: number;
+    clockIdentity: number;
   };
   type ItemSync = {
     devName: string;
@@ -102,23 +102,23 @@
           ptpClockId: '',
           ptpDomain: '',
           ptpProtocol: '',
-          ptpClockClass: '',
-          ptpPriority1: '',
-          ptpPriority2: '',
-          timeSource: '',
-          announceIntv: '',
-          syncIntv: '',
-          delayIntv: '',
+          ptpClockClass: 0,
+          ptpPriority1: 0,
+          ptpPriority2: 0,
+          timeSource: 0,
+          announceIntv: 0,
+          syncIntv: 0,
+          delayIntv: 0,
           packageType: '',
           broadcastType: '',
           delayMechanism: '',
           timeStampSendMode: '',
           accuracy: '',
-          clockAccuracy: '',
-          offsetScaledLogVariance: '',
+          clockAccuracy: 0,
+          offsetScaledLogVariance: 0,
           localPriority: '',
-          portIdentity: '',
-          clockIdentity: '',
+          portIdentity: 0,
+          clockIdentity: 0,
         },
       ];
     }
@@ -186,6 +186,9 @@
     return {
       dataType: 'ptp',
       devName: data1588Source.value?.[0]?.devName || '',
+      clockAccuracy: data1588Source.value?.[0]?.clockAccuracy,
+      offsetScaledLogVariance: data1588Source.value?.[0]?.offsetScaledLogVariance,
+      clockIdentity: data1588Source.value?.[0]?.clockIdentity,
       portList: toRaw(data1588Source.value),
     };
   };
@@ -193,6 +196,9 @@
     return {
       dataType: 'syncE',
       devName: dataSyncSource.value?.[0]?.devName || '',
+      clockAccuracy: data1588Source.value?.[0]?.clockAccuracy,
+      offsetScaledLogVariance: data1588Source.value?.[0]?.offsetScaledLogVariance,
+      clockIdentity: data1588Source.value?.[0]?.clockIdentity,
       portList: toRaw(dataSyncSource.value),
     };
   };
@@ -291,7 +297,7 @@
           class: '!w-20',
           value: data1588Source.value[index].ptpClockClass,
           'onUpdate:value'(e) {
-            data1588Source.value[index].ptpClockClass = e;
+            data1588Source.value[index].ptpClockClass = parseInt(e, 10);
           },
         });
       },
@@ -317,7 +323,7 @@
           class: '!w-20',
           value: data1588Source.value[index].ptpPriority1,
           'onUpdate:value'(e) {
-            data1588Source.value[index].ptpPriority1 = e;
+            data1588Source.value[index].ptpPriority1 = parseInt(e, 10);
           },
         });
       },
@@ -330,7 +336,7 @@
           class: '!w-20',
           value: data1588Source.value[index].ptpPriority2,
           'onUpdate:value'(e) {
-            data1588Source.value[index].ptpPriority2 = e;
+            data1588Source.value[index].ptpPriority2 = parseInt(e, 10);
           },
         });
       },
@@ -343,7 +349,7 @@
           class: '!w-20',
           value: data1588Source.value[index].timeSource,
           'onUpdate:value'(e) {
-            data1588Source.value[index].timeSource = e;
+            data1588Source.value[index].timeSource = parseInt(e, 10);
           },
         });
       },
@@ -356,7 +362,7 @@
           class: '!w-20',
           value: data1588Source.value[index].clockAccuracy,
           'onUpdate:value'(e) {
-            data1588Source.value[index].clockAccuracy = e;
+            data1588Source.value[index].clockAccuracy = parseInt(e, 10);
           },
         });
       },
@@ -369,7 +375,7 @@
           class: '!w-20',
           value: data1588Source.value[index].offsetScaledLogVariance,
           'onUpdate:value'(e) {
-            data1588Source.value[index].offsetScaledLogVariance = e;
+            data1588Source.value[index].offsetScaledLogVariance = parseInt(e, 10);
           },
         });
       },
@@ -382,7 +388,7 @@
           class: '!w-20',
           value: data1588Source.value[index].clockIdentity,
           'onUpdate:value'(e) {
-            data1588Source.value[index].clockIdentity = e;
+            data1588Source.value[index].clockIdentity = parseInt(e, 10);
           },
         });
       },
@@ -395,7 +401,7 @@
           class: '!w-20',
           value: data1588Source.value[index].portIdentity,
           'onUpdate:value'(e) {
-            data1588Source.value[index].portIdentity = e;
+            data1588Source.value[index].portIdentity = parseInt(e, 10);
           },
         });
       },

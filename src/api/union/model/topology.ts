@@ -41,7 +41,7 @@ const t = {
   ],
 };
 const devPortItem = {
-  deviceName: '设备1',
+  devName: '设备1',
   portList: ['GigabitEthernet0/1/0', 'GigabitEthernet2/0/6'],
 };
 type DevPortItem = typeof devPortItem;
