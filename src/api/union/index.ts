@@ -80,6 +80,9 @@ export const uploadXlsxFile = (params: UploadFileParams) => {
 export const getDevPort = async () => {
   return defHttp.post<{ devPortList: DevPort }>({ url: '/GetDevPort' });
 };
+export const addNewUser = async (params: any) => {
+  return defHttp.post<any>({ url: '/NewUser', params });
+};
 export const setPortParam = async (params: any) => {
   return defHttp.post<Topology>({ url: '/SetPortParam', params });
 };

@@ -3,10 +3,8 @@
     <h2 class="mb-3 text-2xl font-bold text-center xl:text-3xl enter-x xl:text-left">
       {{ getFormTitle }}
     </h2>
-    <div class="flex items-center text-red-600">
-      <div type="link" class="mr-2">
-        {{ t('sys.login.registerButton') }}
-      </div>
+    <div v-if="getLoginState === LoginStateEnum.LOGIN" class="flex items-center text-red-600 cursor-pointer" @click="handleRegister">
+      <div type="link" class="mr-2"> 注册 </div>
       <Icon icon="bi:arrow-right-circle-fill" />
     </div>
   </div>
@@ -19,7 +17,7 @@
 
   const { t } = useI18n();
 
-  const { getLoginState } = useLoginState();
+  const { getLoginState, setLoginState } = useLoginState();
 
   const getFormTitle = computed(() => {
     const titleObj = {
@@ -31,4 +29,7 @@
     };
     return titleObj[unref(getLoginState)];
   });
+  const handleRegister = () => {
+    setLoginState(LoginStateEnum.REGISTER);
+  };
 </script>
