@@ -31,6 +31,7 @@
   const { data: port1588ParamData, run: _getPort1588Param } = useRequest(getPort1588Param);
 
   const handleTap = async (node: cytoscape.CollectionReturnValue) => {
+    console.log(topology, 'topology');
     try {
       const device = node.data() as any;
       const { _1588, sync, devAttr } = await open<any>({

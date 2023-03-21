@@ -152,10 +152,10 @@
             <Form :labelCol="{ span: 13 }">
               <div class="flex flex-wrap justify-between">
                 <FormItem label="时钟精度" class="w-[50%]">
-                  <Input v-model:value="devAttr.clockAccuracy" />
+                  <Input v-model:value="devAttr.clockAccuracy" :disabled="true" />
                 </FormItem>
                 <FormItem label="偏移缩放精度" class="w-[50%]">
-                  <Input v-model:value="devAttr.offsetScaledLogVariance" />
+                  <Input v-model:value="devAttr.offsetScaledLogVariance" :disabled="true" />
                 </FormItem>
                 <FormItem label="时钟标识符" class="w-[50%]">
                   <Input v-model:value="devAttr.clockIdentity" />
