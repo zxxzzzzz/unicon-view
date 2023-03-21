@@ -355,7 +355,6 @@
     const syncIndexList = typeAndPortIndexMarkList.value.filter((d) => d.type === PARAM_TYPE.sync).map((d) => d.portIndex);
     const _1588Param = portParamState.value.filter((_p, index) => _1588IndexList.includes(index));
     const syncParam = portParamState.value.filter((_p, index) => syncIndexList.includes(index));
-    console.log(_1588Param, '_1588Param');
     emits('sure', {
       _1588: toRaw(_1588Param),
       sync: toRaw(syncParam),
