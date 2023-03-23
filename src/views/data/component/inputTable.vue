@@ -406,45 +406,45 @@
         });
       },
     },
-    // {
-    //   dataIndex: 'announceIntv',
-    //   title: '通知间隔',
-    //   customRender({ index }) {
-    //     return h(Input, {
-    //       class: '!w-20',
-    //       value: data1588Source.value[index].announceIntv,
-    //       'onUpdate:value'(e) {
-    //         data1588Source.value[index].announceIntv = e;
-    //       },
-    //     });
-    //   },
-    // },
-    // {
-    //   dataIndex: 'syncIntv',
-    //   title: '同步间隔',
-    //   customRender({ index }) {
-    //     return h(Input, {
-    //       class: '!w-20',
-    //       value: data1588Source.value[index].syncIntv,
-    //       'onUpdate:value'(e) {
-    //         data1588Source.value[index].syncIntv = e;
-    //       },
-    //     });
-    //   },
-    // },
-    // {
-    //   dataIndex: 'delayIntv',
-    //   title: '延时间隔',
-    //   customRender({ index }) {
-    //     return h(Input, {
-    //       class: '!w-20',
-    //       value: data1588Source.value[index].delayIntv,
-    //       'onUpdate:value'(e) {
-    //         data1588Source.value[index].delayIntv = e;
-    //       },
-    //     });
-    //   },
-    // },
+    {
+      dataIndex: 'announceIntv',
+      title: '通知间隔',
+      customRender({ index }) {
+        return h(Input, {
+          class: '!w-20',
+          value: data1588Source.value[index].announceIntv,
+          'onUpdate:value'(e) {
+            data1588Source.value[index].announceIntv = parseInt(e, 10);
+          },
+        });
+      },
+    },
+    {
+      dataIndex: 'syncIntv',
+      title: '同步间隔',
+      customRender({ index }) {
+        return h(Input, {
+          class: '!w-20',
+          value: data1588Source.value[index].syncIntv,
+          'onUpdate:value'(e) {
+            data1588Source.value[index].syncIntv = parseInt(e, 10);
+          },
+        });
+      },
+    },
+    {
+      dataIndex: 'delayIntv',
+      title: '延时间隔',
+      customRender({ index }) {
+        return h(Input, {
+          class: '!w-20',
+          value: data1588Source.value[index].delayIntv,
+          'onUpdate:value'(e) {
+            data1588Source.value[index].delayIntv = parseInt(e, 10);
+          },
+        });
+      },
+    },
     // {
     //   dataIndex: 'packageType',
     //   title: '报文封装类型',

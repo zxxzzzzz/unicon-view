@@ -8,7 +8,6 @@
 <script lang="ts" setup>
   import InputTable from './component/inputTable.vue';
   import { Card } from 'ant-design-vue';
-  const props = defineProps<{}>();
   const handleSend = (data) => {
     // @ts-ignore
     window.__data__ = data;

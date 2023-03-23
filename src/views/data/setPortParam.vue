@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model:visible="visible" @ok="handleOk" :footer="null" width="800px" title="设置">
+  <div>
     <div class="p-1">
       <div class="flex bg-[rgb(220,220,220)] overflow-auto">
         <div :class="`py-1 px-2 border-2 font-bold ${typeIndex === 2 ? 'bg-white' : ''}`" @click="handleDevAttrClick">网元属性</div>
@@ -169,12 +169,12 @@
         </div>
       </div>
     </div>
-  </Modal>
+  </div>
 </template>
 <script lang="ts" setup>
-  import { Modal, Form, FormItem, Input, Checkbox, Select, InputNumber, Button } from 'ant-design-vue';
+  import { Form, FormItem, Input, Checkbox, Select, InputNumber, Button } from 'ant-design-vue';
   import type { I1588Params } from '/@/api/union/index';
-  import { computed, ref, watch, toRaw } from 'vue';
+  import { computed, ref, onMounted, toRaw } from 'vue';
   import {
     // SSMModeOptions,
     // clockIDModeOptions,
@@ -188,7 +188,7 @@
     delayMechanismOptions,
     // timeStampSendModeOptions,
     inSSMLevelOptions,
-  } from './option';
+  } from './component/option';
 
   interface Port {
     '2M-1Pariotity': string;
@@ -288,12 +288,7 @@
     _1588,
     sync,
   }
-  const visible = ref(false);
-  const typeList = ['1588', '同步以太'];
-  const portIndex = ref(0);
-  const typeAndPortIndexMarkList = ref<{ type: PARAM_TYPE; portIndex: number }[]>([]);
-  const typeIndex = ref(0);
-  const props = defineProps<{
+  type Props = {
     device: {
       portList: Port[];
       id: string;
@@ -301,10 +296,23 @@
       ip: string;
     };
     port1588Param: I1588Params['ptp'];
-  }>();
-  const emits = defineEmits(['sure']);
+  };
+  const typeList = ['1588', '同步以太'];
+  const portIndex = ref(0);
+  // 标记哪些port被修改了
+  const typeAndPortIndexMarkList = ref<{ type: PARAM_TYPE; portIndex: number }[]>([]);
+  const typeIndex = ref(0);
+  const props = ref<Props>({
+    device: {
+      portList: [],
+      id: '',
+      type: '',
+      ip: '',
+    },
+    port1588Param: [],
+  });
   const portList = computed(() => {
-    return (props?.device?.portList || []).filter((d) => d.aliasName);
+    return (props.value?.device?.portList || []).filter((d) => d.aliasName);
   });
   // 网元属性
   const devAttr = ref({
@@ -315,7 +323,7 @@
   const portParamState = ref<Port[]>([]);
   const initPortParamState = () => {
     const t: Port[] = portList.value.map((port) => {
-      const matchedParam = props.port1588Param.find((p) => p.portName === port.portName);
+      const matchedParam = props.value.port1588Param.find((p) => p.portName === port.portName);
       // 没有匹配值，就用默认值
       if (!matchedParam) {
         return { ...port };
@@ -337,6 +345,15 @@
     });
     portParamState.value = t;
   };
+
+  const handleData = (e: CustomEvent) => {
+    props.value = e.detail;
+    initPortParamState();
+  };
+  // 把接收来的数据更新
+  window.removeEventListener('data', handleData);
+  window.addEventListener('data', handleData);
+
   const initDevAttr = () => {
     devAttr.value = {
       offsetScaledLogVariance: '',
@@ -344,23 +361,36 @@
       clockAccuracy: '',
     };
   };
-  watch(
-    () => props.port1588Param,
-    () => {
-      initPortParamState();
-    },
-  );
+  const handleActive = () => {
+    initDevAttr();
+    typeIndex.value = 0;
+    portIndex.value = 0;
+    window.dispatchEvent(new Event('updateData'));
+  };
+  // 激活页面去更新数据
+  window.removeEventListener('active', handleActive);
+  window.addEventListener('active', handleActive);
+
+  // 初始化数据
+  // 主动要求更新数据
+  onMounted(() => {
+    window.dispatchEvent(new Event('updateData'));
+  });
+
   const handleOk = () => {
     const _1588IndexList = typeAndPortIndexMarkList.value.filter((d) => d.type === PARAM_TYPE._1588).map((d) => d.portIndex);
     const syncIndexList = typeAndPortIndexMarkList.value.filter((d) => d.type === PARAM_TYPE.sync).map((d) => d.portIndex);
     const _1588Param = portParamState.value.filter((_p, index) => _1588IndexList.includes(index));
     const syncParam = portParamState.value.filter((_p, index) => syncIndexList.includes(index));
-    emits('sure', {
-      _1588: toRaw(_1588Param),
-      sync: toRaw(syncParam),
-      devAttr: toRaw(devAttr.value),
-    });
-    visible.value = false;
+    window.dispatchEvent(
+      new CustomEvent('backData', {
+        detail: {
+          _1588: toRaw(_1588Param),
+          sync: toRaw(syncParam),
+          devAttr: toRaw(devAttr.value),
+        },
+      }),
+    );
   };
   const handleChange = () => {
     if (typeIndex.value === 0) {
@@ -380,14 +410,4 @@
   const handleDevAttrClick = () => {
     typeIndex.value = 2;
   };
-  defineExpose({
-    open() {
-      visible.value = true;
-      initPortParamState();
-      initDevAttr();
-      typeIndex.value = 0;
-      portIndex.value = 0;
-    },
-    close() {},
-  });
 </script>
