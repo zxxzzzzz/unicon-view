@@ -323,16 +323,16 @@
       return {
         ..._initPort,
         ...port,
-        ...Object.keys(matchedParam).reduce((re, key) => {
-          if (matchedParam[key] !== '') {
-            return {
-              ...re,
-              // 把字符串true false转换成布尔值
-              [key]: ['true', 'false'].includes(matchedParam[key]) ? !!matchedParam[key] : matchedParam[key],
-            };
-          }
-          return re;
-        }, {} as Partial<Port>),
+        // ...Object.keys(matchedParam).reduce((re, key) => {
+        //   if (matchedParam[key] !== '') {
+        //     return {
+        //       ...re,
+        //       // 把字符串true false转换成布尔值
+        //       [key]: ['true', 'false'].includes(matchedParam[key]) ? !!matchedParam[key] : matchedParam[key],
+        //     };
+        //   }
+        //   return re;
+        // }, {} as Partial<Port>),
       };
     });
     portParamState.value = t;
