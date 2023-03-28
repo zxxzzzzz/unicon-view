@@ -30,21 +30,22 @@
   const { data: topology, run: _getTopology } = useRequest(getTopology1);
   // const { data: port1588ParamData, run: _getPort1588Param } = useRequest(getPort1588Param);
 
+  let infoParamWindow: Window | null = null;
   const handleTap = async (node: cytoscape.CollectionReturnValue) => {
     // 如果弹窗已经打开 就复用该弹窗
-    if (infoWindow) {
-      infoWindow.focus();
+    if (infoParamWindow) {
+      infoParamWindow.focus();
     } else {
       let strWindowFeatures = `width=1040,height=600,left=${window.screen.availWidth / 4},top=${window.screen.availHeight / 4}`;
       const portParamUrl = location.origin + '/#/data/setPortParam';
-      infoWindow = window.open(portParamUrl, 'setPortParam', strWindowFeatures);
+      infoParamWindow = window.open(portParamUrl, 'setPortParam', strWindowFeatures);
     }
     // 弹窗被关闭时，引用的变量置为null
-    if (infoWindow) {
-      infoWindow.onload = () => {
-        if (infoWindow) {
-          infoWindow.onunload = () => {
-            infoWindow = null;
+    if (infoParamWindow) {
+      infoParamWindow.onload = () => {
+        if (infoParamWindow) {
+          infoParamWindow.onunload = () => {
+            infoParamWindow = null;
           };
         }
       };
@@ -54,13 +55,13 @@
         // port1588Param: port1588ParamData.value?.ptp || [],
       };
       const handleUpdate = () => {
-        if (infoWindow) {
-          infoWindow.dispatchEvent(new CustomEvent('data', { detail: data }));
+        if (infoParamWindow) {
+          infoParamWindow.dispatchEvent(new CustomEvent('data', { detail: data }));
         }
       };
       // 更新数据
-      infoWindow.removeEventListener('updateData', handleUpdate);
-      infoWindow.addEventListener('updateData', handleUpdate);
+      infoParamWindow.removeEventListener('updateData', handleUpdate);
+      infoParamWindow.addEventListener('updateData', handleUpdate);
       const handleBackData = async (e: CustomEvent) => {
         try {
           const device = node.data() as any;
@@ -108,10 +109,10 @@
         } catch (error) {}
       };
       // 弹出框返回的数据
-      infoWindow.removeEventListener('backData', handleBackData);
-      infoWindow.addEventListener('backData', handleBackData);
+      infoParamWindow.removeEventListener('backData', handleBackData);
+      infoParamWindow.addEventListener('backData', handleBackData);
       // 激活setParam
-      infoWindow.dispatchEvent(new Event('active'));
+      infoParamWindow.dispatchEvent(new Event('active'));
     }
   };
 
