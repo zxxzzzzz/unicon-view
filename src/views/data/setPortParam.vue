@@ -173,7 +173,7 @@
 </template>
 <script lang="ts" setup>
   import { Form, FormItem, Input, Checkbox, Select, InputNumber, Button } from 'ant-design-vue';
-  import type { I1588Params } from '/@/api/union/index';
+  // import type { I1588Params } from '/@/api/union/index';
   import { computed, ref, onMounted, toRaw } from 'vue';
   import {
     // SSMModeOptions,
@@ -294,8 +294,11 @@
       id: string;
       type: string;
       ip: string;
+      clockAccuracy: number;
+      clockIdentity: number;
+      offsetScaledLogVariance: number;
     };
-    port1588Param: I1588Params['ptp'];
+    // port1588Param: I1588Params['ptp'];
   };
   const typeList = ['1588', '同步以太'];
   const portIndex = ref(0);
@@ -308,26 +311,29 @@
       id: '',
       type: '',
       ip: '',
+      clockAccuracy: 0,
+      clockIdentity: 0,
+      offsetScaledLogVariance: 0,
     },
-    port1588Param: [],
+    // port1588Param: [],
   });
   const portList = computed(() => {
     return (props.value?.device?.portList || []).filter((d) => d.aliasName);
   });
   // 网元属性
   const devAttr = ref({
-    offsetScaledLogVariance: '',
-    clockIdentity: '',
-    clockAccuracy: '',
+    offsetScaledLogVariance: 0,
+    clockIdentity: 0,
+    clockAccuracy: 0,
   });
   const portParamState = ref<Port[]>([]);
   const initPortParamState = () => {
     const t: Port[] = portList.value.map((port) => {
-      const matchedParam = props.value.port1588Param.find((p) => p.portName === port.portName);
+      // const matchedParam = props.value.port1588Param.find((p) => p.portName === port.portName);
       // 没有匹配值，就用默认值
-      if (!matchedParam) {
-        return { ...port };
-      }
+      // if (!matchedParam) {
+      //   return { ...port };
+      // }
       return {
         ..._initPort,
         ...port,
@@ -344,8 +350,16 @@
       };
     });
     portParamState.value = t;
+    if (props?.value?.device) {
+      devAttr.value = {
+        offsetScaledLogVariance: props.value.device.offsetScaledLogVariance,
+        clockIdentity: props.value.device.clockIdentity,
+        clockAccuracy: props.value.device.clockAccuracy,
+      };
+    }
   };
 
+  // 接受数据
   const handleData = (e: CustomEvent) => {
     props.value = e.detail;
     initPortParamState();
@@ -356,9 +370,9 @@
 
   const initDevAttr = () => {
     devAttr.value = {
-      offsetScaledLogVariance: '',
-      clockIdentity: '',
-      clockAccuracy: '',
+      offsetScaledLogVariance: 0,
+      clockIdentity: 0,
+      clockAccuracy: 0,
     };
   };
   const handleActive = () => {

@@ -39,7 +39,15 @@
     }
     const nodes = topology.deviceList.map((d) => {
       return {
-        data: { id: d.object, ip: d.ip, type: d.type, portList: d.portList },
+        data: {
+          id: d.object,
+          ip: d.ip,
+          type: d.type,
+          portList: d.portList,
+          clockAccuracy: d.clockAccuracy,
+          clockIdentity: d.clockIdentity,
+          offsetScaledLogVariance: d.offsetScaledLogVariance,
+        },
         position: { x: d.posX, y: d.posY },
         classes: [formatType(d.type)],
       };

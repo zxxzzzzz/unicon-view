@@ -1,3 +1,36 @@
+const port = {
+  aliasName: '长寿中心机房-CX600X8-ASG- GigabitEthernet5/0/0-10240',
+  announceIntv: 2,
+  clockAccuracy: 33,
+  clockStatus: '',
+  connDevPort: '长寿水墨林溪-CX600X8-ASG+GigabitEthernet5/0/0',
+  delayIntv: 2,
+  delayMechanism: 'P2P',
+  enableState: 'normal',
+  enableTimeSync: false,
+  inClockID: '',
+  inSSMLevel: 'PRC',
+  localPriority: 128,
+  offsetScaledLogVariance: 17258,
+  physicalLayerStatus: '',
+  portName: 'GigabitEthernet5/0/0',
+  portNumber: 0,
+  portldentity: 9999,
+  precisionExpect: 20.25,
+  ptpClockClass: 7,
+  ptpClockId: '00:D0:DA:FF:FE:00:00:08',
+  ptpDomain: 48,
+  ptpPortStatus: 'slave',
+  ptpPriority1: 128,
+  ptpPriority2: 100,
+  referenceClock: false,
+  signalStyle: '',
+  syncEPrecisionExpect: 0,
+  syncIntv: 2,
+  systemPriority: 10,
+  timeSource: 32,
+};
+
 const t = {
   deviceList: [
     {
@@ -6,23 +39,32 @@ const t = {
       ip: '设备ip',
       posX: 0,
       posY: 0,
-      portList: ['123', '123'],
+      clockAccuracy: 0,
+      clockIdentity: 0,
+      offsetScaledLogVariance: 0,
+      portList: [port, port],
     },
     {
       object: '设备2',
       type: '设备类型',
       ip: '设备ip',
+      clockAccuracy: 0,
+      clockIdentity: 0,
+      offsetScaledLogVariance: 0,
       posX: 150,
       posY: 150,
-      portList: ['123', '123'],
+      portList: [port, port],
     },
     {
       object: '设备3',
       type: '设备类型',
       ip: '设备ip',
+      clockAccuracy: 0,
+      clockIdentity: 0,
+      offsetScaledLogVariance: 0,
       posX: 200,
       posY: 200,
-      portList: ['123', '123'],
+      portList: [port, port],
     },
   ],
   linkList: [
@@ -40,9 +82,13 @@ const t = {
     },
   ],
 };
+
 const devPortItem = {
   devName: '设备1',
-  portList: ['GigabitEthernet0/1/0', 'GigabitEthernet2/0/6'],
+  clockAccuracy: 33,
+  clockIdentity: 0,
+  offsetScaledLogVariance: 17258,
+  portList: [port, port],
 };
 type DevPortItem = typeof devPortItem;
 

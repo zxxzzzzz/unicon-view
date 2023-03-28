@@ -23,12 +23,12 @@
   // import SetPortParamModal from './component/setPortParamModal.vue';
   import cytoscape from 'cytoscape';
   import { setPortParam, setSyncEParam } from '/@/api/union/index';
-  import { getPort1588Param } from '/@/api/union/index';
+  // import { getPort1588Param } from '/@/api/union/index';
 
   // const { Modal, open } = useModal(SetPortParamModal);
   // const activeKey = ref('1');
   const { data: topology, run: _getTopology } = useRequest(getTopology1);
-  const { data: port1588ParamData, run: _getPort1588Param } = useRequest(getPort1588Param);
+  // const { data: port1588ParamData, run: _getPort1588Param } = useRequest(getPort1588Param);
 
   const handleTap = async (node: cytoscape.CollectionReturnValue) => {
     // 如果弹窗已经打开 就复用该弹窗
@@ -51,7 +51,7 @@
       const device = node.data() as any;
       const data = {
         device,
-        port1588Param: port1588ParamData.value?.ptp || [],
+        // port1588Param: port1588ParamData.value?.ptp || [],
       };
       const handleUpdate = () => {
         if (infoWindow) {
@@ -103,7 +103,7 @@
             await setPortParam(param);
           }
           await _getTopology();
-          await _getPort1588Param();
+          // await _getPort1588Param();
           message.success('设置成功');
         } catch (error) {}
       };

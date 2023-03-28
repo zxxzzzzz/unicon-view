@@ -79,10 +79,11 @@
     const id = selectedNode.value.data('id');
     return (devPortData.value?.devPortList || [])
       .filter((d) => {
-        return d.deviceName === id;
+        return d.devName === id;
       })
       .map((d) => d.portList)
-      .flat();
+      .flat()
+      .map((e) => e.portName);
   });
 
   let infoWindow: Window | null = null;
@@ -103,6 +104,7 @@
       return;
     }
     let strWindowFeatures = `width=900,height=900,left=999999px,top=999999px`;
+    console.log(selectedNodePort.value, 'selectedNodePort.value');
     portListStr = JSON.stringify(selectedNodePort.value);
     const alarmUrl = location.origin + '/#/data/home' + `?portList=${btoa(portListStr)}`;
     infoWindow = window.open(alarmUrl, 'alarm', strWindowFeatures);

@@ -17,10 +17,14 @@ export const getTopology = async () => {
   });
   const portList = await defHttp.post<{ devPortList: DevPort }>({ url: '/GetDevPort' });
   const deviceList = topologyData.deviceList.map((d) => {
+    const deviceExtraData = (portList?.devPortList || []).find((p) => p.devName === d.object);
     return {
       ...d,
+      clockAccuracy: deviceExtraData?.clockAccuracy || '',
+      clockIdentity: deviceExtraData?.clockIdentity || '',
+      offsetScaledLogVariance: deviceExtraData?.offsetScaledLogVariance || '',
       portList: (portList?.devPortList || [])
-        .filter((p) => p.deviceName === d.object)
+        .filter((p) => p.devName === d.object)
         .map((p) => p.portList)
         .flat(),
     };
@@ -45,9 +49,13 @@ export const getTopology1 = async () => {
     url: '/GetTopography1',
   });
   const portList = await defHttp.post<{ devPortList: DevPort }>({ url: '/GetDevPort' });
-  const deviceList = topologyData.deviceList.map((d) => {
+  const deviceList = (topologyData?.deviceList || []).map((d) => {
+    const deviceExtraData = (portList?.devPortList || []).find((p) => p.devName === d.object);
     return {
       ...d,
+      clockAccuracy: deviceExtraData?.clockAccuracy || 0,
+      clockIdentity: deviceExtraData?.clockIdentity || 0,
+      offsetScaledLogVariance: deviceExtraData?.offsetScaledLogVariance || 0,
       portList: (portList?.devPortList || [])
         .filter((p) => p.devName === d.object)
         .map((p) => p.portList)
@@ -56,7 +64,7 @@ export const getTopology1 = async () => {
   });
   return {
     deviceList: deviceList,
-    linkList: topologyData.linkList
+    linkList: (topologyData?.linkList || [])
       .map((l) => {
         const linkTypeList = (l.linkType || '').split('&');
         if (linkTypeList.length <= 1) {
