@@ -253,8 +253,12 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
 export const defHttp = createAxios({
   requestOptions: {
     // apiUrl: 'http://47.97.166.4:8888',
-    apiUrl: 'http://115.239.58.159:7000',
+    // apiUrl: 'http://115.239.58.159:7000',
     // apiUrl: 'http://47.97.166.4:8888',
+    // apiUrl: 'http://192.168.0.167:7000',
+    // apiUrl: 'http://192.168.119.138:8888',
+    // @ts-ignore
+    apiUrl: window.__apiUrl__,
   },
 });
 
