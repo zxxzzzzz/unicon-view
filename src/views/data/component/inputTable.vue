@@ -32,6 +32,7 @@
   import ResultTable from './resultTable.vue';
   import { getUserData, getComBoxInfor } from '/@/api/union/index';
   import { useRequest } from 'vue-request';
+  import { inSSMLevelOptions } from './option';
 
   type Item1588 = {
     devName: string;
@@ -169,7 +170,7 @@
   // const packageTypeOptions = ['level2', 'level3'].map((d) => ({ title: d, value: d }));
   // const broadcastTypeOptions = ['unicast', 'multicast'].map((d) => ({ title: d, value: d }));
   // const delayMechanismOptions = ['E2E', 'P2P'].map((d) => ({ title: d, value: d }));
-  const timeStampSendModeOptions = ['oneStep', 'twoStep'].map((d) => ({ title: d, value: d }));
+  // const timeStampSendModeOptions = ['oneStep', 'twoStep'].map((d) => ({ title: d, value: d }));
   const clockStatusOptions = ['normal', 'abnormal'].map((d) => ({ title: d, value: d }));
   const physicalLayerStatusOptions = ['NA', 'Down', 'Up'].map((d) => ({ title: d, value: d }));
   // const SSMModeOptions = ['Auto', 'Manual'].map((d) => ({ title: d, value: d }));
@@ -713,11 +714,12 @@
       dataIndex: 'inSSMLevel',
       title: '输入SSM等级',
       customRender({ index }) {
-        return h(Input, {
+        return h(Select, {
+          options: inSSMLevelOptions,
           class: '!w-20',
           value: dataSyncSource.value[index].inSSMLevel,
           'onUpdate:value'(e) {
-            dataSyncSource.value[index].inSSMLevel = e;
+            dataSyncSource.value[index].inSSMLevel = e as string;
           },
         });
       },
@@ -740,12 +742,12 @@
       dataIndex: 'inClockID',
       title: '输入时钟ID',
       customRender({ index }) {
-        return h(Select, {
+        return h(Input, {
           value: dataSyncSource.value[index].inClockID,
-          options: timeStampSendModeOptions,
+          // options: timeStampSendModeOptions,
           class: '!w-20',
           'onUpdate:value'(e) {
-            dataSyncSource.value[index].inClockID = e?.toString?.() || '';
+            dataSyncSource.value[index].inClockID = e || '';
           },
         });
       },
